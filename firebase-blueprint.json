@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "User progress data, streak, xp, etc.",
+      "type": "object",
+      "properties": {
+        "streak": { "type": "number" },
+        "xp": { "type": "number" },
+        "learnedWordIds": { "type": "array" },
+        "favoriteWordIds": { "type": "array" },
+        "quizHighScore": { "type": "number" },
+        "selectedAvatarId": { "type": "string" },
+        "userName": { "type": "string" },
+        "lastActiveDate": { "type": "string" }
+      }
+    },
+    "Vocabulary": {
+      "title": "Vocabulary",
+      "description": "Custom user vocabulary entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "word": { "type": "string" },
+        "reading": { "type": "string" },
+        "romaji": { "type": "string" },
+        "meaning": { "type": "string" },
+        "example": { "type": "string" },
+        "exampleMeaning": { "type": "string" },
+        "level": { "type": "string" },
+        "category": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProgress",
+      "description": "User progress and settings documents"
+    },
+    "users/{userId}/custom_vocab/{vocabId}": {
+      "schema": "Vocabulary",
+      "description": "Custom vocabularies added by the user"
+    }
+  }
+}

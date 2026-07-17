@@ -1,0 +1,6 @@
+{
+  "name": "Hoc cung thay Son",
+  "description": "Website học từ vựng tiếng Nhật phong cách Anime đầy đủ tiện ích và tích hợp AI trợ lý thầy Sơn",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
