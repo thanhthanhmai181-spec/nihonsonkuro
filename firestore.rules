@@ -23,6 +23,10 @@ service cloud.firestore {
         allow create, update: if isOwner(userId) && isValidId(vocabId);
         allow delete: if isOwner(userId);
       }
+      
+      match /sync/{syncId} {
+        allow read, write: if isOwner(userId) && isValidId(syncId);
+      }
     }
   }
 }

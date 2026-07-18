@@ -29,6 +29,7 @@ import VerbConjugationN4Lessons from "./components/VerbConjugationN4Lessons";
 import JLPTN4Exams from "./components/JLPTN4Exams";
 import JLPTN3Exams from "./components/JLPTN3Exams";
 import Auth from "./components/Auth";
+import { DuySonLogo } from "./components/DuySonLogo";
 import { auth, db } from "./lib/firebase";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
@@ -46,6 +47,47 @@ import {
   LogOut, 
   RefreshCw 
 } from "lucide-react";
+
+const SYNCABLE_STORAGE_KEYS = [
+  "sonkuro_n5_grammar_progress_v1",
+  "sk_n4_mastered_ids",
+  "n3_grammar_progress",
+  "kanji_n5_state",
+  "n4_known_kanji",
+  "kanji_n3_progress",
+  "n5_srs_v8",
+  "sk_vocab_n4_progress",
+  "sk_vocab_n3_progress",
+  "hac_tong_high_score",
+  "driftGame_stars",
+  "sk_test_history",
+  "sonkuro_verb_stats",
+  "reflex_n4_highscore",
+  "n4_known_examples",
+  "n4_quiz_correct",
+  "n4_quiz_total",
+  "duy_son_custom_logo_url"
+];
+
+// Monkeypatch localStorage to emit custom event on changes
+if (typeof window !== "undefined") {
+  try {
+    const originalSetItem = window.localStorage.setItem;
+    const originalRemoveItem = window.localStorage.removeItem;
+
+    window.localStorage.setItem = function (key: string, value: string) {
+      originalSetItem.call(this, key, value);
+      window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key, value } }));
+    };
+
+    window.localStorage.removeItem = function (key: string) {
+      originalRemoveItem.call(this, key);
+      window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key, value: null } }));
+    };
+  } catch (err) {
+    console.warn("Failed to patch localStorage for syncing:", err);
+  }
+}
 
 const PROGRESS_LOCAL_STORAGE_KEY = "hoc_cung_thay_son_progress";
 const CUSTOM_VOCAB_LOCAL_STORAGE_KEY = "hoc_cung_thay_son_custom_vocab";
@@ -71,6 +113,8 @@ export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [renderKey, setRenderKey] = useState(0);
+  const [syncTrigger, setSyncTrigger] = useState(0);
 
   // Load persistent user progress from LocalStorage
   const [progress, setProgress] = useState<UserProgress>(() => {
@@ -163,6 +207,34 @@ export default function App() {
             firestoreVocab.push(doc.data() as Vocabulary);
           });
           setCustomVocab(firestoreVocab);
+
+          // 3. Fetch syncable storage keys
+          const syncRef = doc(db, "users/" + firebaseUser.uid + "/sync/storage");
+          const syncSnap = await getDoc(syncRef);
+          if (syncSnap.exists()) {
+            const syncData = syncSnap.data();
+            if (syncData && syncData.data) {
+              (window as any).__isSyncingFromCloud = true;
+              try {
+                Object.entries(syncData.data).forEach(([key, val]) => {
+                  localStorage.setItem(key, val as string);
+                });
+              } finally {
+                (window as any).__isSyncingFromCloud = false;
+              }
+              setRenderKey(prev => prev + 1);
+            }
+          } else {
+            // First time: backup current localStorage to cloud
+            const initialData: Record<string, string> = {};
+            SYNCABLE_STORAGE_KEYS.forEach(k => {
+              const val = localStorage.getItem(k);
+              if (val !== null) {
+                initialData[k] = val;
+              }
+            });
+            await setDoc(syncRef, { data: initialData, updatedAt: new Date().toISOString() });
+          }
         } catch (e) {
           console.error("Error loading user data from Firebase:", e);
         } finally {
@@ -179,6 +251,16 @@ export default function App() {
         if (savedVocab) {
           try { setCustomVocab(JSON.parse(savedVocab)); } catch (e) {}
         }
+        // Clear syncable keys on logout so guest has fresh state
+        (window as any).__isSyncingFromCloud = true;
+        try {
+          SYNCABLE_STORAGE_KEYS.forEach(k => {
+            localStorage.removeItem(k);
+          });
+        } finally {
+          (window as any).__isSyncingFromCloud = false;
+        }
+        setRenderKey(prev => prev + 1);
       }
       setIsFirebaseLoading(false);
     });
@@ -243,6 +325,49 @@ export default function App() {
     });
   };
 
+  // Sync triggered storage changes to cloud
+  useEffect(() => {
+    if (!user || isFirebaseLoading) return;
+
+    const timer = setTimeout(async () => {
+      setIsSyncing(true);
+      try {
+        const data: Record<string, string> = {};
+        SYNCABLE_STORAGE_KEYS.forEach(k => {
+          const val = localStorage.getItem(k);
+          if (val !== null) {
+            data[k] = val;
+          }
+        });
+        const syncRef = doc(db, "users/" + user.uid + "/sync/storage");
+        await setDoc(syncRef, { data, updatedAt: new Date().toISOString() });
+      } catch (err) {
+        console.error("Error syncing storage to Firestore:", err);
+      } finally {
+        setIsSyncing(false);
+      }
+    }, 1500); // Debounce to prevent rapid database writes
+
+    return () => clearTimeout(timer);
+  }, [syncTrigger, user, isFirebaseLoading]);
+
+  // Listen to storage change events
+  useEffect(() => {
+    const handleStorageChange = (e: any) => {
+      if ((window as any).__isSyncingFromCloud) return;
+
+      const key = e.detail?.key;
+      if (SYNCABLE_STORAGE_KEYS.includes(key)) {
+        setSyncTrigger(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener("local-storage-changed" as any, handleStorageChange);
+    return () => {
+      window.removeEventListener("local-storage-changed" as any, handleStorageChange);
+    };
+  }, []);
+
   const handleLogout = async () => {
     playSound.click();
     if (window.confirm("Em có muốn đăng xuất khỏi tài khoản không?")) {
@@ -253,6 +378,18 @@ export default function App() {
         setUser(null);
         setProgress(DEFAULT_PROGRESS);
         setCustomVocab([]);
+        
+        // Clear syncable keys on logout so guest has fresh state
+        (window as any).__isSyncingFromCloud = true;
+        try {
+          SYNCABLE_STORAGE_KEYS.forEach(k => {
+            localStorage.removeItem(k);
+          });
+        } finally {
+          (window as any).__isSyncingFromCloud = false;
+        }
+        setRenderKey(prev => prev + 1);
+
         playSound.achievement();
       } catch (err) {
         console.error("Error signing out:", err);
@@ -306,15 +443,13 @@ export default function App() {
             onClick={() => handleNavigate("dashboard")}
             className="flex items-center gap-3 cursor-pointer select-none group shrink-0"
           >
-            <div className="w-12 h-12 bg-natural-pink rounded-2xl flex items-center justify-center text-2xl shadow-sm border-2 border-white group-hover:scale-105 transition-all">
-              🎓
-            </div>
+            <DuySonLogo size={52} className="group-hover:rotate-6 transition-transform duration-300" />
             <div>
               <h1 className="font-sans font-black text-natural-deep text-base sm:text-lg tracking-tight leading-none">
                 Học cùng thầy Sơn
               </h1>
               <p className="text-[10px] uppercase tracking-widest font-bold text-pink-500 mt-1">
-                Japanese Learning Academy
+                ĐỊA NGỤC TRẦN GIAN ACADEMY
               </p>
             </div>
           </div>
@@ -447,7 +582,7 @@ export default function App() {
       </nav>
 
       {/* Main Content Area Container */}
-      <main id="primary-main-container" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10">
+      <main id="primary-main-container" key={renderKey} className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10">
         {activeTab === "dashboard" && (
           <Dashboard 
             progress={progress}

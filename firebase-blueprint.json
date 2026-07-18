@@ -30,6 +30,15 @@
         "level": { "type": "string" },
         "category": { "type": "string" }
       }
+    },
+    "SyncStorage": {
+      "title": "SyncStorage",
+      "description": "User local storage data synced to cloud for multi-device support",
+      "type": "object",
+      "properties": {
+        "data": { "type": "object" },
+        "updatedAt": { "type": "string" }
+      }
     }
   },
   "firestore": {
@@ -40,6 +49,10 @@
     "users/{userId}/custom_vocab/{vocabId}": {
       "schema": "Vocabulary",
       "description": "Custom vocabularies added by the user"
+    },
+    "users/{userId}/sync/{syncId}": {
+      "schema": "SyncStorage",
+      "description": "Synced local storage keys for progress data"
     }
   }
 }

@@ -15,7 +15,6 @@ const MOTIVATIONAL_QUOTES = [
   { jp: "継続は力なり！", romaji: "Keizoku wa chikara nari!", vi: "Kiên trì chính là sức mạnh! Thầy tin em làm được! 💪" },
   { jp: "一歩一歩、進もう！", romaji: "Ippo ippo, susumou!", vi: "Hãy tiến lên từng bước một nhé! Ganbatte! 🌸" },
   { jp: "失敗は成功の基！", romaji: "Shippai wa seikou no moto!", vi: "Thất bại là mẹ của thành công! Không việc gì phải sợ sai nhé học trò! 🌟" },
-  { jp: "あきらめたらそこで試合終了ですよ。", romaji: "Akirametara soko de shiai shuuryou desu yo.", vi: "Nếu bỏ cuộc là trận đấu kết thúc ngay lập tức đó! (Thầy Anzai - Slam Dunk) 🔥" },
   { jp: "習うより慣れよ！", romaji: "Narau yori nare yo!", vi: "Trăm hay không bằng tay quen! Hãy luyện tập hàng ngày cùng Thầy nhé! 🎉" }
 ];
 
@@ -30,6 +29,8 @@ const AVATAR_OPTIONS = [
 export default function Dashboard({ progress, vocabList, updateProgress, onNavigate }: DashboardProps) {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [showLogoSelector, setShowLogoSelector] = useState(false);
+  const [logoInputUrl, setLogoInputUrl] = useState("");
   const [editingName, setEditingName] = useState(false);
   const [tempName, setTempName] = useState(progress.userName);
 
@@ -181,7 +182,44 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
     // Pick a daily motivational quote
     const day = new Date().getDate();
     setQuoteIndex(day % MOTIVATIONAL_QUOTES.length);
+
+    // Load custom logo url if saved
+    const savedLogo = localStorage.getItem("duy_son_custom_logo_url");
+    if (savedLogo) {
+      setLogoInputUrl(savedLogo);
+    }
   }, []);
+
+  const handleSaveLogo = () => {
+    playSound.click();
+    let finalUrl = logoInputUrl.trim();
+    if (finalUrl) {
+      // Automatic conversion of Google Drive share links to high-performance direct web view links
+      if (finalUrl.includes("drive.google.com")) {
+        let fileId = "";
+        const dMatch = finalUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (dMatch && dMatch[1]) {
+          fileId = dMatch[1];
+        } else {
+          const idMatch = finalUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+          if (idMatch && idMatch[1]) {
+            fileId = idMatch[1];
+          }
+        }
+        if (fileId) {
+          finalUrl = `https://lh3.googleusercontent.com/d/${fileId}`;
+          setLogoInputUrl(finalUrl);
+        }
+      }
+      localStorage.setItem("duy_son_custom_logo_url", finalUrl);
+      window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key: "duy_son_custom_logo_url", value: finalUrl } }));
+    } else {
+      localStorage.removeItem("duy_son_custom_logo_url");
+      window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key: "duy_son_custom_logo_url", value: null } }));
+    }
+    setShowLogoSelector(false);
+    playSound.achievement();
+  };
 
   const selectedAvatar = AVATAR_OPTIONS.find(a => a.id === progress.selectedAvatarId) || AVATAR_OPTIONS[0];
 
@@ -351,6 +389,52 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 )}
               </div>
               <p className="text-[10px] text-natural-muted mt-2">Chấp nhận định dạng ảnh (JPG, PNG...), tối đa 800KB.</p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Custom Logo URL selector */}
+        {showLogoSelector && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-natural-soft rounded-2xl p-4 border border-natural-border space-y-4"
+          >
+            <div>
+              <p className="text-xs font-bold text-natural-muted mb-2">Đổi Logo Trang Web (Thầy Sơn / Duy Sơn):</p>
+              <p className="text-[11px] text-natural-muted mb-3 leading-relaxed">
+                Em có thể nhập link hình ảnh trực tiếp (direct link) hoặc link chia sẻ từ Google Drive. Hệ thống sẽ tự động tối ưu hóa để hiển thị tốt nhất!
+              </p>
+              <div className="flex gap-2 max-w-lg">
+                <input
+                  type="text"
+                  placeholder="Dán link ảnh hoặc link Google Drive vào đây..."
+                  value={logoInputUrl}
+                  onChange={(e) => setLogoInputUrl(e.target.value)}
+                  className="border border-natural-border rounded-xl px-3 py-2 text-xs w-full bg-white text-natural-text focus:outline-none focus:ring-2 focus:ring-pink-400"
+                />
+                <button 
+                  onClick={handleSaveLogo}
+                  className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all active:scale-95 shadow-sm"
+                >
+                  Lưu Logo
+                </button>
+              </div>
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => {
+                    playSound.click();
+                    setLogoInputUrl("");
+                    localStorage.removeItem("duy_son_custom_logo_url");
+                    window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key: "duy_son_custom_logo_url", value: null } }));
+                    setShowLogoSelector(false);
+                    playSound.achievement();
+                  }}
+                  className="text-rose-600 hover:text-rose-700 text-[11px] font-bold"
+                >
+                  Khôi phục Logo SVG Mặc định (Hình Wolf Duy Son)
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
