@@ -39,6 +39,25 @@
         "data": { "type": "object" },
         "updatedAt": { "type": "string" }
       }
+    },
+    "Leaderboard": {
+      "title": "Leaderboard",
+      "description": "Public user rank and stats for hall of fame leaderboard",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "userName": { "type": "string" },
+        "selectedAvatarId": { "type": "string" },
+        "customAvatarUrl": { "type": "string" },
+        "xp": { "type": "number" },
+        "streak": { "type": "number" },
+        "quizHighScore": { "type": "number" },
+        "learnedWordsCount": { "type": "number" },
+        "learnedGrammarCount": { "type": "number" },
+        "learnedKanjiCount": { "type": "number" },
+        "totalMasteredCount": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      }
     }
   },
   "firestore": {
@@ -53,6 +72,10 @@
     "users/{userId}/sync/{syncId}": {
       "schema": "SyncStorage",
       "description": "Synced local storage keys for progress data"
+    },
+    "leaderboard/{userId}": {
+      "schema": "Leaderboard",
+      "description": "Public leaderboard entry for hall of fame"
     }
   }
 }

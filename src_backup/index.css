@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Noto+Serif+JP:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-natural-bg: #FEF9F3;
+  --color-natural-text: #4A3F35;
+  --color-natural-deep: #2D241E;
+  --color-natural-border: #E9DCC9;
+  --color-natural-olive: #5A5A40;
+  --color-natural-pink: #FFD1DC;
+  --color-natural-sand: #F5F1E8;
+  --color-natural-soft: #FDF8F3;
+  --color-natural-muted: #8C7B6A;
+}
+
+body {
+  background-color: #FEF9F3;
+  color: #4A3F35;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Washi pattern background helper */
+.washi-pattern {
+  background-color: #FDFBF7;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Antique card with 3D black shadow offsets */
+.card-antique {
+  background-color: #ffffff;
+  border: 2px solid #1A1A1A;
+  box-shadow: 6px 6px 0px #1A1A1A;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card-antique:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px #8B0000;
+}
+
+/* Hanko seal (stamp stamp stamp) */
+.hanko-seal {
+  border: 2px solid #8B0000;
+  color: #8B0000;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Vertical Japanese text alignment */
+.tategaki {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.2em;
+}
+
+/* 3D Flashcard flip utility classes */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Custom Knowledge/Bổ ích styles matching the request */
+.card-recommended {
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border: 2px solid #C5A059;
+  box-shadow: 6px 6px 0px #1A1A1A, 0 0 30px rgba(197, 160, 89, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-recommended::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 60%, rgba(197, 160, 89, 0.05) 100%);
+  pointer-events: none;
+}
+
+.card-recommended:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px #1A1A1A, 0 0 50px rgba(197, 160, 89, 0.4);
+  border-color: #D4AF6A;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(197, 160, 89, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(197, 160, 89, 0.6), 0 0 50px rgba(197, 160, 89, 0.2);
+  }
+}
+
+.btn-read-more {
+  animation: pulse-glow 2s infinite;
+}
+
+.tag-essential {
+  background: #8B0000;
+  color: white;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+.tag-practical {
+  background: #C5A059;
+  color: white;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+.knowledge-title-glow {
+  text-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+}
+
+/* Custom Games/Trò chơi styles matching the request */
+.game-card-active {
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border: 2px solid #FF6B35;
+  box-shadow: 6px 6px 0px #1A1A1A, 0 0 30px rgba(255, 107, 53, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 60%, rgba(255, 107, 53, 0.05) 100%);
+  pointer-events: none;
+}
+
+.game-card-active:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px #1A1A1A, 0 0 50px rgba(255, 107, 53, 0.4);
+  border-color: #FF8C5A;
+}
+
+.game-title-glow {
+  text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+}
+
+@keyframes pulse-glow-game {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), 0 0 50px rgba(255, 107, 53, 0.2);
+  }
+}
+
+.btn-play-now {
+  animation: pulse-glow-game 2s infinite;
+}
+
+.tag-new {
+  background: #FF6B35;
+  color: white;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+.tag-dev {
+  background: #666;
+  color: white;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+.tag-soon {
+  background: #999;
+  color: white;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+/* 3D Rotating Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+
+
+

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { UserProgress, Vocabulary } from "./types";
 import { PRESET_VOCABULARY } from "./data/vocabPreset";
 import { playSound } from "./utils/audio";
+import { calculateDetailedUserStats } from "./utils/stats";
 import Dashboard from "./components/Dashboard";
 import FlashcardSet from "./components/FlashcardSet";
 import QuizGame from "./components/QuizGame";
@@ -9,9 +10,11 @@ import MatchGame from "./components/MatchGame";
 import SonkuroDrift from "./components/SonkuroDrift";
 import CraneKanji from "./components/CraneKanji";
 import ThaySonChat from "./components/ThaySonChat";
+import JapaneseAiChat from "./components/JapaneseAiChat";
 import PersonalVocab from "./components/PersonalVocab";
 import CoursesTab from "./components/CoursesTab";
 import KnowledgeTab from "./components/KnowledgeTab";
+import ListeningShadowing from "./components/ListeningShadowing";
 import GamesTab from "./components/GamesTab";
 import N5Lessons from "./components/N5Lessons";
 import AlphabetLessons from "./components/AlphabetLessons";
@@ -28,11 +31,13 @@ import VerbConjugationLessons from "./components/VerbConjugationLessons";
 import VerbConjugationN4Lessons from "./components/VerbConjugationN4Lessons";
 import JLPTN4Exams from "./components/JLPTN4Exams";
 import JLPTN3Exams from "./components/JLPTN3Exams";
+import Leaderboard from "./components/Leaderboard";
 import Auth from "./components/Auth";
 import { DuySonLogo } from "./components/DuySonLogo";
 import { auth, db } from "./lib/firebase";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
+import { mergeStorageSerialized } from "./utils/syncHelper";
 import { 
   BookOpen, 
   Gamepad2, 
@@ -45,7 +50,8 @@ import {
   CloudOff, 
   LogIn, 
   LogOut, 
-  RefreshCw 
+  RefreshCw,
+  Trophy
 } from "lucide-react";
 
 const SYNCABLE_STORAGE_KEYS = [
@@ -56,6 +62,7 @@ const SYNCABLE_STORAGE_KEYS = [
   "n4_known_kanji",
   "kanji_n3_progress",
   "n5_srs_v8",
+  "n5_settings_v8",
   "sk_vocab_n4_progress",
   "sk_vocab_n3_progress",
   "hac_tong_high_score",
@@ -66,10 +73,11 @@ const SYNCABLE_STORAGE_KEYS = [
   "n4_known_examples",
   "n4_quiz_correct",
   "n4_quiz_total",
-  "duy_son_custom_logo_url"
+  "duy_son_custom_logo_url",
+  "hoc_cung_thay_son_ai_examples"
 ];
 
-// Monkeypatch localStorage to emit custom event on changes
+// Monkeypatch localStorage to emit custom event on changes (deferred to avoid setState-in-render)
 if (typeof window !== "undefined") {
   try {
     const originalSetItem = window.localStorage.setItem;
@@ -77,12 +85,16 @@ if (typeof window !== "undefined") {
 
     window.localStorage.setItem = function (key: string, value: string) {
       originalSetItem.call(this, key, value);
-      window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key, value } }));
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key, value } }));
+      }, 0);
     };
 
     window.localStorage.removeItem = function (key: string) {
       originalRemoveItem.call(this, key);
-      window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key, value: null } }));
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key, value: null } }));
+      }, 0);
     };
   } catch (err) {
     console.warn("Failed to patch localStorage for syncing:", err);
@@ -208,7 +220,7 @@ export default function App() {
           });
           setCustomVocab(firestoreVocab);
 
-          // 3. Fetch syncable storage keys
+          // 3. Fetch syncable storage keys and smart merge with local storage
           const syncRef = doc(db, "users/" + firebaseUser.uid + "/sync/storage");
           const syncSnap = await getDoc(syncRef);
           if (syncSnap.exists()) {
@@ -216,12 +228,27 @@ export default function App() {
             if (syncData && syncData.data) {
               (window as any).__isSyncingFromCloud = true;
               try {
-                Object.entries(syncData.data).forEach(([key, val]) => {
-                  localStorage.setItem(key, val as string);
+                SYNCABLE_STORAGE_KEYS.forEach(key => {
+                  const cloudVal = syncData.data[key];
+                  const localVal = localStorage.getItem(key);
+
+                  if (cloudVal !== undefined && cloudVal !== null) {
+                    const merged = mergeStorageSerialized(localVal, cloudVal as string);
+                    localStorage.setItem(key, merged);
+                  }
                 });
               } finally {
                 (window as any).__isSyncingFromCloud = false;
               }
+
+              // Save the merged result back up to Cloud so Firestore reflects latest local gains
+              const mergedPayload: Record<string, string> = {};
+              SYNCABLE_STORAGE_KEYS.forEach(k => {
+                const val = localStorage.getItem(k);
+                if (val !== null) mergedPayload[k] = val;
+              });
+              await setDoc(syncRef, { data: mergedPayload, updatedAt: new Date().toISOString() });
+
               setRenderKey(prev => prev + 1);
             }
           } else {
@@ -251,15 +278,6 @@ export default function App() {
         if (savedVocab) {
           try { setCustomVocab(JSON.parse(savedVocab)); } catch (e) {}
         }
-        // Clear syncable keys on logout so guest has fresh state
-        (window as any).__isSyncingFromCloud = true;
-        try {
-          SYNCABLE_STORAGE_KEYS.forEach(k => {
-            localStorage.removeItem(k);
-          });
-        } finally {
-          (window as any).__isSyncingFromCloud = false;
-        }
         setRenderKey(prev => prev + 1);
       }
       setIsFirebaseLoading(false);
@@ -276,6 +294,25 @@ export default function App() {
       setDoc(doc(db, "users/" + user.uid), progress)
         .catch(err => console.error("Error saving progress to Firestore:", err))
         .finally(() => setIsSyncing(false));
+
+      // Also sync public leaderboard entry
+      const detailed = calculateDetailedUserStats(progress, PRESET_VOCABULARY);
+
+      const leaderboardData = {
+        uid: user.uid,
+        userName: user.displayName || progress.userName || "Học trò ngoan",
+        selectedAvatarId: progress.selectedAvatarId || "hero",
+        customAvatarUrl: progress.customAvatarUrl || user.photoURL || "",
+        xp: progress.xp || 0,
+        streak: progress.streak || 1,
+        quizHighScore: progress.quizHighScore || 0,
+        learnedWordsCount: detailed.vocab,
+        learnedGrammarCount: detailed.grammar,
+        learnedKanjiCount: detailed.kanji,
+        totalMasteredCount: detailed.total,
+        updatedAt: new Date().toISOString()
+      };
+      setDoc(doc(db, "leaderboard", user.uid), leaderboardData).catch(() => {});
     } else {
       localStorage.setItem(PROGRESS_LOCAL_STORAGE_KEY, JSON.stringify(progress));
     }
@@ -325,31 +362,59 @@ export default function App() {
     });
   };
 
-  // Sync triggered storage changes to cloud
+  // Direct sync function to immediately push local storage to Cloud
+  const performCloudSync = async () => {
+    if (!user || isFirebaseLoading) return;
+    setIsSyncing(true);
+    try {
+      const data: Record<string, string> = {};
+      SYNCABLE_STORAGE_KEYS.forEach(k => {
+        const val = localStorage.getItem(k);
+        if (val !== null) {
+          data[k] = val;
+        }
+      });
+      const syncRef = doc(db, "users/" + user.uid + "/sync/storage");
+      await setDoc(syncRef, { data, updatedAt: new Date().toISOString() });
+    } catch (err) {
+      console.error("Error syncing storage to Firestore:", err);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Sync triggered storage changes to cloud (with short 500ms debounce)
   useEffect(() => {
     if (!user || isFirebaseLoading) return;
 
-    const timer = setTimeout(async () => {
-      setIsSyncing(true);
-      try {
-        const data: Record<string, string> = {};
-        SYNCABLE_STORAGE_KEYS.forEach(k => {
-          const val = localStorage.getItem(k);
-          if (val !== null) {
-            data[k] = val;
-          }
-        });
-        const syncRef = doc(db, "users/" + user.uid + "/sync/storage");
-        await setDoc(syncRef, { data, updatedAt: new Date().toISOString() });
-      } catch (err) {
-        console.error("Error syncing storage to Firestore:", err);
-      } finally {
-        setIsSyncing(false);
-      }
-    }, 1500); // Debounce to prevent rapid database writes
+    const timer = setTimeout(() => {
+      performCloudSync();
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [syncTrigger, user, isFirebaseLoading]);
+
+  // Tab unload & visibility change flush to prevent data loss on closing tab
+  useEffect(() => {
+    if (!user) return;
+
+    const handleFlush = () => {
+      performCloudSync();
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        handleFlush();
+      }
+    };
+
+    window.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("beforeunload", handleFlush);
+    return () => {
+      window.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("beforeunload", handleFlush);
+    };
+  }, [user]);
 
   // Listen to storage change events
   useEffect(() => {
@@ -357,7 +422,7 @@ export default function App() {
       if ((window as any).__isSyncingFromCloud) return;
 
       const key = e.detail?.key;
-      if (SYNCABLE_STORAGE_KEYS.includes(key)) {
+      if (!key || SYNCABLE_STORAGE_KEYS.includes(key)) {
         setSyncTrigger(prev => prev + 1);
       }
     };
@@ -370,7 +435,7 @@ export default function App() {
 
   const handleLogout = async () => {
     playSound.click();
-    if (window.confirm("Em có muốn đăng xuất khỏi tài khoản không?")) {
+    if (window.confirm("Em có muốn đăng xuất khỏi tài khoản không? (Tiến trình học tập trên thiết bị này vẫn được giữ nguyên)")) {
       try {
         if (user) {
           await signOut(auth);
@@ -378,18 +443,7 @@ export default function App() {
         setUser(null);
         setProgress(DEFAULT_PROGRESS);
         setCustomVocab([]);
-        
-        // Clear syncable keys on logout so guest has fresh state
-        (window as any).__isSyncingFromCloud = true;
-        try {
-          SYNCABLE_STORAGE_KEYS.forEach(k => {
-            localStorage.removeItem(k);
-          });
-        } finally {
-          (window as any).__isSyncingFromCloud = false;
-        }
         setRenderKey(prev => prev + 1);
-
         playSound.achievement();
       } catch (err) {
         console.error("Error signing out:", err);
@@ -456,18 +510,20 @@ export default function App() {
 
           {/* Quick Info & Authentication Badge */}
           <div className="flex items-center gap-3 select-none shrink-0">
-            {/* Sync status indicator */}
+            {/* Sync status indicator & manual sync button */}
             {user && (
-              <div 
-                className="flex items-center justify-center p-1.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
-                title={isSyncing ? "Đang đồng bộ..." : "Đã lưu trữ đám mây"}
+              <button 
+                onClick={() => { playSound.click(); performCloudSync(); }}
+                className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 text-[10px] font-bold transition-all cursor-pointer"
+                title={isSyncing ? "Đang đồng bộ đám mây..." : "Đã đồng bộ an toàn! Bấm để đồng bộ ngay lập tức"}
               >
                 {isSyncing ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-pink-500" />
                 ) : (
-                  <Cloud className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
+                  <Cloud className="w-3.5 h-3.5 text-emerald-600" />
                 )}
-              </div>
+                <span className="hidden md:inline">{isSyncing ? "Đang đồng bộ..." : "Đã đồng bộ"}</span>
+              </button>
             )}
             
             {!user && (
@@ -537,7 +593,7 @@ export default function App() {
       {/* Iconic Navigation Bar - Positioned at the top right below primary header/login */}
       <nav id="iconic-navigation-bar" className="sticky top-20 z-30 bg-white border-b border-natural-border py-2 px-1 sm:px-4 shadow-sm backdrop-blur-md">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-5 gap-1 max-w-2xl mx-auto text-center">
+          <div className="grid grid-cols-7 gap-1 max-w-4xl mx-auto text-center">
             <button
               onClick={() => handleNavigate("dashboard")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "dashboard" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
@@ -547,11 +603,33 @@ export default function App() {
             </button>
             
             <button
+              onClick={() => handleNavigate("leaderboard")}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${activeTab === "leaderboard" ? "text-amber-600 bg-amber-50/80 font-black" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+            >
+              <Trophy className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-amber-500" />
+              <span>Bảng Vàng</span>
+              <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase scale-90 shadow-sm">
+                TOP
+              </span>
+            </button>
+
+            <button
               onClick={() => handleNavigate("courses")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "courses" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
             >
               <GraduationCap className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Khóa học</span>
+            </button>
+
+            <button
+              onClick={() => handleNavigate("japanese-ai-chat")}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${activeTab === "japanese-ai-chat" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+            >
+              <MessageSquare className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+              <span>Trò chuyện AI</span>
+              <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase scale-90">
+                JP
+              </span>
             </button>
 
             <button
@@ -589,6 +667,14 @@ export default function App() {
             vocabList={PRESET_VOCABULARY}
             updateProgress={updateProgress}
             onNavigate={handleNavigate}
+          />
+        )}
+
+        {activeTab === "leaderboard" && (
+          <Leaderboard 
+            progress={progress}
+            currentUser={user}
+            onRefreshProgress={() => setRenderKey(prev => prev + 1)}
           />
         )}
 
@@ -695,6 +781,12 @@ export default function App() {
           <KnowledgeTab />
         )}
 
+        {activeTab === "listening-shadowing" && (
+          <ListeningShadowing 
+            onGoBack={() => handleNavigate("knowledge")}
+          />
+        )}
+
         {activeTab === "games" && (
           <GamesTab 
             onNavigate={handleNavigate}
@@ -742,6 +834,22 @@ export default function App() {
             onGoBack={() => handleNavigate("games")}
             progress={progress}
             updateProgress={updateProgress}
+          />
+        )}
+
+        {activeTab === "japanese-ai-chat" && (
+          <JapaneseAiChat 
+            progress={progress}
+            updateProgress={updateProgress}
+            onGoBack={() => handleNavigate("dashboard")}
+          />
+        )}
+
+        {activeTab === "thay-son-chat" && (
+          <ThaySonChat 
+            progress={progress}
+            updateProgress={updateProgress}
+            onGoBack={() => handleNavigate("dashboard")}
           />
         )}
 

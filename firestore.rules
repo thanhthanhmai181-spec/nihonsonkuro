@@ -15,7 +15,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow read: if isOwner(userId);
+      allow read: if true;
       allow create, update: if isOwner(userId) && isValidId(userId);
       
       match /custom_vocab/{vocabId} {
@@ -25,8 +25,15 @@ service cloud.firestore {
       }
       
       match /sync/{syncId} {
-        allow read, write: if isOwner(userId) && isValidId(syncId);
+        allow read: if true;
+        allow write: if isOwner(userId) && isValidId(syncId);
       }
+    }
+
+    match /leaderboard/{userId} {
+      allow read: if true;
+      allow create, update: if isOwner(userId) && isValidId(userId);
+      allow delete: if isOwner(userId);
     }
   }
 }
