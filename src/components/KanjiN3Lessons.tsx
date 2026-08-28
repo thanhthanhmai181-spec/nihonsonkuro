@@ -18,13 +18,38 @@ import {
   Star,
   Pointer,
   HelpCircle,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft,
+  Volume2,
+  Sparkles
 } from "lucide-react";
 import { KANJI_N3_DATA, LessonItem, KanjiItem, VocabularyItem } from "../data/kanjiN3Data";
+import { SINO_VIETNAMESE_DICTIONARY } from "../data/sinoVietnameseDictionary";
 
 interface KanjiN3LessonsProps {
   onGoBack: () => void;
 }
+
+// Helper to determine optimal font size so Kanji words stay strictly on 1 line while maximizing size
+const getKanjiN3WordSizeClass = (word: string) => {
+  const len = word ? word.length : 0;
+  if (len <= 1) {
+    return "text-7xl sm:text-8xl md:text-9xl";
+  } else if (len === 2) {
+    return "text-6xl sm:text-7xl md:text-8xl";
+  } else if (len === 3) {
+    return "text-5xl sm:text-6xl md:text-7xl";
+  } else if (len === 4) {
+    return "text-4xl sm:text-5xl md:text-6xl";
+  } else {
+    return "text-3xl sm:text-4xl md:text-5xl";
+  }
+};
+
+// Base Sino-Vietnamese dictionary for common kanji
+const BASE_SINO_MAP: Record<string, string> = {
+  ...SINO_VIETNAMESE_DICTIONARY
+};
 
 interface UserProgress {
   viewedKanjis: string[];
@@ -39,8 +64,8 @@ interface UserProgress {
 }
 
 export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
-  // Tabs: 'kienthuc' | 'flashcard' | 'baitap' | 'dulieu'
-  const [currentTab, setCurrentTab] = useState<'kienthuc' | 'flashcard' | 'baitap' | 'dulieu'>('kienthuc');
+  // Tabs: 'kienthuc' | 'hocflashcard' | 'flashcard' | 'baitap' | 'dulieu'
+  const [currentTab, setCurrentTab] = useState<'kienthuc' | 'hocflashcard' | 'flashcard' | 'baitap' | 'dulieu'>('kienthuc');
   
   // Progress State
   const [userProgress, setUserProgress] = useState<UserProgress>({
@@ -128,6 +153,47 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
     return list;
   }, []);
 
+  // Sino-Vietnamese map combined from N3 dataset and base map
+  const kanjiSinoMap = useMemo(() => {
+    const map: Record<string, string> = { ...BASE_SINO_MAP };
+    KANJI_N3_DATA.forEach(lesson => {
+      lesson.kanjis.forEach(k => {
+        if (k.character && k.sino_vietnamese) {
+          map[k.character] = k.sino_vietnamese;
+        }
+      });
+    });
+    return map;
+  }, []);
+
+  // Helper to format Sino-Vietnamese reading in parentheses: e.g. (Mai - Vũ)
+  const getWordSinoVietnamese = (word: string): string => {
+    const kanjiRegex = /[\u4E00-\u9FAF\u3400-\u4DBF]/g;
+    const matches = word.match(kanjiRegex);
+    if (!matches || matches.length === 0) return "";
+    
+    const parts = matches.map(char => {
+      const val = kanjiSinoMap[char] || "";
+      if (!val) return "";
+      return val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+    }).filter(Boolean);
+
+    if (parts.length === 0) return "";
+    return `(${parts.join(" - ")})`;
+  };
+
+  // Helper for Japanese TTS pronunciation
+  const speakJapanese = (text: string) => {
+    playSound.click();
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.85;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   // --- TAB 1: KIẾN THỨC (KNOWLEDGE) STATE ---
   const [expandedLessonIndex, setExpandedLessonIndex] = useState<number | null>(null);
   const [expandedKanjiKeys, setExpandedKanjiKeys] = useState<Record<string, boolean>>({});
@@ -155,7 +221,101 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
     }
   };
 
-  // --- TAB 2: FLASH CARD STATE ---
+  // --- TAB 2: HỌC FLASHCARD (1-MẶT ĐẦY ĐỦ THÔNG TIN) STATE ---
+  const [hfcLessonSelect, setHfcLessonSelect] = useState<string>('all');
+  const [hfcCurrentQueue, setHfcCurrentQueue] = useState<(VocabularyItem & { lessonId: number; kanjiChar: string })[]>([]);
+  const [hfcCurrentIndex, setHfcCurrentIndex] = useState<number>(0);
+
+  const initHocFlashcards = () => {
+    let queue: typeof allVocabularies = [];
+
+    if (hfcLessonSelect === 'all') {
+      // Prioritize unmastered words, followed by all words
+      const unmastered = allVocabularies.filter(v => {
+        const stats = userProgress.flashcards[v.word];
+        return !stats || !stats.mastered;
+      });
+      const mastered = allVocabularies.filter(v => {
+        const stats = userProgress.flashcards[v.word];
+        return stats && stats.mastered;
+      });
+      queue = [...unmastered, ...mastered];
+    } else {
+      queue = allVocabularies.filter(v => v.lessonId === Number(hfcLessonSelect));
+    }
+
+    setHfcCurrentQueue(queue);
+    setHfcCurrentIndex(0);
+  };
+
+  useEffect(() => {
+    if (currentTab === 'hocflashcard') {
+      initHocFlashcards();
+    }
+  }, [currentTab, hfcLessonSelect]);
+
+  const handleHfcPrev = () => {
+    playSound.click();
+    setHfcCurrentIndex(prev => (prev > 0 ? prev - 1 : hfcCurrentQueue.length - 1));
+  };
+
+  const handleHfcNext = () => {
+    playSound.click();
+    setHfcCurrentIndex(prev => (prev < hfcCurrentQueue.length - 1 ? prev + 1 : 0));
+  };
+
+  const handleHfcResult = (isMastered: boolean) => {
+    if (hfcCurrentQueue.length === 0) return;
+    playSound.click();
+
+    const currentVocab = hfcCurrentQueue[hfcCurrentIndex];
+    const prevStats = userProgress.flashcards[currentVocab.word] || { attempts: 0, mastered: false };
+    
+    const updatedFlashcards = {
+      ...userProgress.flashcards,
+      [currentVocab.word]: {
+        attempts: prevStats.attempts + 1,
+        mastered: isMastered
+      }
+    };
+
+    saveProgress({
+      ...userProgress,
+      flashcards: updatedFlashcards
+    });
+
+    if (hfcCurrentIndex < hfcCurrentQueue.length - 1) {
+      setHfcCurrentIndex(prev => prev + 1);
+    }
+  };
+
+  const hfcStats = useMemo(() => {
+    let pool = hfcLessonSelect === 'all' 
+      ? allVocabularies 
+      : allVocabularies.filter(v => v.lessonId === Number(hfcLessonSelect));
+
+    let mastered = 0;
+    let unmastered = 0;
+
+    pool.forEach(v => {
+      const stats = userProgress.flashcards[v.word];
+      if (stats && stats.mastered) {
+        mastered++;
+      } else {
+        unmastered++;
+      }
+    });
+
+    return {
+      mastered,
+      unmastered,
+      current: hfcCurrentQueue.length > 0 ? Math.min(hfcCurrentIndex + 1, hfcCurrentQueue.length) : 0,
+      total: hfcCurrentQueue.length
+    };
+  }, [hfcLessonSelect, hfcCurrentIndex, hfcCurrentQueue, userProgress.flashcards, allVocabularies]);
+
+
+  // --- TAB 3: FLASH CARD (LẬT THẺ) STATE ---
   const [fcLessonSelect, setFcLessonSelect] = useState<string>('all');
   const [fcCurrentQueue, setFcCurrentQueue] = useState<(VocabularyItem & { lessonId: number; kanjiChar: string })[]>([]);
   const [fcCurrentIndex, setFcCurrentIndex] = useState<number>(0);
@@ -274,7 +434,7 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
   }, [fcLessonSelect, fcCurrentIndex, fcCurrentQueue, userProgress.flashcards, allVocabularies]);
 
 
-  // --- TAB 3: BÀI TẬP (QUIZ) STATE ---
+  // --- TAB 4: BÀI TẬP (QUIZ) STATE ---
   const [quizLessonSelect, setQuizLessonSelect] = useState<string>('all');
   const [quizState, setQuizState] = useState<'setup' | 'active' | 'result'>('setup');
   const [quizQueue, setQuizQueue] = useState<(VocabularyItem & { lessonId: number; kanjiChar: string })[]>([]);
@@ -509,17 +669,27 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
                               {/* Kanji vocabulary entries */}
                               {isKanjiExpanded && (
                                 <div className="mt-3 ml-12 pl-4 border-l-2 border-[#8B0000] space-y-2.5 bg-gray-50/50 p-3 rounded-lg">
-                                  {kanji.vocabularies.map((vocab, vIdx) => (
-                                    <div key={vIdx} className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-gray-200 shadow-sm">
-                                      <div>
-                                        <div className="font-bold text-base text-[#1A1A1A]" style={{ fontFamily: "'Noto Serif JP', serif" }}>{vocab.word}</div>
-                                        <div className="text-xs text-gray-500 mt-0.5 font-sans">{vocab.meaning}</div>
+                                  {kanji.vocabularies.map((vocab, vIdx) => {
+                                    const sino = getWordSinoVietnamese(vocab.word);
+                                    return (
+                                      <div key={vIdx} className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-gray-200 shadow-sm">
+                                        <div>
+                                          <div className="flex items-center gap-2">
+                                            <span className="font-bold text-base text-[#1A1A1A]" style={{ fontFamily: "'Noto Serif JP', serif" }}>{vocab.word}</span>
+                                            {sino && (
+                                              <span className="text-xs font-bold text-emerald-700 font-serif">
+                                                {sino}
+                                              </span>
+                                            )}
+                                          </div>
+                                          <div className="text-xs text-gray-500 mt-0.5 font-sans">{vocab.meaning}</div>
+                                        </div>
+                                        <div className="bg-[#8B0000]/10 text-[#8B0000] text-xs font-bold px-3 py-1 rounded-full border border-[#8B0000]/20 font-serif">
+                                          {vocab.reading}
+                                        </div>
                                       </div>
-                                      <div className="bg-[#8B0000]/10 text-[#8B0000] text-xs font-bold px-3 py-1 rounded-full border border-[#8B0000]/20 font-serif">
-                                        {vocab.reading}
-                                      </div>
-                                    </div>
-                                  ))}
+                                    );
+                                  })}
                                 </div>
                               )}
                             </div>
@@ -534,7 +704,174 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
           </section>
         )}
 
-        {/* --- TAB 2: FLASH CARD --- */}
+        {/* --- TAB 2: HỌC FLASHCARD (1-MẶT ĐẦY ĐỦ THÔNG TIN) --- */}
+        {currentTab === 'hocflashcard' && (
+          <section className="max-w-md mx-auto space-y-6">
+            {/* Lesson Filter Selector */}
+            <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 bg-white p-4 border-2 border-[#1A1A1A] rounded-xl shadow-[3px_3px_0px_#1A1A1A]">
+              <span className="font-bold text-gray-700 flex items-center gap-1.5 font-serif text-sm">
+                <BookOpen className="w-4 h-4 text-[#8B0000]" /> Học Theo Bài:
+              </span>
+              <select
+                value={hfcLessonSelect}
+                onChange={(e) => setHfcLessonSelect(e.target.value)}
+                className="bg-white border-2 border-[#1A1A1A] text-gray-800 text-sm font-bold rounded-lg p-2 focus:ring-[#8B0000] focus:border-[#8B0000] outline-none"
+              >
+                <option value="all">Tất cả bài ({allVocabularies.length} từ)</option>
+                {KANJI_N3_DATA.map(lesson => (
+                  <option key={lesson.id} value={lesson.id}>{lesson.title}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Flashcard Stats Panel */}
+            <div className="bg-white p-4 rounded-xl border-2 border-[#1A1A1A] shadow-[4px_4px_0px_#1A1A1A] space-y-2">
+              <div className="text-center text-sm font-bold text-gray-600 border-b pb-2">
+                Từ thứ <span className="text-[#8B0000] text-lg font-serif">{hfcStats.current}</span> / <span className="font-serif text-lg">{hfcStats.total}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs font-bold font-sans">
+                <span className="text-green-600 flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5" /> Đã thuộc: {hfcStats.mastered}
+                </span>
+                <span className="text-[#8B0000] flex items-center gap-1">
+                  <XCircle className="w-3.5 h-3.5" /> Chưa thuộc: {hfcStats.unmastered}
+                </span>
+              </div>
+            </div>
+
+            {/* Empty / Completed State */}
+            {hfcCurrentQueue.length === 0 ? (
+              <div className="bg-white p-8 border-4 border-[#1A1A1A] shadow-[6px_6px_0px_#1A1A1A] rounded-2xl text-center space-y-4">
+                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-3xl">
+                  ✓
+                </div>
+                <h3 className="text-xl font-bold font-serif text-gray-800">Tuyệt Vời!</h3>
+                <p className="text-sm text-gray-500 italic">
+                  Không có từ vựng nào trong danh sách này.
+                </p>
+                <button
+                  onClick={initHocFlashcards}
+                  className="px-6 py-2.5 bg-[#8B0000] text-white border-2 border-[#1A1A1A] hover:bg-red-800 transition-colors font-bold rounded-xl text-sm shadow-[3px_3px_0px_#1A1A1A] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center gap-2 mx-auto uppercase"
+                >
+                  <RotateCcw className="w-4 h-4" /> Tải Lại Danh Sách
+                </button>
+              </div>
+            ) : (
+              /* Active 1-face Learning Card Display (Matching image strictly) */
+              <div className="space-y-6">
+                {(() => {
+                  const currentItem = hfcCurrentQueue[hfcCurrentIndex] || hfcCurrentQueue[0];
+                  const sino = getWordSinoVietnamese(currentItem.word);
+                  const isCurrentMastered = !!(userProgress.flashcards[currentItem.word]?.mastered);
+
+                  return (
+                    <>
+                      {/* Main 1-face Card */}
+                      <div 
+                        onClick={() => speakJapanese(currentItem.reading || currentItem.word)}
+                        className="bg-white border-4 border-[#1A1A1A] rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-[8px_8px_0px_#1A1A1A] min-h-[340px] sm:min-h-[380px] space-y-4 relative group cursor-pointer transition-transform duration-200 hover:-translate-y-1"
+                        title="Chạm để nghe phát âm"
+                      >
+                        {/* Status Badge */}
+                        <div className="absolute top-4 right-4 flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speakJapanese(currentItem.reading || currentItem.word);
+                            }}
+                            className="p-2 rounded-full bg-amber-50 border-2 border-[#1A1A1A] text-[#8B0000] hover:bg-[#8B0000] hover:text-white transition-colors shadow-[2px_2px_0px_#1A1A1A] active:shadow-none"
+                            title="Nghe phát âm"
+                          >
+                            <Volume2 className="w-4 h-4" />
+                          </button>
+                          {isCurrentMastered ? (
+                            <span className="text-xs bg-green-100 text-green-700 font-bold px-2.5 py-1 rounded-full border border-green-300 flex items-center gap-1 font-sans">
+                              <CheckCircle className="w-3 h-3" /> Đã thuộc
+                            </span>
+                          ) : (
+                            <span className="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded-full border border-amber-300 font-sans">
+                              Đang học
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Top: Furigana / Reading in RED */}
+                        <div className="text-3xl sm:text-4xl font-black text-red-600 font-serif tracking-wider pt-4 select-none">
+                          {currentItem.reading}
+                        </div>
+
+                        {/* Middle 1: Kanji in BLUE */}
+                        <div className={`${getKanjiN3WordSizeClass(currentItem.word)} font-black font-serif text-blue-700 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis max-w-full px-2 text-center inline-block leading-tight select-none`}>
+                          {currentItem.word}
+                        </div>
+
+                        {/* Middle 2: Sino-Vietnamese / Âm Hán Việt in GREEN */}
+                        {sino && (
+                          <div className="text-xl sm:text-2xl font-bold text-emerald-700 font-sans tracking-wide select-none">
+                            {sino}
+                          </div>
+                        )}
+
+                        {/* Divider */}
+                        <div className="w-20 h-0.5 bg-gray-200 rounded"></div>
+
+                        {/* Bottom: Vietnamese Meaning in BLACK */}
+                        <div className="text-xl sm:text-2xl font-black text-[#1A1A1A] font-sans leading-snug max-w-md select-none">
+                          {currentItem.meaning}
+                        </div>
+
+                        <div className="text-gray-400 text-xs flex items-center gap-1 font-sans pt-2">
+                          <Pointer className="w-3 h-3" /> Chạm thẻ để nghe đọc
+                        </div>
+                      </div>
+
+                      {/* Navigation Controls: Prev / Sound / Next */}
+                      <div className="flex items-center justify-between gap-3">
+                        <button
+                          onClick={handleHfcPrev}
+                          className="flex-1 bg-white border-2 border-[#1A1A1A] text-[#1A1A1A] rounded-xl py-3 px-3 font-bold shadow-[3px_3px_0px_#1A1A1A] hover:bg-amber-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1 text-sm uppercase"
+                        >
+                          <ChevronLeft className="w-4 h-4" /> Trước
+                        </button>
+                        <button
+                          onClick={() => speakJapanese(currentItem.reading || currentItem.word)}
+                          className="bg-white border-2 border-[#1A1A1A] text-[#8B0000] rounded-xl py-3 px-4 font-bold shadow-[3px_3px_0px_#1A1A1A] hover:bg-red-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1.5 text-sm"
+                          title="Nghe đọc tiếng Nhật"
+                        >
+                          <Volume2 className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={handleHfcNext}
+                          className="flex-1 bg-white border-2 border-[#1A1A1A] text-[#1A1A1A] rounded-xl py-3 px-3 font-bold shadow-[3px_3px_0px_#1A1A1A] hover:bg-amber-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1 text-sm uppercase"
+                        >
+                          Sau <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Mastery Buttons */}
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => handleHfcResult(false)}
+                          className="flex-1 bg-white border-2 border-[#1A1A1A] text-[#8B0000] rounded-xl py-3 px-4 font-bold shadow-[3px_3px_0px_#1A1A1A] hover:bg-red-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1.5 text-sm uppercase"
+                        >
+                          <XCircle className="w-4 h-4" /> Chưa nhớ
+                        </button>
+                        <button
+                          onClick={() => handleHfcResult(true)}
+                          className="flex-1 bg-[#8B0000] border-2 border-[#1A1A1A] text-white rounded-xl py-3 px-4 font-bold shadow-[3px_3px_0px_#1A1A1A] hover:bg-red-800 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1.5 text-sm uppercase"
+                        >
+                          <CheckCircle className="w-4 h-4" /> Đã nhớ
+                        </button>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* --- TAB 3: FLASH CARD --- */}
         {currentTab === 'flashcard' && (
           <section className="max-w-md mx-auto space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 bg-white p-4 border-2 border-[#1A1A1A] rounded-xl shadow-[3px_3px_0px_#1A1A1A]">
@@ -594,22 +931,30 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
                     className={`w-full h-full duration-700 transform-style-3d relative rounded-3xl border-4 border-[#1A1A1A] shadow-[8px_8px_0px_#1A1A1A] cursor-pointer ${isCardFlipped ? 'rotate-y-180' : ''}`}
                   >
                     {/* Front: Word */}
-                    <div className="absolute inset-0 bg-white backface-hidden flex flex-col items-center justify-center p-6 rounded-2xl">
+                    <div className="absolute inset-0 bg-white backface-hidden flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl">
                       <div className="text-gray-400 text-xs absolute top-4 right-4 flex items-center gap-1 font-sans">
                         <Pointer className="w-3 h-3" /> Chạm để lật
                       </div>
-                      <span className="text-5xl font-black text-gray-800 tracking-wider font-serif" style={{ fontFamily: "'Noto Serif JP', serif" }}>
+                      <span className={`${getKanjiN3WordSizeClass(fcCurrentQueue[fcCurrentIndex].word)} font-black font-serif text-[#1A1A1A] tracking-normal whitespace-nowrap overflow-hidden text-ellipsis max-w-full px-2 text-center inline-block leading-tight select-none`}>
                         {fcCurrentQueue[fcCurrentIndex].word}
                       </span>
                     </div>
 
                     {/* Back: Reading & Meaning */}
-                    <div className="absolute inset-0 bg-[#FDFBF7] rotate-y-180 backface-hidden flex flex-col items-center justify-center p-6 rounded-2xl text-center">
-                      <span className="text-2xl text-[#8B0000] font-bold font-serif mb-3" style={{ fontFamily: "'Noto Serif JP', serif" }}>
+                    <div className="absolute inset-0 bg-[#FDFBF7] rotate-y-180 backface-hidden flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl text-center">
+                      <span className="text-3xl sm:text-4xl text-[#8B0000] font-black font-serif mb-2 whitespace-nowrap px-2 leading-tight">
                         {fcCurrentQueue[fcCurrentIndex].reading}
                       </span>
-                      <div className="w-16 h-0.5 bg-[#8B0000]/30 rounded mb-3"></div>
-                      <span className="text-xl font-bold text-gray-800 font-sans leading-snug">
+                      {(() => {
+                        const sino = getWordSinoVietnamese(fcCurrentQueue[fcCurrentIndex].word);
+                        return sino ? (
+                          <span className="text-sm sm:text-base font-black text-emerald-700 font-serif mb-2 tracking-wide">
+                            {sino}
+                          </span>
+                        ) : null;
+                      })()}
+                      <div className="w-16 h-0.5 bg-[#8B0000]/30 rounded mb-2"></div>
+                      <span className="text-lg sm:text-xl font-bold text-[#1A1A1A] font-sans leading-snug px-2">
                         {fcCurrentQueue[fcCurrentIndex].meaning}
                       </span>
                     </div>
@@ -702,7 +1047,7 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block font-sans">
                     Cách đọc của từ này là gì?
                   </span>
-                  <h3 className="text-5xl font-black text-gray-800 font-serif" style={{ fontFamily: "'Noto Serif JP', serif" }}>
+                  <h3 className="text-5xl font-black text-[#1A1A1A] font-serif">
                     {quizQueue[currentQuizIndex].word}
                   </h3>
                   <div className="text-xs text-gray-400 font-sans italic">
@@ -921,14 +1266,23 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
 
       {/* Persistent sticky Bottom Navigation bar */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-[#1A1A1A] z-40 pb-safe shadow-[0_-4px_10px_rgba(0,0,0,0.03)]">
-        <ul className="flex justify-around items-center h-16 max-w-lg mx-auto">
+        <ul className="flex justify-around items-center h-16 max-w-lg mx-auto px-1">
           <li className="flex-1">
             <button 
               onClick={() => handleTabChange('kienthuc')}
               className={`w-full h-full flex flex-col items-center justify-center gap-1 transition-all ${currentTab === 'kienthuc' ? 'text-[#8B0000] scale-105' : 'text-gray-400 hover:text-gray-600'}`}
             >
-              <Book className="w-5 h-5" />
-              <span className="text-[10px] font-black uppercase tracking-wider font-sans">Kiến Thức</span>
+              <Book className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider font-sans whitespace-nowrap">Kiến Thức</span>
+            </button>
+          </li>
+          <li className="flex-1">
+            <button 
+              onClick={() => handleTabChange('hocflashcard')}
+              className={`w-full h-full flex flex-col items-center justify-center gap-1 transition-all ${currentTab === 'hocflashcard' ? 'text-[#8B0000] scale-105' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+              <BookOpen className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider font-sans whitespace-nowrap">Học Flashcard</span>
             </button>
           </li>
           <li className="flex-1">
@@ -936,8 +1290,8 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
               onClick={() => handleTabChange('flashcard')}
               className={`w-full h-full flex flex-col items-center justify-center gap-1 transition-all ${currentTab === 'flashcard' ? 'text-[#8B0000] scale-105' : 'text-gray-400 hover:text-gray-600'}`}
             >
-              <Layers className="w-5 h-5" />
-              <span className="text-[10px] font-black uppercase tracking-wider font-sans">Flashcard</span>
+              <Layers className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider font-sans whitespace-nowrap">Flashcard</span>
             </button>
           </li>
           <li className="flex-1">
@@ -945,8 +1299,8 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
               onClick={() => handleTabChange('baitap')}
               className={`w-full h-full flex flex-col items-center justify-center gap-1 transition-all ${currentTab === 'baitap' ? 'text-[#8B0000] scale-105' : 'text-gray-400 hover:text-gray-600'}`}
             >
-              <Pencil className="w-5 h-5" />
-              <span className="text-[10px] font-black uppercase tracking-wider font-sans">Bài Tập</span>
+              <Pencil className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider font-sans whitespace-nowrap">Bài Tập</span>
             </button>
           </li>
           <li className="flex-1">
@@ -954,8 +1308,8 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
               onClick={() => handleTabChange('dulieu')}
               className={`w-full h-full flex flex-col items-center justify-center gap-1 transition-all ${currentTab === 'dulieu' ? 'text-[#8B0000] scale-105' : 'text-gray-400 hover:text-gray-600'}`}
             >
-              <ChartPie className="w-5 h-5" />
-              <span className="text-[10px] font-black uppercase tracking-wider font-sans">Kết Quả</span>
+              <ChartPie className="w-4 sm:w-5 h-4 sm:h-5" />
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider font-sans whitespace-nowrap">Kết Quả</span>
             </button>
           </li>
         </ul>

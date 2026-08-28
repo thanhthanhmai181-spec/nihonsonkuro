@@ -31,6 +31,999 @@ export interface ListeningEpisode {
 }
 
 export const PRESET_LISTENING_EPISODES: ListeningEpisode[] = [
+  // --- FEATURED YOUTUBE EPISODE: THẢM HỌA NẤU CÀ RI (NICHIJOU) ---
+  {
+    id: "youtube-AQX6HiZLDmo",
+    title: "Thảm Họa Nấu Cà Ri (Nichijou)",
+    level: "N4",
+    category: "Hội Thoại Anime",
+    icon: "🍛",
+    durationEst: "2 phút 27 giây",
+    description: "Trích đoạn anime hài kinh điển Nichijou: Chuyến cắm trại thảm họa khi nồi cà ri và nồi cơm đều gặp sự cố bất ngờ.",
+    youtubeId: "AQX6HiZLDmo",
+    lines: [
+      {
+        id: "yt-curry-1",
+        speaker: "Mio",
+        japanese: "んま！ゆっこ、カレーどう？",
+        furigana: "んま！ゆっこ、かれー どう？",
+        romaji: "Nma! Yukko, karee dou?",
+        vietnamese: "Chà! Yukko, món cà ri thế nào rồi?",
+        startTime: 10,
+        endTime: 13,
+        keywords: [
+          { word: "カレー", reading: "かれー", meaning: "Món cà ri" }
+        ]
+      },
+      {
+        id: "yt-curry-2",
+        speaker: "Yuuko",
+        japanese: "うん、もうすぐできるよ。",
+        furigana: "うん、もうすぐ できるよ。",
+        romaji: "Un, mousugu dekiru yo.",
+        vietnamese: "Ừ, sắp xong rồi nè.",
+        startTime: 14,
+        endTime: 16,
+        keywords: [
+          { word: "もうすぐ", reading: "もうすぐ", meaning: "Sắp sửa / Sắp xong" },
+          { word: "できる", reading: "できる", meaning: "Xong / Hoàn thành" }
+        ]
+      },
+      {
+        id: "yt-curry-3",
+        speaker: "Mio",
+        japanese: "もうかなりグーペコになってきたよー。",
+        furigana: "もう かなり ぐーぺこ に なってきたよー。",
+        romaji: "Mou kanari guupeko ni natte kita yoo.",
+        vietnamese: "Bụng tớ bắt đầu đói cồn cào rồi đấy.",
+        startTime: 16,
+        endTime: 18,
+        keywords: [
+          { word: "かなり", reading: "かなり", meaning: "Khá là / Rất" },
+          { word: "グーペコ", reading: "ぐーぺこ", meaning: "Bụng đói cồn cào (bụng kêu réo)" }
+        ]
+      },
+      {
+        id: "yt-curry-4",
+        speaker: "Yuuko",
+        japanese: "超私も。",
+        furigana: "ちょう わたし も。",
+        romaji: "Chou watashi mo.",
+        vietnamese: "Tớ cũng siêu đói luôn.",
+        startTime: 19,
+        endTime: 21,
+        keywords: [
+          { word: "超", reading: "ちょう", meaning: "Siêu / Cực kỳ" },
+          { word: "私", reading: "わたし", meaning: "Tôi / Tớ" }
+        ]
+      },
+      {
+        id: "yt-curry-5",
+        speaker: "Mio",
+        japanese: "麻衣ちゃん、そっちはどう？",
+        furigana: "まい ちゃん、そっちは どう？",
+        romaji: "Mai-chan, socchi wa dou?",
+        vietnamese: "Mai-chan, bên cậu thế nào rồi?",
+        startTime: 21,
+        endTime: 23,
+        keywords: [
+          { word: "そっち", reading: "そっち", meaning: "Bên đó / Phía đó" }
+        ]
+      },
+      {
+        id: "yt-curry-6",
+        speaker: "Mai",
+        japanese: "大物の予感。",
+        furigana: "おおもの の よかん。",
+        romaji: "Oomono no yokan.",
+        vietnamese: "Linh cảm có cá lớn.",
+        startTime: 23,
+        endTime: 25,
+        keywords: [
+          { word: "大物", reading: "おおもの", meaning: "Cá to / Đồ khủng" },
+          { word: "予感", reading: "よかん", meaning: "Linh cảm / Điềm báo" }
+        ]
+      },
+      {
+        id: "yt-curry-7",
+        speaker: "Mio & Yuuko",
+        japanese: "おおー！",
+        furigana: "おおー！",
+        romaji: "Ooo-!",
+        vietnamese: "Ồồồ!",
+        startTime: 25,
+        endTime: 26,
+        keywords: [
+          { word: "おおー", reading: "おおー", meaning: "Ồ (thán từ)" }
+        ]
+      },
+      {
+        id: "yt-curry-8",
+        speaker: "Mio",
+        japanese: "えへへ、こりゃあごちそうだな。",
+        furigana: "えへへ、こりゃあ ごちそう だな。",
+        romaji: "Ehehe, koryaa gochisou da na.",
+        vietnamese: "Ehehe, phen này có bữa thịnh soạn rồi.",
+        startTime: 26,
+        endTime: 28,
+        keywords: [
+          { word: "ごちそう", reading: "ごちそう", meaning: "Bữa ăn ngon thịnh soạn" }
+        ]
+      },
+      {
+        id: "yt-curry-9",
+        speaker: "Yuuko",
+        japanese: "よし！もういい感じだろう。",
+        furigana: "よし！もう いい かんじ だろう。",
+        romaji: "Yoshi! Mou ii kanji darou.",
+        vietnamese: "Được rồi! Chắc là ngon nghẻ rồi đấy.",
+        startTime: 31,
+        endTime: 34,
+        keywords: [
+          { word: "いい感じ", reading: "いいかんじ", meaning: "Cảm giác ổn / Ngon lành rồi" }
+        ]
+      },
+      {
+        id: "yt-curry-10",
+        speaker: "Yuuko",
+        japanese: "よっと。",
+        furigana: "よっと。",
+        romaji: "Yotto.",
+        vietnamese: "Nào.",
+        startTime: 36,
+        endTime: 37,
+        keywords: [
+          { word: "よっと", reading: "よっと", meaning: "Nào (tiếng thốt khi nhấc đồ)" }
+        ]
+      },
+      {
+        id: "yt-curry-11",
+        speaker: "Yuuko",
+        japanese: "へいお待ち！超美味スーパーカレー、完成の巻きなのだ！",
+        furigana: "へい お まち！ちょう びみ すーぱー かれー、かんせい の まき なのだ！",
+        romaji: "Hei omachi! Chou bimi suupaa karee, kansei no maki na no da!",
+        vietnamese: "Có ngay đây! Siêu phẩm cà ri siêu ngon, hoàn thành mỹ mãn rồi đây!",
+        startTime: 37,
+        endTime: 42,
+        keywords: [
+          { word: "お待ち", reading: "おまち", meaning: "Có ngay đây (khi dọn món)" },
+          { word: "超美味", reading: "ちょうびみ", meaning: "Siêu ngon lành" },
+          { word: "完成", reading: "かんせい", meaning: "Hoàn thành" }
+        ]
+      },
+      {
+        id: "yt-curry-12",
+        speaker: "Yuuko",
+        japanese: "ああーーー！ううう…",
+        furigana: "ああーーー！ううう…",
+        romaji: "Aaaa---! Uuu...",
+        vietnamese: "Aaaa---! Uuu...",
+        startTime: 43,
+        endTime: 45,
+        keywords: []
+      },
+      {
+        id: "yt-curry-13",
+        speaker: "Mio",
+        japanese: "こっちはもうちょっとかかるかな。",
+        furigana: "こっちは もう ちょっと かかるかな。",
+        romaji: "Kocchi wa mou chotto kakaru ka na.",
+        vietnamese: "Bên này chắc còn phải chờ thêm một chút nữa.",
+        startTime: 47,
+        endTime: 50,
+        keywords: [
+          { word: "かかる", reading: "かかる", meaning: "Tốn / Mất thời gian" },
+          { word: "もうちょっと", reading: "もうちょっと", meaning: "Thêm một chút nữa" }
+        ]
+      },
+      {
+        id: "yt-curry-14",
+        speaker: "Mio",
+        japanese: "カレー作る前に仕込んどけばよかったね。",
+        furigana: "かれー つくる まえ に しこんどけば よかったね。",
+        romaji: "Karee tsukuru mae ni shikondokeba yokatta ne.",
+        vietnamese: "Đáng lẽ phải nấu cơm trước khi nấu cà ri mới đúng.",
+        startTime: 50,
+        endTime: 53,
+        keywords: [
+          { word: "仕込む", reading: "しこむ", meaning: "Chuẩn bị trước / Nấu trước" },
+          { word: "〜ばよかった", reading: "〜ばよかった", meaning: "Biết thế thì đã... / Giá mà..." }
+        ]
+      },
+      {
+        id: "yt-curry-15",
+        speaker: "Mio",
+        japanese: "まあ、赤子泣いても蓋取るなっつってね。あははは。",
+        furigana: "まあ、あかご ないても ふた とるな っつってね。あははは。",
+        romaji: "Maa, akago naitemo futa toru na ttsutte ne. Ahahaha.",
+        vietnamese: "Mà, người ta bảo 'dù trẻ con có khóc cũng không được mở nắp nồi' mà. A ha ha ha.",
+        startTime: 53,
+        endTime: 57,
+        keywords: [
+          { word: "赤子", reading: "あかご", meaning: "Đứa trẻ sơ sinh" },
+          { word: "泣く", reading: "なく", meaning: "Khóc" },
+          { word: "蓋", reading: "ふた", meaning: "Nắp nồi" }
+        ]
+      },
+      {
+        id: "yt-curry-16",
+        speaker: "Mio",
+        japanese: "あ、マヨネーズ持ってくればよかったよ。カレーにはマヨネーズだよね、やっぱ。",
+        furigana: "あ、まよねーず もってくれば よかったよ。かれー には まよねーず だよね、やっぱ。",
+        romaji: "A, mayoneezu mottekureba yokatta yo. Karee ni wa mayoneezu da yo ne, yappa.",
+        vietnamese: "A, biết thế mang theo sốt mayonnaise. Cà ri thì phải ăn với sốt mayonnaise mới chuẩn nhỉ.",
+        startTime: 59,
+        endTime: 65,
+        keywords: [
+          { word: "マヨネーズ", reading: "まよねーず", meaning: "Sốt mayonnaise" },
+          { word: "持って来る", reading: "もってくる", meaning: "Mang theo / Mang đến" },
+          { word: "やっぱ", reading: "やっぱ", meaning: "Quả nhiên là / Đúng là" }
+        ]
+      },
+      {
+        id: "yt-curry-17",
+        speaker: "Yuuko",
+        japanese: "ま、マヨ…",
+        furigana: "ま、まよ…",
+        romaji: "Ma, mayo...",
+        vietnamese: "M-Mayo...",
+        startTime: 66,
+        endTime: 67,
+        keywords: []
+      },
+      {
+        id: "yt-curry-18",
+        speaker: "Mio",
+        japanese: "ゆっこは何派？",
+        furigana: "ゆっこ は なん は？",
+        romaji: "Yukko wa nan pa?",
+        vietnamese: "Yukko thuộc phe nào?",
+        startTime: 67,
+        endTime: 69,
+        keywords: [
+          { word: "何派", reading: "なんぱ", meaning: "Phe nào / Trường phái nào" }
+        ]
+      },
+      {
+        id: "yt-curry-19",
+        speaker: "Yuuko",
+        japanese: "あ、あ、ああ…う、う、う…",
+        furigana: "あ、あ、ああ…う、う、う…",
+        romaji: "A, a, aa... u, u, u...",
+        vietnamese: "A, a, a... ư, ư, ư...",
+        startTime: 69,
+        endTime: 76,
+        keywords: []
+      },
+      {
+        id: "yt-curry-20",
+        speaker: "Mio",
+        japanese: "なんつって。",
+        furigana: "なんつって。",
+        romaji: "Nantsutte.",
+        vietnamese: "Nói đùa tí thôi.",
+        startTime: 76,
+        endTime: 77,
+        keywords: [
+          { word: "なんつって", reading: "なんつって", meaning: "Nói đùa tí thôi" }
+        ]
+      },
+      {
+        id: "yt-curry-21",
+        speaker: "Yuuko",
+        japanese: "ち、違うの！こ、これはそういうんじゃなくて…",
+        furigana: "ち、ちがう の！こ、これは そういうんじゃなくて…",
+        romaji: "Chi, chigau no! Ko, kore wa sou iu n ja nakute...",
+        vietnamese: "K-Không phải đâu! C-Cái này không phải như vậy đâu...",
+        startTime: 78,
+        endTime: 82,
+        keywords: [
+          { word: "違う", reading: "ちがう", meaning: "Không phải / Khác" }
+        ]
+      },
+      {
+        id: "yt-curry-22",
+        speaker: "Yuuko",
+        japanese: "まだ、ほ、ほら！ところてんもあるし！と、ところてん…なんつ…",
+        furigana: "まだ、ほ、ほら！ところてん も あるし！と、ところてん…なんつ…",
+        romaji: "Mada, ho, hora! Tokoroten mo aru shi! To, tokoroten... nantsu...",
+        vietnamese: "Vẫn, n-nhìn này! Vẫn còn tokoroten (thạch rong biển) mà! T-Tokoroten... nói đ...",
+        startTime: 83,
+        endTime: 88,
+        keywords: [
+          { word: "ところてん", reading: "ところてん", meaning: "Tokoroten (Món thạch rong biển truyền thống Nhật Bản)" }
+        ]
+      },
+      {
+        id: "yt-curry-23",
+        speaker: "Mio",
+        japanese: "なんつ…",
+        furigana: "なんつ…",
+        romaji: "Nantsu...",
+        vietnamese: "Nói đ...",
+        startTime: 88,
+        endTime: 90,
+        keywords: []
+      },
+      {
+        id: "yt-curry-24",
+        speaker: "Mio",
+        japanese: "お前の…",
+        furigana: "おまえ の…",
+        romaji: "Omae no...",
+        vietnamese: "Máu của mày...",
+        startTime: 92,
+        endTime: 95,
+        keywords: [
+          { word: "お前", reading: "おまえ", meaning: "Mày / Cậu (ngôi thứ 2 thô bạo)" }
+        ]
+      },
+      {
+        id: "yt-curry-25",
+        speaker: "Yuuko",
+        japanese: "み、みおちゃん！？",
+        furigana: "み、みお ちゃん！？",
+        romaji: "Mi, Mio-chan!?",
+        vietnamese: "M-Mio-chan?!",
+        startTime: 95,
+        endTime: 96,
+        keywords: []
+      },
+      {
+        id: "yt-curry-26",
+        speaker: "Mio",
+        japanese: "お前の…",
+        furigana: "おまえ の…",
+        romaji: "Omae no...",
+        vietnamese: "Máu của mày...",
+        startTime: 96,
+        endTime: 98,
+        keywords: []
+      },
+      {
+        id: "yt-curry-27",
+        speaker: "Yuuko",
+        japanese: "ああー！",
+        furigana: "ああー！",
+        romaji: "Aaa-!",
+        vietnamese: "Aaa!",
+        startTime: 98,
+        endTime: 99,
+        keywords: []
+      },
+      {
+        id: "yt-curry-28",
+        speaker: "Mio",
+        japanese: "お前の血は何色だーーー！！",
+        furigana: "おまえ の ち は なにいろ だーーー！！",
+        romaji: "Omae no chi wa nani iro da---!!",
+        vietnamese: "MÁU CỦA MÀY MÀU GÌ HẢẢẢẢẢ!!",
+        startTime: 100,
+        endTime: 104,
+        keywords: [
+          { word: "血", reading: "ち", meaning: "Máu" },
+          { word: "何色", reading: "なにいろ", meaning: "Màu gì" }
+        ]
+      },
+      {
+        id: "yt-curry-29",
+        speaker: "Mio",
+        japanese: "ぐっ！みぎゃーーー！",
+        furigana: "ぐっ！みぎゃーーー！",
+        romaji: "Gu'! Migyaaa---!",
+        vietnamese: "Hự! Áaaa---!",
+        startTime: 104,
+        endTime: 107,
+        keywords: []
+      },
+      {
+        id: "yt-curry-30",
+        speaker: "Yuuko & Mio",
+        japanese: "ぎゃあああああ！",
+        furigana: "ぎゃあああああ！",
+        romaji: "Gyaaaaaaa!",
+        vietnamese: "Áaaaaaaa!",
+        startTime: 108,
+        endTime: 114,
+        keywords: []
+      },
+      {
+        id: "yt-curry-31",
+        speaker: "Yuuko & Mio",
+        japanese: "ごめん麻衣ちゃん！昼食のカレーも米もなくなったーーー！",
+        furigana: "ごめん まい ちゃん！ちゅうしょく の かれー も こめ も なくなったーーー！",
+        romaji: "Gomen Mai-chan! Chuushoku no karee mo kome mo naku natta---!",
+        vietnamese: "Xin lỗi Mai-chan! Cả cơm lẫn cà ri cho bữa trưa đều đi tong hết rồi---!",
+        startTime: 116,
+        endTime: 120,
+        keywords: [
+          { word: "昼食", reading: "ちゅうしょく", meaning: "Bữa trưa" },
+          { word: "米", reading: "こめ", meaning: "Gạo / Cơm" },
+          { word: "なくなる", reading: "なくなる", meaning: "Biến mất / Hết sạch" }
+        ]
+      },
+      {
+        id: "yt-curry-32",
+        speaker: "Mio",
+        japanese: "麻衣ちゃん…",
+        furigana: "まい ちゃん…",
+        romaji: "Mai-chan...",
+        vietnamese: "Mai-chan...",
+        startTime: 126,
+        endTime: 128,
+        keywords: []
+      },
+      {
+        id: "yt-curry-33",
+        speaker: "Yuuko",
+        japanese: "ところてんならあるけど…",
+        furigana: "ところてん なら あるけど…",
+        romaji: "Tokoroten nara aru kedo...",
+        vietnamese: "Tụi mình chỉ còn thạch tokoroten thôi...",
+        startTime: 128,
+        endTime: 129,
+        keywords: [
+          { word: "〜ならある", reading: "〜ならある", meaning: "Nếu là ... thì còn / có" }
+        ]
+      },
+      {
+        id: "yt-curry-34",
+        speaker: "Yuuko & Mio",
+        japanese: "わあーー！麻衣ちゃん！",
+        furigana: "わあーー！まい ちゃん！",
+        romaji: "Waaa--! Mai-chan!",
+        vietnamese: "Oaaa! Mai-chan!",
+        startTime: 135,
+        endTime: 138,
+        keywords: []
+      },
+      {
+        id: "yt-curry-35",
+        speaker: "Mai",
+        japanese: "リリース。",
+        furigana: "りりーす。",
+        romaji: "Ririisu.",
+        vietnamese: "Thả.",
+        startTime: 139,
+        endTime: 141,
+        keywords: [
+          { word: "リリース", reading: "りりーす", meaning: "Thả phóng sinh (Release)" }
+        ]
+      },
+      {
+        id: "yt-curry-36",
+        speaker: "Yuuko & Mio",
+        japanese: "ぎゃあああああああーーーー！",
+        furigana: "ぎゃあああああああーーーー！",
+        romaji: "Gyaaaaaaaaaaaa----!",
+        vietnamese: "Áaaaaaaaaaaa----!",
+        startTime: 141,
+        endTime: 147,
+        keywords: []
+      }
+    ],
+    summaryKeywords: [
+      { word: "カレー", reading: "かれー", meaning: "Món cà ri" },
+      { word: "仕込む", reading: "しこむ", meaning: "Chuẩn bị trước / Nấu trước" },
+      { word: "予感", reading: "よかん", meaning: "Linh cảm / Điềm báo" },
+      { word: "昼食", reading: "ちゅうしょく", meaning: "Bữa trưa" },
+      { word: "血", reading: "ち", meaning: "Máu" },
+      { word: "ところてん", reading: "ところてん", meaning: "Món thạch tokoroten" },
+      { word: "リリース", reading: "りりーす", meaning: "Thả phóng sinh" }
+    ]
+  },
+  // --- FEATURED YOUTUBE EPISODE: MAI ĐẾN CHƠI NHÀ & VẼ CÁ MẬP (NICHIJOU) ---
+  {
+    id: "youtube-R1mqTmfIVT8",
+    title: "Mai Đến Chơi Nhà & Vẽ Cá Mập (Nichijou)",
+    level: "N4",
+    category: "Hội Thoại Anime",
+    icon: "🦈",
+    durationEst: "2 phút 20 giây",
+    description: "Trích đoạn anime hài Nichijou: Bạn Mai (Minakami) ghé thăm phòng thí nghiệm Shinonome, tặng tượng Đại Uy Đức Minh Vương và trổ tài vẽ cá mập cho Hakase.",
+    youtubeId: "R1mqTmfIVT8",
+    lines: [
+      {
+        id: "yt-mai-1",
+        speaker: "Nano (なの)",
+        japanese: "水上さん、どうしたんですか？",
+        furigana: "みなかみ さん、どうしたんですか？",
+        romaji: "Minakami-san, doushitan desu ka?",
+        vietnamese: "Minakami-san, có chuyện gì thế ạ?",
+        startTime: 5,
+        endTime: 8,
+        keywords: [
+          { word: "水上さん", reading: "みなかみさん", meaning: "Bạn Minakami (Mai)" },
+          { word: "どうしたんですか", reading: "どうしたんですか", meaning: "Có chuyện gì thế ạ?" }
+        ]
+      },
+      {
+        id: "yt-mai-2",
+        speaker: "Mai (麻衣)",
+        japanese: "遊びに来た。",
+        furigana: "あそび に きた。",
+        romaji: "Asobi ni kita.",
+        vietnamese: "Tớ đến chơi.",
+        startTime: 8,
+        endTime: 10,
+        keywords: [
+          { word: "遊びに来る", reading: "あそびにくる", meaning: "Đến chơi" }
+        ]
+      },
+      {
+        id: "yt-mai-3",
+        speaker: "Nano (なの)",
+        japanese: "わぁ、すみません、こんなにお菓子もらってしまって。",
+        furigana: "わぁ、すみません、こんなに おかし もらってしまって。",
+        romaji: "Waa, sumimasen, konna ni okashi moratte shimatte.",
+        vietnamese: "Oa, cảm ơn bạn nhiều nhé, cho chúng mình nhiều bánh kẹo thế này.",
+        startTime: 14,
+        endTime: 18,
+        keywords: [
+          { word: "お菓子", reading: "おかし", meaning: "Bánh kẹo" },
+          { word: "もらう", reading: "もらう", meaning: "Nhận được" }
+        ]
+      },
+      {
+        id: "yt-mai-4",
+        speaker: "Hakase (はかせ)",
+        japanese: "あっ！博士に犬噛ませようとした人だ！",
+        furigana: "あっ！はかせ に いぬ かませよう と した ひと だ！",
+        romaji: "A'! Hakase ni inu kamaseyou to shita hito da!",
+        vietnamese: "A! Người đã định thả chó cắn Hakase này!",
+        startTime: 18,
+        endTime: 21,
+        keywords: [
+          { word: "博士", reading: "はかせ", meaning: "Bé Hakase / Tiến sĩ" },
+          { word: "犬", reading: "いぬ", meaning: "Chó" },
+          { word: "噛ませる", reading: "かませる", meaning: "Thả cắn / Cho cắn (sai khiến)" }
+        ]
+      },
+      {
+        id: "yt-mai-5",
+        speaker: "Hakase (はかせ)",
+        japanese: "絶対この人なんだけど！",
+        furigana: "ぜったい この ひと なんだけど！",
+        romaji: "Zettai kono hito nan dakedo!",
+        vietnamese: "Chắc chắn là người này mà!",
+        startTime: 29,
+        endTime: 31,
+        keywords: [
+          { word: "絶対", reading: "ぜったい", meaning: "Tuyệt đối / Chắc chắn" }
+        ]
+      },
+      {
+        id: "yt-mai-6",
+        speaker: "Nano (なの)",
+        japanese: "じゃあ、私ちょっとお茶淹れてきますね。",
+        furigana: "じゃあ、わたし ちょっと おちゃ いれてきますね。",
+        romaji: "Jaa, watashi chotto ocha iretekimasu ne.",
+        vietnamese: "Vậy em đi pha trà một chút nhé.",
+        startTime: 32,
+        endTime: 35,
+        keywords: [
+          { word: "お茶", reading: "おちゃ", meaning: "Trà" },
+          { word: "淹れる", reading: "いれる", meaning: "Pha (trà, cà phê)" }
+        ]
+      },
+      {
+        id: "yt-mai-7",
+        speaker: "Hakase (はかせ)",
+        japanese: "何しに来たの？",
+        furigana: "なに しに きた の？",
+        romaji: "Nani shi ni kita no?",
+        vietnamese: "Chị đến đây làm gì thế?",
+        startTime: 41,
+        endTime: 43,
+        keywords: [
+          { word: "何しに来た", reading: "なにしにきた", meaning: "Đến làm gì" }
+        ]
+      },
+      {
+        id: "yt-mai-8",
+        speaker: "Mai (麻衣)",
+        japanese: "あげる。",
+        furigana: "あげる。",
+        romaji: "Ageru.",
+        vietnamese: "Cho nè.",
+        startTime: 48,
+        endTime: 49,
+        keywords: [
+          { word: "あげる", reading: "あげる", meaning: "Cho / Tặng" }
+        ]
+      },
+      {
+        id: "yt-mai-9",
+        speaker: "Hakase (はかせ)",
+        japanese: "何それ？",
+        furigana: "なに それ？",
+        romaji: "Nani sore?",
+        vietnamese: "Cái gì thế này?",
+        startTime: 49,
+        endTime: 50,
+        keywords: []
+      },
+      {
+        id: "yt-mai-10",
+        speaker: "Mai (麻衣)",
+        japanese: "大威徳明王。",
+        furigana: "だいいとくみょうおう。",
+        romaji: "Daiitoku Myouou.",
+        vietnamese: "Đại Uy Đức Minh Vương.",
+        startTime: 50,
+        endTime: 52,
+        keywords: [
+          { word: "大威徳明王", reading: "だいいとくみょうおう", meaning: "Đại Uy Đức Minh Vương (Vị minh vương Phật giáo)" }
+        ]
+      },
+      {
+        id: "yt-mai-11",
+        speaker: "Hakase (はかせ)",
+        japanese: "いらない。",
+        furigana: "いらない。",
+        romaji: "Iranai.",
+        vietnamese: "Không cần đâu.",
+        startTime: 52,
+        endTime: 53,
+        keywords: [
+          { word: "いらない", reading: "いらない", meaning: "Không cần" }
+        ]
+      },
+      {
+        id: "yt-mai-12",
+        speaker: "Mai (麻衣)",
+        japanese: "かっこいいけど。",
+        furigana: "かっこいい けど。",
+        romaji: "Kakkoii kedo.",
+        vietnamese: "Ngầu lắm đó.",
+        startTime: 54,
+        endTime: 55,
+        keywords: [
+          { word: "かっこいい", reading: "かっこいい", meaning: "Ngầu / Đẹp mắt" }
+        ]
+      },
+      {
+        id: "yt-mai-13",
+        speaker: "Hakase (はかせ)",
+        japanese: "全然かっこよくない！",
+        furigana: "ぜんぜん かっこよくない！",
+        romaji: "Zenzen kakkoyokunai!",
+        vietnamese: "Chẳng ngầu chút nào hết!",
+        startTime: 55,
+        endTime: 58,
+        keywords: [
+          { word: "全然〜ない", reading: "ぜんぜん〜ない", meaning: "Hoàn toàn không..." }
+        ]
+      },
+      {
+        id: "yt-mai-14",
+        speaker: "Mai (麻衣)",
+        japanese: "これ、面白いよ。",
+        furigana: "これ、おもしろい よ。",
+        romaji: "Kore, omoshiroi yo.",
+        vietnamese: "Cái này thú vị lắm nè.",
+        startTime: 62,
+        endTime: 64,
+        keywords: [
+          { word: "面白い", reading: "おもしろい", meaning: "Thú vị / Hay" }
+        ]
+      },
+      {
+        id: "yt-mai-15",
+        speaker: "Hakase (はかせ)",
+        japanese: "何それ？",
+        furigana: "なに それ？",
+        romaji: "Nani sore?",
+        vietnamese: "Cái gì thế?",
+        startTime: 64,
+        endTime: 65,
+        keywords: []
+      },
+      {
+        id: "yt-mai-16",
+        speaker: "Mai (麻衣)",
+        japanese: "36LDK。",
+        furigana: "36LDK。",
+        romaji: "Sanjuuroku Eru Dii Kee.",
+        vietnamese: "Căn hộ 36LDK.",
+        startTime: 65,
+        endTime: 67,
+        keywords: [
+          { word: "LDK", reading: "えるでぃーけー", meaning: "Phòng khách, ăn, bếp (Living, Dining, Kitchen)" }
+        ]
+      },
+      {
+        id: "yt-mai-17",
+        speaker: "Hakase (はかせ)",
+        japanese: "全然面白くない！",
+        furigana: "ぜんぜん おもしろくない！",
+        romaji: "Zenzen omoshirokunai!",
+        vietnamese: "Chẳng thú vị chút nào!",
+        startTime: 67,
+        endTime: 69,
+        keywords: [
+          { word: "面白くない", reading: "おもしろくない", meaning: "Không thú vị / Chẳng buồn cười" }
+        ]
+      },
+      {
+        id: "yt-mai-18",
+        speaker: "Mai (麻衣)",
+        japanese: "風呂、トイレ、窓なし。",
+        furigana: "ふろ、といれ、まど なし。",
+        romaji: "Furo, toire, mado nashi.",
+        vietnamese: "Không phòng tắm, không nhà vệ sinh, không cửa sổ.",
+        startTime: 69,
+        endTime: 71,
+        keywords: [
+          { word: "風呂", reading: "ふろ", meaning: "Bồn tắm / Phòng tắm" },
+          { word: "トイレ", reading: "といれ", meaning: "Nhà vệ sinh" },
+          { word: "窓", reading: "まど", meaning: "Cửa sổ" },
+          { word: "なし", reading: "なし", meaning: "Không có" }
+        ]
+      },
+      {
+        id: "yt-mai-19",
+        speaker: "Hakase (はかせ)",
+        japanese: "面白くない！",
+        furigana: "おもしろくない！",
+        romaji: "Omoshirokunai!",
+        vietnamese: "Không hề thú vị!",
+        startTime: 71,
+        endTime: 73,
+        keywords: []
+      },
+      {
+        id: "yt-mai-20",
+        speaker: "Mai (麻衣)",
+        japanese: "何描いてるの？",
+        furigana: "なに かいてる の？",
+        romaji: "Nani kaiteru no?",
+        vietnamese: "Em đang vẽ gì thế?",
+        startTime: 83,
+        endTime: 84,
+        keywords: [
+          { word: "描く", reading: "かく", meaning: "Vẽ" }
+        ]
+      },
+      {
+        id: "yt-mai-21",
+        speaker: "Hakase (はかせ)",
+        japanese: "教えてあげない！",
+        furigana: "おしえて あげない！",
+        romaji: "Oshiete agenai!",
+        vietnamese: "Không thèm nói cho chị biết đâu!",
+        startTime: 84,
+        endTime: 86,
+        keywords: [
+          { word: "教える", reading: "おしえる", meaning: "Nói cho biết / Chỉ cho" }
+        ]
+      },
+      {
+        id: "yt-mai-22",
+        speaker: "Hakase (はかせ)",
+        japanese: "はい。",
+        furigana: "はい。",
+        romaji: "Hai.",
+        vietnamese: "Đây nè.",
+        startTime: 95,
+        endTime: 96,
+        keywords: []
+      },
+      {
+        id: "yt-mai-23",
+        speaker: "Mai (麻衣)",
+        japanese: "ん、ヨシキリザメ。",
+        furigana: "ん、よしきりざめ。",
+        romaji: "N, yoshikirizame.",
+        vietnamese: "Ừm, cá mập xanh.",
+        startTime: 97,
+        endTime: 99,
+        keywords: [
+          { word: "ヨシキリザメ", reading: "よしきりざめ", meaning: "Cá mập xanh" }
+        ]
+      },
+      {
+        id: "yt-mai-24",
+        speaker: "Hakase (はかせ)",
+        japanese: "あ！…はあぁ〜！かっこいい！",
+        furigana: "あ！…はあぁ〜！かっこいい！",
+        romaji: "A! ...Haaa~! Kakkoii!",
+        vietnamese: "A! ... Oa oa~! Ngầu quá đi!",
+        startTime: 99,
+        endTime: 104,
+        keywords: [
+          { word: "かっこいい", reading: "かっこいい", meaning: "Ngầu / Tuyệt vời" }
+        ]
+      },
+      {
+        id: "yt-mai-25",
+        speaker: "Mai (麻衣)",
+        japanese: "あげる。",
+        furigana: "あげる。",
+        romaji: "Ageru.",
+        vietnamese: "Cho em nè.",
+        startTime: 106,
+        endTime: 107,
+        keywords: []
+      },
+      {
+        id: "yt-mai-26",
+        speaker: "Hakase (はかせ)",
+        japanese: "やったー！",
+        furigana: "やったー！",
+        romaji: "Yattaa-!",
+        vietnamese: "Tuyệt quá!",
+        startTime: 107,
+        endTime: 108,
+        keywords: [
+          { word: "やったー", reading: "やったー", meaning: "Hoan hô / Tuyệt vời" }
+        ]
+      },
+      {
+        id: "yt-mai-27",
+        speaker: "Hakase (はかせ)",
+        japanese: "ねえねえ、違うサメも描いてみて！",
+        furigana: "ねえねえ、ちがう さめ も かいてみて！",
+        romaji: "Nee nee, chigau same mo kaitemite!",
+        vietnamese: "Này này, vẽ con cá mập khác nữa đi!",
+        startTime: 108,
+        endTime: 110,
+        keywords: [
+          { word: "違う", reading: "ちがう", meaning: "Khác" },
+          { word: "サメ", reading: "さめ", meaning: "Cá mập" },
+          { word: "描く", reading: "かく", meaning: "Vẽ" }
+        ]
+      },
+      {
+        id: "yt-mai-28",
+        speaker: "Mai (麻衣)",
+        japanese: "いいよ。",
+        furigana: "いいよ。",
+        romaji: "Ii yo.",
+        vietnamese: "Được thôi.",
+        startTime: 110,
+        endTime: 111,
+        keywords: [
+          { word: "いいよ", reading: "いいよ", meaning: "Được thôi" }
+        ]
+      },
+      {
+        id: "yt-mai-29",
+        speaker: "Hakase (はかせ)",
+        japanese: "笑ってるやつ描いてみて！",
+        furigana: "わらってる やつ かいてみて！",
+        romaji: "Waratteru yatsu kaitemite!",
+        vietnamese: "Vẽ con nào đang cười đi!",
+        startTime: 111,
+        endTime: 113,
+        keywords: [
+          { word: "笑う", reading: "わらう", meaning: "Cười" },
+          { word: "やつ", reading: "やつ", meaning: "Con / Đứa" }
+        ]
+      },
+      {
+        id: "yt-mai-30",
+        speaker: "Mai (麻衣)",
+        japanese: "いいよ。",
+        furigana: "いいよ。",
+        romaji: "Ii yo.",
+        vietnamese: "Được thôi.",
+        startTime: 113,
+        endTime: 114,
+        keywords: []
+      },
+      {
+        id: "yt-mai-31",
+        speaker: "Hakase (はかせ)",
+        japanese: "博士のと交換していい？",
+        furigana: "はかせ の と こうかん して いい？",
+        romaji: "Hakase no to koukan shite ii?",
+        vietnamese: "Đổi lấy tranh của Hakase được không?",
+        startTime: 114,
+        endTime: 116,
+        keywords: [
+          { word: "交換", reading: "こうかん", meaning: "Đổi / Trao đổi" }
+        ]
+      },
+      {
+        id: "yt-mai-32",
+        speaker: "Mai (麻衣)",
+        japanese: "いいよ。",
+        furigana: "いいよ。",
+        romaji: "Ii yo.",
+        vietnamese: "Được chứ.",
+        startTime: 116,
+        endTime: 117,
+        keywords: []
+      },
+      {
+        id: "yt-mai-33",
+        speaker: "Nano (なの)",
+        japanese: "お待たせしまし…",
+        furigana: "お またせ しまし…",
+        romaji: "Omatase shimashi...",
+        vietnamese: "Xin lỗi vì để mọi người phải...",
+        startTime: 118,
+        endTime: 120,
+        keywords: [
+          { word: "お待たせする", reading: "おまたせする", meaning: "Để ai đó phải chờ đợi" }
+        ]
+      },
+      {
+        id: "yt-mai-34",
+        speaker: "Nano (なの)",
+        japanese: "あっ、あれ？",
+        furigana: "あっ、あれ？",
+        romaji: "A', are?",
+        vietnamese: "A, ủa?",
+        startTime: 123,
+        endTime: 124,
+        keywords: []
+      },
+      {
+        id: "yt-mai-35",
+        speaker: "Nano (なの)",
+        japanese: "あ、博士、水上さん帰っちゃったんですか？",
+        furigana: "あ、はかせ、みなかみ さん かえっちゃった ん ですか？",
+        romaji: "A, Hakase, Minakami-san kaecchatta n desu ka?",
+        vietnamese: "A, Hakase, Minakami-san về rồi ạ?",
+        startTime: 128,
+        endTime: 131,
+        keywords: [
+          { word: "帰っちゃう", reading: "かえっちゃう", meaning: "Về mất rồi" }
+        ]
+      },
+      {
+        id: "yt-mai-36",
+        speaker: "Hakase (はかせ)",
+        japanese: "おう！でもまた絵描きに来てって言っといたよ。",
+        furigana: "おう！でも また えかき に きて って いっといた よ。",
+        romaji: "Ou! Demo mata ekaki ni kite tte ittoita yo.",
+        vietnamese: "Ừm! Nhưng em đã bảo chị ấy lần sau lại tới vẽ tranh tiếp rồi.",
+        startTime: 131,
+        endTime: 135,
+        keywords: [
+          { word: "絵描き", reading: "えかき", meaning: "Vẽ tranh" },
+          { word: "言っておく", reading: "いっておく", meaning: "Dặn trước / Bảo trước" }
+        ]
+      },
+      {
+        id: "yt-mai-37",
+        speaker: "Nano (なの)",
+        japanese: "そうですか。",
+        furigana: "そう です か。",
+        romaji: "Sou desu ka.",
+        vietnamese: "Vậy ạ.",
+        startTime: 135,
+        endTime: 137,
+        keywords: []
+      },
+      {
+        id: "yt-mai-38",
+        speaker: "Hakase & Nano (はかせ・なの)",
+        japanese: "何しに来たんだろう？",
+        furigana: "なに しに きた んだろう？",
+        romaji: "Nani shi ni kita n darou?",
+        vietnamese: "Không biết chị ấy/bạn ấy đến đây làm gì nhỉ?",
+        startTime: 138,
+        endTime: 140,
+        keywords: [
+          { word: "何しに来た", reading: "なにしにきた", meaning: "Đến làm gì" },
+          { word: "〜んだろう", reading: "〜んだろう", meaning: "Không biết là... nhỉ" }
+        ]
+      }
+    ],
+    summaryKeywords: [
+      { word: "遊びに来る", reading: "あそびにくる", meaning: "Đến chơi" },
+      { word: "大威徳明王", reading: "だいいとくみょうおう", meaning: "Đại Uy Đức Minh Vương" },
+      { word: "全然〜ない", reading: "ぜんぜん〜ない", meaning: "Hoàn toàn không... chút nào" },
+      { word: "ヨシキリザメ", reading: "よしきりざめ", meaning: "Cá mập xanh (Prionace glauca)" },
+      { word: "交換", reading: "こうかん", meaning: "Trao đổi / Đổi chác" },
+      { word: "お待たせする", reading: "おまたせする", meaning: "Để ai đó phải chờ đợi" },
+      { word: "帰っちゃう", reading: "かえっちゃう", meaning: "Đã về mất rồi" },
+      { word: "絵描き", reading: "えかき", meaning: "Vẽ tranh" }
+    ]
+  },
   // --- FEATURED YOUTUBE EPISODE: TIỆM SỬA BẤT ỔN ---
   {
     id: "youtube-Tvsa7Q5x3Zw",
@@ -296,6 +1289,179 @@ export const PRESET_LISTENING_EPISODES: ListeningEpisode[] = [
       { word: "直す", reading: "なおす", meaning: "Sửa lại / Khắc phục" },
       { word: "旦那", reading: "だんな", meaning: "Chồng (của mình)" },
       { word: "虚無", reading: "きょむ", meaning: "Hư vô / Cảm giác trống rỗng, bất lực" }
+    ]
+  },
+  // --- FEATURED YOUTUBE EPISODE: KẾ HOẠCH CUỐI TUẦN CỦA SAKUTA ---
+  {
+    id: "youtube-ZMbzhrlOY6E",
+    title: "Kế Hoạch Cuối Tuần Của Sakuta",
+    level: "N4",
+    category: "Hội Thoại Anime",
+    icon: "🌸",
+    durationEst: "35 giây",
+    description: "Đoạn hội thoại gia đình vui nhộn giữa Sakuta, em gái Kaede và Mai-san về kế hoạch đi chơi và hẹn hò cuối tuần.",
+    youtubeId: "ZMbzhrlOY6E",
+    lines: [
+      {
+        id: "yt-sakuta-1",
+        speaker: "花楓 (Kaede)",
+        japanese: "そうだ、お兄ちゃんは……えっと",
+        furigana: "そうだ、お にい ちゃんは……えっと",
+        romaji: "Sou da, oniichan wa... etto",
+        vietnamese: "À đúng rồi, anh hai thì... ừm...",
+        startTime: 0,
+        endTime: 4,
+        keywords: [
+          { word: "お兄ちゃん", reading: "おにいちゃん", meaning: "Anh hai / Anh trai" },
+          { word: "そうだ", reading: "そうだ", meaning: "À phải rồi / Đúng rồi" }
+        ]
+      },
+      {
+        id: "yt-sakuta-2",
+        speaker: "咲太 (Sakuta)",
+        japanese: "なんだよ？",
+        furigana: "なんだよ？",
+        romaji: "Nan da yo?",
+        vietnamese: "Gì thế?",
+        startTime: 4,
+        endTime: 5,
+        keywords: [
+          { word: "なんだよ", reading: "なんだよ", meaning: "Gì vậy / Có chuyện gì?" }
+        ]
+      },
+      {
+        id: "yt-sakuta-3",
+        speaker: "花楓 (Kaede)",
+        japanese: "明日と明後日、どうしてる？",
+        furigana: "あした と あさって、どうしてる？",
+        romaji: "Ashita to asatte, dou shiteru?",
+        vietnamese: "Ngày mai với ngày kia anh định làm gì?",
+        startTime: 5,
+        endTime: 8,
+        keywords: [
+          { word: "明日", reading: "あした", meaning: "Ngày mai" },
+          { word: "明後日", reading: "あさって", meaning: "Ngày kia" },
+          { word: "どうしてる", reading: "どうしてる", meaning: "Định làm gì / Thế nào rồi" }
+        ]
+      },
+      {
+        id: "yt-sakuta-4",
+        speaker: "咲太 (Sakuta)",
+        japanese: "土曜日と日曜日を満喫している予定。",
+        furigana: "どようび と にちようび を まんきつ している よてい。",
+        romaji: "Doyoubi to nichiyoubi o mankitsu shite iru yotei.",
+        vietnamese: "Dự định là sẽ tận hưởng trọn vẹn thứ Bảy và Chủ Nhật.",
+        startTime: 8,
+        endTime: 11,
+        keywords: [
+          { word: "満喫", reading: "まんきつ", meaning: "Tận hưởng trọn vẹn / Thưởng thức hết mình" },
+          { word: "予定", reading: "よてい", meaning: "Dự định / Kế hoạch" }
+        ]
+      },
+      {
+        id: "yt-sakuta-5",
+        speaker: "花楓 (Kaede)",
+        japanese: "ヒマか聞いてるの！むー…",
+        furigana: "ひま か きいてる の！むー…",
+        romaji: "Hima ka kiiteru no! Muu...",
+        vietnamese: "Em hỏi là anh có rảnh không cơ mà! Hứ...",
+        startTime: 11,
+        endTime: 15,
+        keywords: [
+          { word: "ヒマ", reading: "ひま", meaning: "Rảnh rỗi" },
+          { word: "聞く", reading: "きく", meaning: "Hỏi / Lắng nghe" }
+        ]
+      },
+      {
+        id: "yt-sakuta-6",
+        speaker: "咲太 (Sakuta)",
+        japanese: "明日はバイト、日曜は麻衣さんとデートして、麻衣さんに甘えて、麻衣さんに甘やかされるのに忙しい。",
+        furigana: "あした は ばいと、にちよう は まい さんと でーと して、まい さんに あまえて、まい さんに あまやかされる のに いそがしい。",
+        romaji: "Ashita wa baito, nichiyou wa Mai-san to deeto shite, Mai-san ni amaete, Mai-san ni amayakasareru no ni isogashii.",
+        vietnamese: "Mai thì đi làm thêm, Chủ Nhật thì bận hẹn hò với chị Mai, làm nũng chị Mai rồi được chị Mai cưng chiều.",
+        startTime: 15,
+        endTime: 23,
+        keywords: [
+          { word: "バイト", reading: "ばいと", meaning: "Làm thêm (Arubaito)" },
+          { word: "甘える", reading: "あまえる", meaning: "Làm nũng / Dựa dẫm" },
+          { word: "甘やかす", reading: "あまやかす", meaning: "Nuông chiều / Cưng chiều" },
+          { word: "忙しい", reading: "いそがしい", meaning: "Bận rộn" }
+        ]
+      },
+      {
+        id: "yt-sakuta-7",
+        speaker: "花楓 (Kaede)",
+        japanese: "むー。それじゃ困るよぉ。",
+        furigana: "むー。それじゃ こまる よぉ。",
+        romaji: "Muu. Sore ja komaru yo.",
+        vietnamese: "Hứ, thế thì phiền phức thật đó.",
+        startTime: 23,
+        endTime: 26,
+        keywords: [
+          { word: "困る", reading: "こまる", meaning: "Khó khăn / Phiền toái / Rắc rối" }
+        ]
+      },
+      {
+        id: "yt-sakuta-8",
+        speaker: "麻衣 (Mai)",
+        japanese: "大丈夫よ、花楓ちゃん。私、週末は用事あるから。",
+        furigana: "だいじょうぶ よ、かえで ちゃん。わたし、しゅうまつ は ようじ あるから。",
+        romaji: "Daijoubu yo, Kaede-chan. Watashi, shuumatsu wa youji aru kara.",
+        vietnamese: "Không sao đâu Kaede-chan. Cuối tuần chị có việc bận rồi.",
+        startTime: 26,
+        endTime: 29,
+        keywords: [
+          { word: "週末", reading: "しゅうまつ", meaning: "Cuối tuần" },
+          { word: "用事", reading: "ようじ", meaning: "Công việc bận / Việc riêng" }
+        ]
+      },
+      {
+        id: "yt-sakuta-9",
+        speaker: "咲太 (Sakuta)",
+        japanese: "えー、仕事？",
+        furigana: "えー、しごと？",
+        romaji: "Ee, shigoto?",
+        vietnamese: "Hả, công việc á?",
+        startTime: 29,
+        endTime: 31,
+        keywords: [
+          { word: "仕事", reading: "しごと", meaning: "Công việc" }
+        ]
+      },
+      {
+        id: "yt-sakuta-10",
+        speaker: "麻衣 (Mai)",
+        japanese: "まあ、そんな感じ。",
+        furigana: "まあ、そんな かんじ。",
+        romaji: "Maa, sonna kanji.",
+        vietnamese: "Ừm, kiểu kiểu vậy.",
+        startTime: 31,
+        endTime: 33,
+        keywords: [
+          { word: "そんな感じ", reading: "そんなかんじ", meaning: "Đại loại là thế / Kiểu kiểu như vậy" }
+        ]
+      },
+      {
+        id: "yt-sakuta-11",
+        speaker: "咲太 (Sakuta)",
+        japanese: "どんな感じ…？",
+        furigana: "どんな かんじ…？",
+        romaji: "Donna kanji...?",
+        vietnamese: "Kiểu kiểu vậy là sao chứ...?",
+        startTime: 33,
+        endTime: 35,
+        keywords: [
+          { word: "どんな感じ", reading: "どんなかんじ", meaning: "Kiểu như thế nào cơ?" }
+        ]
+      }
+    ],
+    summaryKeywords: [
+      { word: "満喫", reading: "まんきつ", meaning: "Tận hưởng trọn vẹn" },
+      { word: "甘える", reading: "あまえる", meaning: "Làm nũng, dựa dẫm" },
+      { word: "甘やかす", reading: "あまやかす", meaning: "Cưng chiều, nuông chiều" },
+      { word: "週末", reading: "しゅうまつ", meaning: "Cuối tuần" },
+      { word: "用事", reading: "ようじ", meaning: "Việc bận / Việc riêng" },
+      { word: "そんな感じ", reading: "そんなかんじ", meaning: "Đại loại như thế" }
     ]
   },
   // --- FEATURED YOUTUBE EPISODE 2 ---

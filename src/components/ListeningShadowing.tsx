@@ -229,12 +229,29 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
 
     const ep = activeEpisodeRef.current;
     if (ep && ep.lines && ep.lines.length > 0) {
-      const matchedIndex = ep.lines.findIndex((line, idx) => {
-        const start = line.startTime ?? (idx * 4);
-        const nextLine = ep.lines[idx + 1];
-        const end = line.endTime ?? (nextLine?.startTime ?? start + 4);
-        return time >= start && time < end;
-      });
+      let matchedIndex = -1;
+
+      // 1. Direct segment check: line stays active until the next line starts (seamless karaoke transition)
+      for (let i = 0; i < ep.lines.length; i++) {
+        const line = ep.lines[i];
+        const nextLine = ep.lines[i + 1];
+        const start = line.startTime ?? (i * 4);
+        const end = nextLine?.startTime !== undefined ? nextLine.startTime : (line.endTime ?? (start + 4));
+
+        if (time >= start && time < end) {
+          matchedIndex = i;
+          break;
+        }
+      }
+
+      // 2. Boundary fallback: before first line or past last line
+      if (matchedIndex === -1) {
+        if (time < (ep.lines[0].startTime ?? 0)) {
+          matchedIndex = 0;
+        } else {
+          matchedIndex = ep.lines.length - 1;
+        }
+      }
 
       if (matchedIndex !== -1 && matchedIndex !== currentLineIndexRef.current) {
         currentLineIndexRef.current = matchedIndex;
@@ -310,7 +327,7 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
           } catch (e) {}
         }
       }
-    }, 200);
+    }, 100);
 
     // Also connect to YouTube Iframe API if available
     const initYT = () => {
@@ -839,11 +856,12 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
     const line = activeEpisode.lines[index];
 
     if (activeYoutubeId) {
-      const targetStart = Math.max(0, (line.startTime ?? (index * 4)) - 0.2);
+      const targetStart = Math.max(0, (line.startTime ?? (index * 4)) - 0.1);
       const nextLine = activeEpisode.lines[index + 1];
-      const targetEnd = nextLine?.startTime 
-        ? Math.max(nextLine.startTime, (line.endTime ?? targetStart + 3) + 0.6)
-        : (line.endTime ? line.endTime + 0.8 : targetStart + 5);
+      const nominalEnd = line.endTime ?? (targetStart + 3);
+      const targetEnd = nextLine?.startTime !== undefined 
+        ? Math.min(nextLine.startTime, nominalEnd + 0.1)
+        : (nominalEnd + 0.2);
 
       singleLineTargetRef.current = { lineIdx: index, endTime: targetEnd };
       postYoutubeCommand("seekTo", [targetStart, true]);
