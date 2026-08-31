@@ -23,28 +23,400 @@
   --color-natural-muted: #8C7B6A;
 }
 
+:root {
+  --color-natural-bg: #FEF9F3;
+  --color-natural-text: #4A3F35;
+  --color-natural-deep: #2D241E;
+  --color-natural-border: #E9DCC9;
+  --color-natural-olive: #5A5A40;
+  --color-natural-pink: #FFD1DC;
+  --color-natural-sand: #F5F1E8;
+  --color-natural-soft: #FDF8F3;
+  --color-natural-muted: #8C7B6A;
+  color-scheme: light;
+}
+
+.dark {
+  --color-natural-bg: #0F0F1A;
+  --color-natural-text: #E5E1DA;
+  --color-natural-deep: #FFFFFF;
+  --color-natural-border: #2D2D4A;
+  --color-natural-olive: #A3A36B;
+  --color-natural-pink: #FF85A2;
+  --color-natural-sand: #161629;
+  --color-natural-soft: #1D1D34;
+  --color-natural-muted: #A39EB5;
+  color-scheme: dark;
+}
+
 body {
-  background-color: #FEF9F3;
-  color: #4A3F35;
+  background-color: var(--color-natural-bg);
+  color: var(--color-natural-text);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Washi pattern background helper */
-.washi-pattern {
-  background-color: #FDFBF7;
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+/* Cozy Night Sakura & Dark Mode Global Styles */
+.dark body {
+  background-color: #0F0F1A;
+  color: #EDE8E3;
 }
 
-/* Antique card with 3D black shadow offsets */
-.card-antique {
-  background-color: #ffffff;
-  border: 2px solid #1A1A1A;
-  box-shadow: 6px 6px 0px #1A1A1A;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* Night sakura glowing petals and ambient night atmosphere */
+.dark .night-sakura-glow {
+  filter: drop-shadow(0 0 8px rgba(255, 133, 162, 0.7)) drop-shadow(0 0 16px rgba(244, 114, 182, 0.4));
 }
-.card-antique:hover {
+
+.dark .yozakura-ambient {
+  background: radial-gradient(ellipse at 80% 10%, rgba(255, 117, 151, 0.12), transparent 50%),
+              radial-gradient(ellipse at 20% 80%, rgba(99, 102, 241, 0.08), transparent 50%),
+              #0F0F1A;
+}
+
+/* Dark Mode Universal Typography & Text Contrast Overrides */
+.dark,
+.dark body {
+  color: #EDE8E3;
+}
+
+/* High-contrast headings and primary text in Dark Mode */
+.dark [class*="text-[#1A1A1A]"],
+.dark [class*="text-[#1a1a1a]"],
+.dark [class*="text-[#2D241E]"],
+.dark [class*="text-[#4A3F35]"],
+.dark [class*="text-[#2C3E50]"],
+.dark [class*="text-[#34495E]"],
+.dark [class*="text-[#333]"],
+.dark [class*="text-[#222]"],
+.dark [class*="text-[#111]"],
+.dark [class*="text-black"],
+.dark .text-black,
+.dark .text-natural-deep,
+.dark .text-natural-text,
+.dark .text-stone-900,
+.dark .text-neutral-900,
+.dark .text-gray-900,
+.dark .text-slate-900,
+.dark .text-zinc-900,
+.dark .text-stone-800,
+.dark .text-neutral-800,
+.dark .text-gray-800,
+.dark .text-slate-800,
+.dark .text-zinc-800,
+.dark .text-stone-700,
+.dark .text-neutral-700,
+.dark .text-gray-700,
+.dark .text-slate-700,
+.dark .text-zinc-700,
+.dark .text-amber-950,
+.dark .text-amber-900 {
+  color: #EDE8E3 !important;
+}
+
+/* Secondary muted text with WCAG AA contrast */
+.dark .text-natural-muted,
+.dark .text-gray-600,
+.dark .text-slate-600,
+.dark .text-neutral-600,
+.dark .text-stone-600,
+.dark .text-gray-500,
+.dark .text-slate-500,
+.dark .text-neutral-500,
+.dark .text-stone-500,
+.dark [class*="text-[#555]"],
+.dark [class*="text-[#666]"],
+.dark [class*="text-[#777]"] {
+  color: #A9A4BA !important;
+}
+
+/* Crimson / Dark Red accents converted to bright, vibrant Sakura Pink / Rose */
+.dark [class*="text-[#8B0000]"],
+.dark [class*="text-[#8b0000]"],
+.dark .text-red-900,
+.dark .text-red-800,
+.dark .text-rose-900,
+.dark .text-rose-800 {
+  color: #FF7597 !important;
+}
+
+/* Dark mode surface & card adaptations */
+.dark .bg-white,
+.dark [class*="bg-white"] {
+  background-color: #18182B !important;
+  color: #EDE8E3;
+}
+
+.dark .bg-white\/60,
+.dark .bg-white\/70,
+.dark .bg-white\/80,
+.dark .bg-white\/90,
+.dark .bg-white\/95 {
+  background-color: rgba(24, 24, 43, 0.92) !important;
+}
+
+.dark .washi-pattern,
+.dark .bg-natural-bg,
+.dark [class*="bg-[#FEF9F3]"],
+.dark [class*="bg-[#FAF7F2]"],
+.dark [class*="bg-[#FDF8F3]"],
+.dark [class*="bg-[#FDFBF7]"],
+.dark [class*="bg-[#F5F1E8]"] {
+  background-color: #0F0F1A !important;
+  color: #EDE8E3 !important;
+}
+
+.dark .bg-natural-soft,
+.dark .bg-natural-sand,
+.dark .bg-gray-50,
+.dark .bg-slate-50,
+.dark .bg-stone-50,
+.dark .bg-neutral-50 {
+  background-color: #151528 !important;
+}
+
+.dark .bg-gray-100,
+.dark .bg-slate-100,
+.dark .bg-stone-100,
+.dark .bg-neutral-100 {
+  background-color: #202038 !important;
+}
+
+.dark .bg-gray-200,
+.dark .bg-slate-200,
+.dark .bg-stone-200,
+.dark .bg-neutral-200 {
+  background-color: #2B2B48 !important;
+}
+
+/* Status Cards & Badges in Lessons (e.g. Mastered / Review / New) */
+.dark [class*="bg-[#EAFaf1]"],
+.dark [class*="bg-[#eafaf1]"] {
+  background-color: rgba(46, 204, 113, 0.15) !important;
+  border-color: rgba(46, 204, 113, 0.5) !important;
+}
+.dark [class*="bg-[#EAFaf1]"] *,
+.dark [class*="bg-[#eafaf1]"] * {
+  color: #4ADE80 !important;
+}
+
+.dark [class*="bg-[#FEF9E7]"],
+.dark [class*="bg-[#fef9e7]"] {
+  background-color: rgba(241, 196, 15, 0.15) !important;
+  border-color: rgba(241, 196, 15, 0.5) !important;
+}
+.dark [class*="bg-[#FEF9E7]"] *,
+.dark [class*="bg-[#fef9e7]"] * {
+  color: #FDE047 !important;
+}
+
+.dark [class*="bg-[#EBEDEF]"],
+.dark [class*="bg-[#ebedef]"] {
+  background-color: #1F1F38 !important;
+  border-color: #363659 !important;
+}
+.dark [class*="bg-[#EBEDEF]"] *,
+.dark [class*="bg-[#ebedef]"] * {
+  color: #CBD5E1 !important;
+}
+
+/* Black icon boxes / header badges (e.g. "詞", "文", "漢") */
+.dark [class*="bg-[#1A1A1A]"],
+.dark [class*="bg-[#1a1a1a]"] {
+  background-color: #2D2D4E !important;
+  border-color: #4B4B70 !important;
+  color: #FFFFFF !important;
+}
+
+/* Navigation active tab buttons */
+.dark button[class*="bg-[#1A1A1A]"],
+.dark button[class*="bg-[#1a1a1a]"] {
+  background-color: #FF5C8A !important;
+  color: #FFFFFF !important;
+  border-color: #FF85A2 !important;
+  box-shadow: 0 0 12px rgba(255, 92, 138, 0.4) !important;
+}
+
+/* Buttons (White action/return buttons) */
+.dark button.bg-white,
+.dark button[class*="bg-white"] {
+  background-color: #1F1F36 !important;
+  color: #EDE8E3 !important;
+  border-color: #363659 !important;
+}
+
+.dark button.bg-white:hover,
+.dark button[class*="bg-white"]:hover {
+  background-color: #2A2A48 !important;
+  color: #FF85A2 !important;
+  border-color: #FF5C8A !important;
+}
+
+/* Primary Crimson CTA buttons in Dark Mode */
+.dark [class*="bg-[#8B0000]"],
+.dark [class*="bg-[#8b0000]"] {
+  background-color: #9E0A24 !important;
+  color: #FFFFFF !important;
+  border-color: #FF5C8A !important;
+}
+
+.dark [class*="bg-[#8B0000]"]:hover,
+.dark [class*="bg-[#8b0000]"]:hover {
+  background-color: #B50C2A !important;
+  box-shadow: 0 0 16px rgba(255, 92, 138, 0.4) !important;
+}
+
+/* Borders in Dark Mode */
+.dark [class*="border-[#1A1A1A]"],
+.dark [class*="border-[#1a1a1a]"],
+.dark [class*="border-[#2D241E]"],
+.dark [class*="border-[#E9DCC9]"],
+.dark .border-natural-border,
+.dark .border-gray-200,
+.dark .border-slate-200,
+.dark .border-gray-300,
+.dark .border-slate-300,
+.dark .border-neutral-200,
+.dark .border-stone-200 {
+  border-color: #363659 !important;
+}
+
+.dark .border-gray-100,
+.dark .border-slate-100 {
+  border-color: #222238 !important;
+}
+
+.dark [class*="border-[#8B0000]"],
+.dark [class*="border-[#8b0000]"] {
+  border-color: #FF5C8A !important;
+}
+
+/* Shadows & 3D Offsets */
+.dark [class*="shadow-["][class*="#1A1A1A]"],
+.dark [class*="shadow-["][class*="#1a1a1a]"] {
+  box-shadow: 4px 4px 0px #080812, 0 0 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark [class*="shadow-["][class*="#8B0000]"],
+.dark [class*="shadow-["][class*="#8b0000]"] {
+  box-shadow: 4px 4px 0px #8B0000, 0 0 14px rgba(255, 92, 138, 0.35) !important;
+}
+
+/* Accent themes in Dark Mode */
+.dark .bg-pink-50,
+.dark .bg-pink-50\/50,
+.dark .bg-pink-50\/80,
+.dark .bg-rose-50 {
+  background-color: rgba(255, 117, 151, 0.14) !important;
+}
+
+.dark .border-pink-100,
+.dark .border-pink-200,
+.dark .border-rose-100,
+.dark .border-rose-200 {
+  border-color: rgba(255, 117, 151, 0.3) !important;
+}
+
+.dark .text-pink-600,
+.dark .text-rose-600 {
+  color: #FF85A2 !important;
+}
+
+.dark .bg-amber-50,
+.dark .bg-amber-50\/80 {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+}
+
+.dark .border-amber-100,
+.dark .border-amber-200 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.dark .text-amber-600,
+.dark .text-amber-700 {
+  color: #FBBF24 !important;
+}
+
+.dark .bg-emerald-50,
+.dark .bg-green-50 {
+  background-color: rgba(16, 185, 129, 0.14) !important;
+}
+
+.dark .border-emerald-100,
+.dark .border-emerald-200 {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.dark .text-emerald-600 {
+  color: #34D399 !important;
+}
+
+.dark .bg-blue-50,
+.dark .bg-sky-50 {
+  background-color: rgba(59, 130, 246, 0.14) !important;
+}
+
+.dark .border-blue-100,
+.dark .border-blue-200 {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark .text-blue-600 {
+  color: #60A5FA !important;
+}
+
+.dark .bg-purple-50,
+.dark .bg-fuchsia-50 {
+  background-color: rgba(168, 85, 247, 0.14) !important;
+}
+
+.dark .border-purple-100,
+.dark .border-purple-200 {
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+
+.dark .text-purple-600 {
+  color: #C084FC !important;
+}
+
+/* Dark mode inputs, textareas, selects */
+.dark input[type="text"],
+.dark input[type="search"],
+.dark input[type="password"],
+.dark input[type="email"],
+.dark textarea,
+.dark select {
+  background-color: #141424 !important;
+  color: #FFFFFF !important;
+  border-color: #363659 !important;
+}
+
+.dark select option {
+  background-color: #18182B !important;
+  color: #FFFFFF !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #78738D !important;
+}
+
+/* Dark mode antique card */
+.dark .card-antique {
+  background-color: #18182B;
+  border: 2px solid #363654;
+  box-shadow: 6px 6px 0px #0A0A12;
+}
+
+.dark .card-antique:hover {
   transform: translate(-4px, -4px);
-  box-shadow: 10px 10px 0px #8B0000;
+  box-shadow: 10px 10px 0px #FF5C8A;
+  border-color: #FF5C8A;
+}
+
+/* Dark mode Washi pattern */
+.dark .washi-pattern {
+  background-color: #0F0F1A !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
 }
 
 /* Hanko seal (stamp stamp stamp) */

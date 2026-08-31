@@ -27,12 +27,15 @@ import KanjiN5Lessons from "./components/KanjiN5Lessons";
 import KanjiN4Lessons from "./components/KanjiN4Lessons";
 import N4Lessons from "./components/N4Lessons";
 import N3Lessons from "./components/N3Lessons";
+import N2Lessons from "./components/N2Lessons";
+import VocabN2Lessons from "./components/VocabN2Lessons";
 import VerbConjugationLessons from "./components/VerbConjugationLessons";
 import VerbConjugationN4Lessons from "./components/VerbConjugationN4Lessons";
 import JLPTN4Exams from "./components/JLPTN4Exams";
 import JLPTN3Exams from "./components/JLPTN3Exams";
 import Leaderboard from "./components/Leaderboard";
 import Auth from "./components/Auth";
+import ThemeToggle from "./components/ThemeToggle";
 import { DuySonLogo } from "./components/DuySonLogo";
 import { auth, db } from "./lib/firebase";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
@@ -74,7 +77,8 @@ const SYNCABLE_STORAGE_KEYS = [
   "n4_quiz_correct",
   "n4_quiz_total",
   "duy_son_custom_logo_url",
-  "hoc_cung_thay_son_ai_examples"
+  "hoc_cung_thay_son_ai_examples",
+  "hoc_cung_thay_son_theme"
 ];
 
 // Monkeypatch localStorage to emit custom event on changes (deferred to avoid setState-in-render)
@@ -119,6 +123,30 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [selectedLevel, setSelectedLevel] = useState<"N5" | "N4" | "N3" | "Anime" | "Travel">("N5");
   const [practiceMode, setPracticeMode] = useState<"standard" | "custom">("standard");
+
+  // Night Mode Theme state with localStorage persistence
+  const [isNightMode, setIsNightMode] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("hoc_cung_thay_son_theme");
+      if (saved) return saved === "dark";
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return false;
+  });
+
+  // Apply dark mode classes & sync theme state to document
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      if (isNightMode) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.setAttribute("data-theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+      localStorage.setItem("hoc_cung_thay_son_theme", isNightMode ? "dark" : "light");
+    }
+  }, [isNightMode]);
 
   // Firebase auth & syncing state
   const [user, setUser] = useState<any>(null);
@@ -477,19 +505,48 @@ export default function App() {
   const vocabSource = practiceMode === "custom" ? customVocab : PRESET_VOCABULARY;
 
   return (
-    <div id="app-root-container" className="min-h-screen bg-natural-bg text-natural-text font-sans flex flex-col relative overflow-hidden">
+    <div 
+      id="app-root-container" 
+      className={`min-h-screen font-sans flex flex-col relative overflow-hidden transition-colors duration-300 ${
+        isNightMode ? "bg-[#0F0F1A] text-[#E5E1DA] yozakura-ambient" : "bg-natural-bg text-natural-text"
+      }`}
+    >
       
-      {/* Immersive falling cherry blossoms background (CSS only, light-weight & beautiful) */}
+      {/* Immersive falling cherry blossoms background with Day / Night (Yozakura 🌙) dynamics */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
-        <div className="absolute top-10 left-10 text-pink-400/20 text-2xl animate-pulse">🌸</div>
-        <div className="absolute top-40 right-20 text-pink-400/10 text-xl animate-pulse delay-500">🌸</div>
-        <div className="absolute bottom-20 left-1/4 text-pink-400/15 text-3xl animate-bounce delay-1000">🌸</div>
-        <div className="absolute bottom-40 right-1/3 text-pink-400/20 text-2xl animate-pulse delay-300">🌸</div>
-        <div className="absolute top-1/2 left-2/3 text-pink-400/10 text-4xl animate-bounce delay-700">🌸</div>
+        {isNightMode ? (
+          <>
+            {/* Glowing Night Sakura petals & gentle moonlit ambiance */}
+            <div className="absolute top-8 left-10 text-pink-300 text-2xl animate-pulse night-sakura-glow opacity-80">🌸</div>
+            <div className="absolute top-36 right-20 text-pink-400 text-xl animate-pulse delay-500 night-sakura-glow opacity-60">🌸</div>
+            <div className="absolute top-1/4 left-1/3 text-amber-100 text-xs animate-ping delay-1000 opacity-40">✨</div>
+            <div className="absolute bottom-24 left-1/4 text-pink-300 text-3xl animate-bounce delay-700 night-sakura-glow opacity-75">🌸</div>
+            <div className="absolute bottom-44 right-1/3 text-pink-400 text-2xl animate-pulse delay-300 night-sakura-glow opacity-70">🌸</div>
+            <div className="absolute top-1/2 left-3/4 text-pink-300 text-4xl animate-bounce delay-1000 night-sakura-glow opacity-50">🌸</div>
+            <div className="absolute top-16 right-1/4 text-amber-200 text-sm animate-pulse delay-700 opacity-60">✨</div>
+            <div className="absolute bottom-16 right-16 text-pink-200 text-xs animate-ping delay-500 opacity-50">✨</div>
+            <div className="absolute top-12 right-12 text-amber-100 text-2xl animate-pulse delay-1000 opacity-30">🌙</div>
+          </>
+        ) : (
+          <>
+            <div className="absolute top-10 left-10 text-pink-400/20 text-2xl animate-pulse">🌸</div>
+            <div className="absolute top-40 right-20 text-pink-400/10 text-xl animate-pulse delay-500">🌸</div>
+            <div className="absolute bottom-20 left-1/4 text-pink-400/15 text-3xl animate-bounce delay-1000">🌸</div>
+            <div className="absolute bottom-40 right-1/3 text-pink-400/20 text-2xl animate-pulse delay-300">🌸</div>
+            <div className="absolute top-1/2 left-2/3 text-pink-400/10 text-4xl animate-bounce delay-700">🌸</div>
+          </>
+        )}
       </div>
 
       {/* Primary Navigation Header */}
-      <header id="primary-header" className="sticky top-0 z-40 bg-white/60 backdrop-blur-md border-b border-natural-border shadow-sm h-20 flex items-center">
+      <header 
+        id="primary-header" 
+        className={`sticky top-0 z-40 backdrop-blur-md border-b shadow-sm h-20 flex items-center transition-colors duration-300 ${
+          isNightMode 
+            ? "bg-[#131324]/85 border-[#2D2D4A] shadow-black/20" 
+            : "bg-white/60 border-natural-border"
+        }`}
+      >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           
           {/* Logo Brand area */}
@@ -502,25 +559,35 @@ export default function App() {
               <h1 className="font-sans font-black text-natural-deep text-base sm:text-lg tracking-tight leading-none">
                 Học cùng thầy Sơn
               </h1>
-              <p className="text-[10px] uppercase tracking-widest font-bold text-pink-500 mt-1">
+              <p className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${isNightMode ? "text-pink-400" : "text-pink-500"}`}>
                 ĐỊA NGỤC TRẦN GIAN ACADEMY
               </p>
             </div>
           </div>
 
-          {/* Quick Info & Authentication Badge */}
-          <div className="flex items-center gap-3 select-none shrink-0">
+          {/* Quick Info, Theme Toggle & Authentication Badge */}
+          <div className="flex items-center gap-2 sm:gap-3 select-none shrink-0">
+            {/* Theme Toggle Button (Day ☀️ / Night 🌙 Yozakura) */}
+            <ThemeToggle 
+              isNightMode={isNightMode} 
+              onToggle={() => setIsNightMode(prev => !prev)} 
+            />
+
             {/* Sync status indicator & manual sync button */}
             {user && (
               <button 
                 onClick={() => { playSound.click(); performCloudSync(); }}
-                className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 text-[10px] font-bold transition-all cursor-pointer"
+                className={`flex items-center gap-1 px-2 py-1 rounded-full border text-[10px] font-bold transition-all cursor-pointer ${
+                  isNightMode
+                    ? "bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-400 border-emerald-500/30"
+                    : "bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border-emerald-200"
+                }`}
                 title={isSyncing ? "Đang đồng bộ đám mây..." : "Đã đồng bộ an toàn! Bấm để đồng bộ ngay lập tức"}
               >
                 {isSyncing ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-pink-500" />
                 ) : (
-                  <Cloud className="w-3.5 h-3.5 text-emerald-600" />
+                  <Cloud className="w-3.5 h-3.5 text-emerald-500" />
                 )}
                 <span className="hidden md:inline">{isSyncing ? "Đang đồng bộ..." : "Đã đồng bộ"}</span>
               </button>
@@ -528,7 +595,11 @@ export default function App() {
             
             {!user && (
               <div 
-                className="hidden md:flex items-center justify-center p-1.5 rounded-full bg-amber-50 text-amber-600 border border-amber-100 cursor-pointer"
+                className={`hidden md:flex items-center justify-center p-1.5 rounded-full border cursor-pointer ${
+                  isNightMode 
+                    ? "bg-amber-950/40 text-amber-300 border-amber-500/30" 
+                    : "bg-amber-50 text-amber-600 border-amber-100"
+                }`}
                 onClick={() => { playSound.click(); setAuthModalOpen(true); }}
                 title="Sử dụng Chế độ Khách (Bấm để đăng nhập và lưu đám mây)"
               >
@@ -541,11 +612,15 @@ export default function App() {
               <span className="font-bold text-xs text-natural-deep leading-none">
                 {user ? user.displayName || progress.userName : "Khách (Chưa lưu)"}
               </span>
-              <span className="text-[10px] text-pink-600 font-bold mt-1">{progress.xp} XP</span>
+              <span className={`text-[10px] font-bold mt-1 ${isNightMode ? "text-pink-400" : "text-pink-600"}`}>
+                {progress.xp} XP
+              </span>
             </div>
             
             {/* User Avatar */}
-            <div className="w-10 h-10 rounded-full border-2 border-white shadow-md flex items-center justify-center bg-orange-100 text-lg shrink-0 overflow-hidden">
+            <div className={`w-10 h-10 rounded-full border-2 shadow-md flex items-center justify-center text-lg shrink-0 overflow-hidden ${
+              isNightMode ? "border-slate-700 bg-slate-800" : "border-white bg-orange-100"
+            }`}>
               {progress.customAvatarUrl ? (
                 <img 
                   src={progress.customAvatarUrl} 
@@ -562,7 +637,11 @@ export default function App() {
             </div>
 
             {/* Streak */}
-            <div className="hidden xs:flex items-center gap-1 bg-natural-soft border border-natural-border px-2.5 py-1 rounded-full">
+            <div className={`hidden xs:flex items-center gap-1 border px-2.5 py-1 rounded-full ${
+              isNightMode 
+                ? "bg-[#1D1D34] border-[#2D2D4A] text-slate-200" 
+                : "bg-natural-soft border-natural-border text-natural-deep"
+            }`}>
               <span className="text-xs">🔥</span>
               <span className="font-extrabold text-[10px] sm:text-xs text-natural-deep">{progress.streak} ngày</span>
             </div>
@@ -591,12 +670,23 @@ export default function App() {
       </header>
 
       {/* Iconic Navigation Bar - Positioned at the top right below primary header/login */}
-      <nav id="iconic-navigation-bar" className="sticky top-20 z-30 bg-white border-b border-natural-border py-2 px-1 sm:px-4 shadow-sm backdrop-blur-md">
+      <nav 
+        id="iconic-navigation-bar" 
+        className={`sticky top-20 z-30 py-2 px-1 sm:px-4 shadow-sm backdrop-blur-md transition-colors duration-300 border-b ${
+          isNightMode 
+            ? "bg-[#18182B]/90 border-[#2D2D4A]" 
+            : "bg-white/90 border-natural-border"
+        }`}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-7 gap-1 max-w-4xl mx-auto text-center">
             <button
               onClick={() => handleNavigate("dashboard")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "dashboard" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
+                activeTab === "dashboard" 
+                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <Home className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Trang chủ</span>
@@ -604,7 +694,11 @@ export default function App() {
             
             <button
               onClick={() => handleNavigate("leaderboard")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${activeTab === "leaderboard" ? "text-amber-600 bg-amber-50/80 font-black" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${
+                activeTab === "leaderboard" 
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/40 font-black border border-amber-500/30" : "text-amber-600 bg-amber-50/80 font-black border border-amber-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <Trophy className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-amber-500" />
               <span>Bảng Vàng</span>
@@ -615,7 +709,11 @@ export default function App() {
 
             <button
               onClick={() => handleNavigate("courses")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "courses" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
+                activeTab === "courses" 
+                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <GraduationCap className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Khóa học</span>
@@ -623,7 +721,11 @@ export default function App() {
 
             <button
               onClick={() => handleNavigate("japanese-ai-chat")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${activeTab === "japanese-ai-chat" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${
+                activeTab === "japanese-ai-chat" 
+                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <MessageSquare className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Trò chuyện AI</span>
@@ -634,7 +736,11 @@ export default function App() {
 
             <button
               onClick={() => handleNavigate("knowledge")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "knowledge" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
+                activeTab === "knowledge" 
+                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <BookOpen className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Bổ ích</span>
@@ -642,7 +748,11 @@ export default function App() {
 
             <button
               onClick={() => handleNavigate("games")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "games" || activeTab === "quiz" || activeTab === "match" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
+                activeTab === "games" || activeTab === "quiz" || activeTab === "match" 
+                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <Gamepad2 className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Trò chơi</span>
@@ -650,7 +760,11 @@ export default function App() {
 
             <button
               onClick={() => handleNavigate("personal")}
-              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${activeTab === "personal" ? "text-pink-600 bg-pink-50/50" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/30"}`}
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
+                activeTab === "personal" 
+                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
+                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+              }`}
             >
               <Notebook className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Sổ tay</span>
@@ -768,6 +882,19 @@ export default function App() {
           <N3Lessons 
             onGoBack={() => handleNavigate("courses")}
             onNavigate={handleNavigate}
+          />
+        )}
+
+        {activeTab === "n2-lessons" && (
+          <N2Lessons 
+            onGoBack={() => handleNavigate("courses")}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {activeTab === "n2-vocab-lessons" && (
+          <VocabN2Lessons 
+            onGoBack={() => handleNavigate("n2-lessons")}
           />
         )}
 

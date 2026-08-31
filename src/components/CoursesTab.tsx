@@ -37,6 +37,16 @@ export default function CoursesTab({ onNavigate }: CoursesTabProps) {
       icon: "🔍",
       desc: "Nâng cao khả năng đọc hiểu và nghe hiểu để tự tin giao tiếp trong công việc và cuộc sống hàng ngày tại Nhật Bản.",
       externalLink: "https://sites.google.com/view/lopthayson/n3"
+    },
+    {
+      id: "N2" as const,
+      title: "Trung Cao Cấp",
+      level: "N2",
+      bgClass: "from-indigo-500/10 to-purple-500/10 border-indigo-200",
+      textClass: "text-indigo-600",
+      icon: "🏆",
+      desc: "Làm chủ từ vựng cao cấp, cụm Collocations thực tế và ngữ pháp phức tạp chuẩn đề thi JLPT N2.",
+      externalLink: "https://sites.google.com/view/lopthayson/n2"
     }
   ];
 
@@ -60,7 +70,7 @@ export default function CoursesTab({ onNavigate }: CoursesTabProps) {
         </p>
       </div>
 
-      <div id="course-cards-grid" className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div id="course-cards-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {courses.map((course) => (
           <div 
             key={course.id}
@@ -92,15 +102,18 @@ export default function CoursesTab({ onNavigate }: CoursesTabProps) {
                   } else if (course.id === "N4") {
                     playSound.click();
                     onNavigate("n4-lessons");
-                  } else {
+                  } else if (course.id === "N3") {
                     playSound.click();
                     onNavigate("n3-lessons");
+                  } else {
+                    playSound.click();
+                    onNavigate("n2-lessons");
                   }
                 }}
                 className="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-black shadow-sm transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
               >
                 <ExternalLink className="w-4 h-4" />
-                {course.id === "N5" ? "HỌC NN5 NGAY" : course.id === "N4" ? "HỌC NN4 NGAY" : "HỌC NN3 NGAY"}
+                {course.id === "N5" ? "HỌC NN5 NGAY" : course.id === "N4" ? "HỌC NN4 NGAY" : course.id === "N3" ? "HỌC NN3 NGAY" : "HỌC NN2 NGAY"}
               </button>
               
               {course.id === "N5" && (
