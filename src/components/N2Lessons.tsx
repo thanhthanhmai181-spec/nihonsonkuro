@@ -3,6 +3,7 @@ import { playSound } from "../utils/audio";
 import { ArrowLeft, ExternalLink, Sparkles, BookOpen, Layers, Award } from "lucide-react";
 import VocabN2Lessons from "./VocabN2Lessons";
 import GrammarN2Lessons from "./GrammarN2Lessons";
+import KanjiN2Lessons from "./KanjiN2Lessons";
 
 interface N2LessonsProps {
   onGoBack: () => void;
@@ -12,6 +13,7 @@ interface N2LessonsProps {
 export default function N2Lessons({ onGoBack, onNavigate }: N2LessonsProps) {
   const [studyVocab, setStudyVocab] = useState<boolean>(false);
   const [studyGrammar, setStudyGrammar] = useState<boolean>(false);
+  const [studyKanji, setStudyKanji] = useState<boolean>(false);
 
   const books = [
     {
@@ -35,8 +37,8 @@ export default function N2Lessons({ onGoBack, onNavigate }: N2LessonsProps) {
       title: "Hán Tự N2",
       volume: "Quyển III",
       symbol: "漢",
-      desc: "Kho Hán tự N2 thực chiến, phân biệt âm On/Kun và các từ ghép thường gặp.",
-      isReady: false,
+      desc: "Kho Hán tự N2 thực chiến, phân biệt âm On/Kun, âm Hán Việt, Flashcard và bài tập trắc nghiệm.",
+      isReady: true,
     },
     {
       id: 4,
@@ -54,6 +56,8 @@ export default function N2Lessons({ onGoBack, onNavigate }: N2LessonsProps) {
       setStudyVocab(true);
     } else if (book.id === 2) {
       setStudyGrammar(true);
+    } else if (book.id === 3) {
+      setStudyKanji(true);
     } else {
       alert("Phần này đang được Thầy Sơn biên soạn và sẽ sớm ra mắt!");
     }
@@ -76,6 +80,17 @@ export default function N2Lessons({ onGoBack, onNavigate }: N2LessonsProps) {
         onGoBack={() => {
           playSound.click();
           setStudyGrammar(false);
+        }} 
+      />
+    );
+  }
+
+  if (studyKanji) {
+    return (
+      <KanjiN2Lessons 
+        onGoBack={() => {
+          playSound.click();
+          setStudyKanji(false);
         }} 
       />
     );

@@ -167,24 +167,24 @@ body {
 
 .dark .bg-natural-soft,
 .dark .bg-natural-sand,
-.dark .bg-gray-50,
-.dark .bg-slate-50,
-.dark .bg-stone-50,
-.dark .bg-neutral-50 {
+.dark [class*="bg-gray-50"],
+.dark [class*="bg-slate-50"],
+.dark [class*="bg-stone-50"],
+.dark [class*="bg-neutral-50"] {
   background-color: #151528 !important;
 }
 
-.dark .bg-gray-100,
-.dark .bg-slate-100,
-.dark .bg-stone-100,
-.dark .bg-neutral-100 {
+.dark [class*="bg-gray-100"],
+.dark [class*="bg-slate-100"],
+.dark [class*="bg-stone-100"],
+.dark [class*="bg-neutral-100"] {
   background-color: #202038 !important;
 }
 
-.dark .bg-gray-200,
-.dark .bg-slate-200,
-.dark .bg-stone-200,
-.dark .bg-neutral-200 {
+.dark [class*="bg-gray-200"],
+.dark [class*="bg-slate-200"],
+.dark [class*="bg-stone-200"],
+.dark [class*="bg-neutral-200"] {
   background-color: #2B2B48 !important;
 }
 

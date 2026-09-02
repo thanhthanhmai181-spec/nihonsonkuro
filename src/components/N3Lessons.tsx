@@ -4,6 +4,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import VocabN3Lessons from "./VocabN3Lessons";
 import GrammarN3Lessons from "./GrammarN3Lessons";
 import KanjiN3Lessons from "./KanjiN3Lessons";
+import TranslationN3Lessons from "./TranslationN3Lessons";
 
 interface N3LessonsProps {
   onGoBack: () => void;
@@ -14,6 +15,7 @@ export default function N3Lessons({ onGoBack, onNavigate }: N3LessonsProps) {
   const [studyVocab, setStudyVocab] = useState<boolean>(false);
   const [studyGrammar, setStudyGrammar] = useState<boolean>(false);
   const [studyKanji, setStudyKanji] = useState<boolean>(false);
+  const [studyTranslation, setStudyTranslation] = useState<boolean>(false);
 
   const books = [
     {
@@ -41,6 +43,14 @@ export default function N3Lessons({ onGoBack, onNavigate }: N3LessonsProps) {
       url: "https://sites.google.com/view/lopthayson/n3/h%C3%A1n-t%E1%BB%B1-n3?authuser=0",
     },
     {
+      id: 5,
+      title: "Dịch N3",
+      volume: "Quyển IV",
+      symbol: "訳",
+      desc: "Tuyệt kỹ chuyển ngữ 22 bài. Rèn luyện phản xạ ngữ pháp sắc sảo qua hàng trăm câu dịch thực chiến hai chiều Nhật - Việt.",
+      url: "",
+    },
+    {
       id: 4,
       title: "Thi Thử N3",
       volume: "Thử Thách",
@@ -58,6 +68,8 @@ export default function N3Lessons({ onGoBack, onNavigate }: N3LessonsProps) {
       setStudyGrammar(true);
     } else if (book.id === 3) {
       setStudyKanji(true);
+    } else if (book.id === 5) {
+      setStudyTranslation(true);
     } else if (book.id === 4) {
       onNavigate("n3-jlpt-exam");
     } else {
@@ -93,6 +105,17 @@ export default function N3Lessons({ onGoBack, onNavigate }: N3LessonsProps) {
         onGoBack={() => {
           playSound.click();
           setStudyKanji(false);
+        }} 
+      />
+    );
+  }
+
+  if (studyTranslation) {
+    return (
+      <TranslationN3Lessons 
+        onGoBack={() => {
+          playSound.click();
+          setStudyTranslation(false);
         }} 
       />
     );
@@ -167,17 +190,17 @@ export default function N3Lessons({ onGoBack, onNavigate }: N3LessonsProps) {
         </div>
       </section>
 
-      {/* Four Books Section */}
-      <section className="max-w-5xl mx-auto space-y-8">
+      {/* Five Books Section */}
+      <section className="max-w-6xl mx-auto space-y-8">
         <div className="text-center">
           <div className="inline-block border-y-2 border-[#1A1A1A] py-2 px-8">
             <h2 className="text-2xl sm:text-3xl font-black text-[#1A1A1A] tracking-wider uppercase" style={{ fontFamily: "'Noto Serif JP', serif" }}>
-              TỨ ĐẠI BÍ KÍP N3
+              NGŨ ĐẠI BÍ KÍP N3
             </h2>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
           {books.map((book) => (
             <div
               key={book.id}
@@ -211,7 +234,7 @@ export default function N3Lessons({ onGoBack, onNavigate }: N3LessonsProps) {
                 <button
                   className="inline-flex items-center justify-center gap-1.5 px-6 py-2.5 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold group-hover:bg-[#1A1A1A] group-hover:text-white transition-all w-full uppercase tracking-wider text-xs rounded-xl mt-auto"
                 >
-                  <span>{(book.id === 1 || book.id === 2 || book.id === 3) ? "Bắt Đầu Học 100%" : "Mở Khóa Ấn"}</span>
+                  <span>{(book.id === 1 || book.id === 2 || book.id === 3 || book.id === 5) ? "Bắt Đầu Học 100%" : "Mở Khóa Ấn"}</span>
                 </button>
               </div>
             </div>
