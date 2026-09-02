@@ -9,7 +9,7 @@ interface DashboardProps {
   progress: UserProgress;
   vocabList: Vocabulary[];
   updateProgress: (updated: Partial<UserProgress>) => void;
-  onNavigate: (tab: string, level?: "N5" | "N4" | "N3" | "Anime" | "Travel") => void;
+  onNavigate: (tab: string, level?: "N5" | "N4" | "N3" | "N2" | "Anime" | "Travel") => void;
 }
 
 const MOTIVATIONAL_QUOTES = [
@@ -37,29 +37,35 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
 
   // Load real state from local storage for accurate dashboard stats
   const [stats, setStats] = useState({
-    // Grammar N5, N4, N3
+    // Grammar N5, N4, N3, N2
     grammarN5Learned: 0,
     grammarN4Learned: 0,
     grammarN3Learned: 0,
+    grammarN2Learned: 0,
     grammarN5Total: 110,
     grammarN4Total: 59,
     grammarN3Total: 124,
+    grammarN2Total: 140,
 
-    // Kanji N5, N4, N3
+    // Kanji N5, N4, N3, N2
     kanjiN5Learned: 0,
     kanjiN4Learned: 0,
     kanjiN3Learned: 0,
+    kanjiN2Learned: 0,
     kanjiN5Total: 50,
     kanjiN4Total: 203,
     kanjiN3Total: 334,
+    kanjiN2Total: 656,
 
-    // Vocab N5, N4, N3
+    // Vocab N5, N4, N3, N2
     vocabN5Learned: 0,
     vocabN4Learned: 0,
     vocabN3Learned: 0,
+    vocabN2Learned: 0,
     vocabN5Total: 953,
     vocabN4Total: 586,
     vocabN3Total: 897,
+    vocabN2Total: 2265,
   });
 
   const calculateStats = () => {
@@ -69,12 +75,15 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
       grammarN5Learned: detailed.grammarN5,
       grammarN4Learned: detailed.grammarN4,
       grammarN3Learned: detailed.grammarN3,
+      grammarN2Learned: detailed.grammarN2,
       kanjiN5Learned: detailed.kanjiN5,
       kanjiN4Learned: detailed.kanjiN4,
       kanjiN3Learned: detailed.kanjiN3,
+      kanjiN2Learned: detailed.kanjiN2,
       vocabN5Learned: detailed.vocabN5,
       vocabN4Learned: detailed.vocabN4,
-      vocabN3Learned: detailed.vocabN3
+      vocabN3Learned: detailed.vocabN3,
+      vocabN2Learned: detailed.vocabN2
     }));
   };
 
@@ -439,7 +448,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
           <div className="border-b border-natural-border pb-4">
             <h4 className="font-black text-sm text-natural-deep uppercase tracking-wider flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-pink-600" />
-              <span>TIẾN TRÌNH THUỘC BÀI CHI TIẾT (CẢ N5, N4, N3)</span>
+              <span>TIẾN TRÌNH THUỘC BÀI CHI TIẾT (CẢ N5, N4, N3, N2)</span>
             </h4>
             <p className="text-xs text-natural-muted mt-1">Hệ thống hóa kết quả học tập từ vựng, ngữ pháp và Hán tự của em.</p>
           </div>
@@ -459,10 +468,10 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 </div>
                 <div className="text-right">
                   <span className="text-xl font-black text-indigo-700">
-                    {stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned}
+                    {stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned}
                   </span>
                   <span className="text-xs font-bold text-natural-muted">
-                    /{stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total}
+                    /{stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total}
                   </span>
                 </div>
               </div>
@@ -473,13 +482,13 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                   <div 
                     className="bg-indigo-600 h-full rounded-full transition-all duration-500" 
                     style={{ 
-                      width: `${Math.min(100, Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total)) * 100))}%` 
+                      width: `${Math.min(100, Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total)) * 100))}%` 
                     }}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-indigo-600 font-extrabold">
                   <span>Hoàn thành</span>
-                  <span>{Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total)) * 100) || 0}%</span>
+                  <span>{Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total)) * 100) || 0}%</span>
                 </div>
               </div>
 
@@ -512,6 +521,15 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                     {stats.grammarN3Learned}<span className="text-natural-muted">/{stats.grammarN3Total}</span>
                   </span>
                 </div>
+                <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-indigo-800 rounded-full"></span>
+                    Cấp độ N2
+                  </span>
+                  <span className="font-mono text-natural-deep font-bold">
+                    {stats.grammarN2Learned}<span className="text-natural-muted">/{stats.grammarN2Total}</span>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -529,10 +547,10 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 </div>
                 <div className="text-right">
                   <span className="text-xl font-black text-amber-700">
-                    {stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned}
+                    {stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned}
                   </span>
                   <span className="text-xs font-bold text-natural-muted">
-                    /{stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total}
+                    /{stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total}
                   </span>
                 </div>
               </div>
@@ -543,13 +561,13 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                   <div 
                     className="bg-amber-500 h-full rounded-full transition-all duration-500" 
                     style={{ 
-                      width: `${Math.min(100, Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total)) * 100))}%` 
+                      width: `${Math.min(100, Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total)) * 100))}%` 
                     }}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-amber-600 font-extrabold">
                   <span>Hoàn thành</span>
-                  <span>{Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total)) * 100) || 0}%</span>
+                  <span>{Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total)) * 100) || 0}%</span>
                 </div>
               </div>
 
@@ -582,6 +600,15 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                     {stats.kanjiN3Learned}<span className="text-natural-muted">/{stats.kanjiN3Total}</span>
                   </span>
                 </div>
+                <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-amber-800 rounded-full"></span>
+                    Cấp độ N2
+                  </span>
+                  <span className="font-mono text-natural-deep font-bold">
+                    {stats.kanjiN2Learned}<span className="text-natural-muted">/{stats.kanjiN2Total}</span>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -599,10 +626,10 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 </div>
                 <div className="text-right">
                   <span className="text-xl font-black text-pink-700">
-                    {stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned}
+                    {stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned}
                   </span>
                   <span className="text-xs font-bold text-natural-muted">
-                    /{stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total}
+                    /{stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total}
                   </span>
                 </div>
               </div>
@@ -613,13 +640,13 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                   <div 
                     className="bg-pink-500 h-full rounded-full transition-all duration-500" 
                     style={{ 
-                      width: `${Math.min(100, Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total)) * 100))}%` 
+                      width: `${Math.min(100, Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total)) * 100))}%` 
                     }}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-pink-600 font-extrabold">
                   <span>Hoàn thành</span>
-                  <span>{Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total)) * 100) || 0}%</span>
+                  <span>{Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total)) * 100) || 0}%</span>
                 </div>
               </div>
 
@@ -650,6 +677,15 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                   </span>
                   <span className="font-mono text-natural-deep font-bold">
                     {stats.vocabN3Learned}<span className="text-natural-muted">/{stats.vocabN3Total}</span>
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-pink-800 rounded-full"></span>
+                    Cấp độ N2
+                  </span>
+                  <span className="font-mono text-natural-deep font-bold">
+                    {stats.vocabN2Learned}<span className="text-natural-muted">/{stats.vocabN2Total}</span>
                   </span>
                 </div>
               </div>

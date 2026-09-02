@@ -6,7 +6,7 @@ export interface Vocabulary {
   meaning: string;    // Vietnamese translation
   example: string;    // Example Japanese sentence
   exampleMeaning: string; // Example Vietnamese translation
-  level: "N5" | "N4" | "N3" | "Anime" | "Travel";
+  level: "N5" | "N4" | "N3" | "N2" | "Anime" | "Travel";
   category: string;   // e.g. "Chào hỏi", "Gia đình", "Ăn uống", "Anime"
 }
 

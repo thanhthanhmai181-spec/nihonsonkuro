@@ -1,23 +1,26 @@
 import { UserProgress, Vocabulary } from "../types";
 
 export interface UserLearnedStats {
-  vocab: number;     // Tổng từ vựng đã thuộc (N5 + N4 + N3, tối đa 2436)
-  grammar: number;   // Tổng ngữ pháp đã thuộc (N5 + N4 + N3, tối đa 293)
-  kanji: number;     // Tổng Hán tự đã thuộc (N5 + N4 + N3, tối đa 614)
-  total: number;     // Tổng điểm kiến thức = Vocab + Grammar + Kanji (tối đa 3343)
+  vocab: number;     // Tổng từ vựng đã thuộc (N5 + N4 + N3 + N2, tối đa 4701)
+  grammar: number;   // Tổng ngữ pháp đã thuộc (N5 + N4 + N3 + N2, tối đa 433)
+  kanji: number;     // Tổng Hán tự đã thuộc (N5 + N4 + N3 + N2, tối đa 1243)
+  total: number;     // Tổng điểm kiến thức = Vocab + Grammar + Kanji (tối đa 6377)
 
   // Chi tiết từng cấp độ
   grammarN5: number;
   grammarN4: number;
   grammarN3: number;
+  grammarN2: number;
 
   kanjiN5: number;
   kanjiN4: number;
   kanjiN3: number;
+  kanjiN2: number;
 
   vocabN5: number;
   vocabN4: number;
   vocabN3: number;
+  vocabN2: number;
 }
 
 export function calculateDetailedUserStats(
@@ -73,7 +76,19 @@ export function calculateDetailedUserStats(
     }
   } catch (e) {}
 
-  // 4. Hán tự N5
+  // 4. Ngữ pháp N2 (Tối đa 140)
+  let g2 = 0;
+  try {
+    const saved = getItem("sk_n2_grammar_mastered_ids");
+    if (saved) {
+      const parsed = typeof saved === "object" ? saved : JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        g2 = parsed.length;
+      }
+    }
+  } catch (e) {}
+
+  // 5. Hán tự N5
   let k5 = 0;
   try {
     const saved = getItem("kanji_n5_state");
@@ -85,7 +100,7 @@ export function calculateDetailedUserStats(
     }
   } catch (e) {}
 
-  // 5. Hán tự N4
+  // 6. Hán tự N4
   let k4 = 0;
   try {
     const saved = getItem("n4_known_kanji");
@@ -97,7 +112,7 @@ export function calculateDetailedUserStats(
     }
   } catch (e) {}
 
-  // 6. Hán tự N3
+  // 7. Hán tự N3
   let k3 = 0;
   try {
     const saved = getItem("kanji_n3_progress");
@@ -109,7 +124,19 @@ export function calculateDetailedUserStats(
     }
   } catch (e) {}
 
-  // 7. Từ vựng N5 (Tối đa 953)
+  // 8. Hán tự N2 (Tối đa 656)
+  let k2 = 0;
+  try {
+    const saved = getItem("kanji_n2_progress");
+    if (saved) {
+      const parsed = typeof saved === "object" ? saved : JSON.parse(saved);
+      if (parsed && Array.isArray(parsed.viewedKanjis)) {
+        k2 = parsed.viewedKanjis.length;
+      }
+    }
+  } catch (e) {}
+
+  // 9. Từ vựng N5 (Tối đa 953)
   const n5LearnedSet = new Set<number>();
   try {
     const saved = getItem("n5_srs_v8");
@@ -189,7 +216,7 @@ export function calculateDetailedUserStats(
   });
   const v4 = Math.min(586, n4LearnedSet.size);
 
-  // 9. Từ vựng N3 (Tối đa 897)
+  // 11. Từ vựng N3 (Tối đa 897)
   const n3LearnedSet = new Set<string>();
   try {
     const saved = getItem("sk_vocab_n3_progress");
@@ -216,9 +243,36 @@ export function calculateDetailedUserStats(
   });
   const v3 = Math.min(897, n3LearnedSet.size);
 
-  const grammarTotal = Math.min(293, g5 + g4 + g3);
-  const kanjiTotal = Math.min(614, k5 + k4 + k3);
-  const vocabTotal = Math.min(2436, v5 + v4 + v3);
+  // 12. Từ vựng N2 (Tối đa 2265)
+  const n2LearnedSet = new Set<string>();
+  try {
+    const saved = getItem("sk_vocab_n2_progress");
+    if (saved) {
+      const parsed = typeof saved === "object" ? saved : JSON.parse(saved);
+      for (const k in parsed) {
+        if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
+          n2LearnedSet.add(String(k));
+        }
+      }
+    }
+  } catch (e) {}
+
+  allLearnedWordIds.forEach(idStr => {
+    if (idStr.startsWith("n2_")) {
+      n2LearnedSet.add(idStr.replace("n2_", ""));
+    }
+    if (vocabList && vocabList.length > 0) {
+      const wordObj = vocabList.find(v => v.id === idStr);
+      if (wordObj && wordObj.level === "N2") {
+        n2LearnedSet.add(wordObj.id);
+      }
+    }
+  });
+  const v2 = Math.min(2265, n2LearnedSet.size);
+
+  const grammarTotal = Math.min(433, g5 + g4 + g3 + g2);
+  const kanjiTotal = Math.min(1243, k5 + k4 + k3 + k2);
+  const vocabTotal = Math.min(4701, v5 + v4 + v3 + v2);
 
   return {
     vocab: vocabTotal,
@@ -229,13 +283,16 @@ export function calculateDetailedUserStats(
     grammarN5: g5,
     grammarN4: g4,
     grammarN3: g3,
+    grammarN2: g2,
 
     kanjiN5: k5,
     kanjiN4: k4,
     kanjiN3: k3,
+    kanjiN2: k2,
 
     vocabN5: v5,
     vocabN4: v4,
     vocabN3: v3,
+    vocabN2: v2,
   };
 }
