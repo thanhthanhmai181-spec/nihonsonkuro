@@ -62,7 +62,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
     vocabN4Learned: 0,
     vocabN3Learned: 0,
     vocabN2Learned: 0,
-    vocabN5Total: 953,
+    vocabN5Total: 948,
     vocabN4Total: 586,
     vocabN3Total: 897,
     vocabN2Total: 2265,

@@ -52,7 +52,7 @@ export default function VocabN5Lessons({ onGoBack }: VocabN5LessonsProps) {
         kanji: kan,
         meaning: mean,
         category: cat,
-        lesson: Math.min(25, Math.floor(idx / 40) + 1)
+        lesson: (item[4] as number) || Math.min(25, Math.floor(idx / 40) + 1)
       };
     });
   }, []);
@@ -151,7 +151,7 @@ export default function VocabN5Lessons({ onGoBack }: VocabN5LessonsProps) {
             const matchN5 = String(idStr).match(/^(?:n5_|v_n5_|v_)?(\d+)$/i);
             if (matchN5) {
               const numId = parseInt(matchN5[1], 10);
-              if (numId >= 1 && numId <= 953 && (!initialSRS[numId] || initialSRS[numId].repCount === 0)) {
+              if (numId >= 1 && numId <= vocabData.length && (!initialSRS[numId] || initialSRS[numId].repCount === 0)) {
                 initialSRS[numId] = {
                   interval: 1,
                   nextReview: today,

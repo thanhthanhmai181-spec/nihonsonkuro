@@ -136,7 +136,7 @@ export function calculateDetailedUserStats(
     }
   } catch (e) {}
 
-  // 9. Từ vựng N5 (Tối đa 953)
+  // 9. Từ vựng N5 (Tối đa 948)
   const n5LearnedSet = new Set<number>();
   try {
     const saved = getItem("n5_srs_v8");
@@ -148,7 +148,7 @@ export function calculateDetailedUserStats(
         const repCount = Array.isArray(item) ? item[3] : (typeof item === 'object' ? (item?.repCount || 0) : (item === true ? 1 : 0));
         const interval = Array.isArray(item) ? item[0] : (typeof item === 'object' ? (item?.interval || 0) : 0);
 
-        if ((repCount > 0 || interval > 0) && !isNaN(numId) && numId >= 1 && numId <= 953) {
+        if ((repCount > 0 || interval > 0) && !isNaN(numId) && numId >= 1 && numId <= 948) {
           n5LearnedSet.add(numId);
         }
       }
@@ -173,7 +173,7 @@ export function calculateDetailedUserStats(
     const matchN5 = idStr.match(/^(?:n5_|v_n5_|v_)?(\d+)$/i);
     if (matchN5) {
       const numId = parseInt(matchN5[1], 10);
-      if (numId >= 1 && numId <= 953) {
+      if (numId >= 1 && numId <= 948) {
         n5LearnedSet.add(numId);
       }
     }
@@ -181,13 +181,13 @@ export function calculateDetailedUserStats(
       const wordObj = vocabList.find(v => v.id === idStr);
       if (wordObj && wordObj.level === "N5") {
         const matchedNum = parseInt(wordObj.id.replace(/\D/g, ""), 10);
-        if (!isNaN(matchedNum) && matchedNum >= 1 && matchedNum <= 953) {
+        if (!isNaN(matchedNum) && matchedNum >= 1 && matchedNum <= 948) {
           n5LearnedSet.add(matchedNum);
         }
       }
     }
   });
-  const v5 = Math.min(953, n5LearnedSet.size);
+  const v5 = Math.min(948, n5LearnedSet.size);
 
   // 8. Từ vựng N4 (Tối đa 586)
   const n4LearnedSet = new Set<string>();
@@ -272,7 +272,7 @@ export function calculateDetailedUserStats(
 
   const grammarTotal = Math.min(433, g5 + g4 + g3 + g2);
   const kanjiTotal = Math.min(1243, k5 + k4 + k3 + k2);
-  const vocabTotal = Math.min(4701, v5 + v4 + v3 + v2);
+  const vocabTotal = Math.min(4696, v5 + v4 + v3 + v2);
 
   return {
     vocab: vocabTotal,
