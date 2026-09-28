@@ -28,6 +28,11 @@ service cloud.firestore {
         allow read: if true;
         allow write: if isOwner(userId) && isValidId(syncId);
       }
+
+      match /{allChildren=**} {
+        allow read: if true;
+        allow write: if isOwner(userId);
+      }
     }
 
     match /leaderboard/{userId} {

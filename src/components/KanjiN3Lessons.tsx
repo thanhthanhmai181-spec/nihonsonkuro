@@ -76,15 +76,39 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
 
   // Load progress on mount & reactive updates
   useEffect(() => {
+    const normalizeArray = (val: any): any[] => {
+      if (Array.isArray(val)) return val;
+      if (val && typeof val === "object") return Object.values(val);
+      return [];
+    };
+
+    const normalizeFlashcards = (val: any): Record<string, { attempts: number; mastered: boolean }> => {
+      if (!val || typeof val !== "object" || Array.isArray(val)) return {};
+      const res: Record<string, { attempts: number; mastered: boolean }> = {};
+      for (const [k, v] of Object.entries(val)) {
+        if (v && typeof v === "object" && !Array.isArray(v)) {
+          res[k] = {
+            attempts: typeof (v as any).attempts === "number" ? (v as any).attempts : 1,
+            mastered: !!(v as any).mastered
+          };
+        } else if (typeof v === "boolean") {
+          res[k] = { attempts: 1, mastered: v };
+        } else if (v === "learned" || v === "mastered") {
+          res[k] = { attempts: 1, mastered: true };
+        }
+      }
+      return res;
+    };
+
     const loadFromStorage = () => {
       const saved = localStorage.getItem("kanji_n3_progress");
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
           setUserProgress({
-            viewedKanjis: parsed.viewedKanjis || [],
-            flashcards: parsed.flashcards || {},
-            quizHistory: parsed.quizHistory || []
+            viewedKanjis: normalizeArray(parsed?.viewedKanjis),
+            flashcards: normalizeFlashcards(parsed?.flashcards),
+            quizHistory: normalizeArray(parsed?.quizHistory)
           });
         } catch (e) {
           console.error("Error parsing Kanji N3 progress", e);
@@ -117,9 +141,33 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
       try { latestSaved = JSON.parse(savedStr); } catch (e) {}
     }
 
-    const mergedViewed = Array.from(new Set([...(latestSaved.viewedKanjis || []), ...(newProgress.viewedKanjis || [])]));
-    const mergedFlashcards = { ...(latestSaved.flashcards || {}), ...(newProgress.flashcards || {}) };
-    const mergedQuizHistory = [...(latestSaved.quizHistory || []), ...(newProgress.quizHistory || [])];
+    const parseArray = (val: any): any[] => {
+      if (Array.isArray(val)) return val;
+      if (val && typeof val === "object") return Object.values(val);
+      return [];
+    };
+
+    const parseFlashcards = (val: any): Record<string, { attempts: number; mastered: boolean }> => {
+      if (!val || typeof val !== "object" || Array.isArray(val)) return {};
+      const res: Record<string, { attempts: number; mastered: boolean }> = {};
+      for (const [k, v] of Object.entries(val)) {
+        if (v && typeof v === "object" && !Array.isArray(v)) {
+          res[k] = {
+            attempts: typeof (v as any).attempts === "number" ? (v as any).attempts : 1,
+            mastered: !!(v as any).mastered
+          };
+        } else if (typeof v === "boolean") {
+          res[k] = { attempts: 1, mastered: v };
+        } else if (v === "learned" || v === "mastered") {
+          res[k] = { attempts: 1, mastered: true };
+        }
+      }
+      return res;
+    };
+
+    const mergedViewed = Array.from(new Set([...parseArray(latestSaved?.viewedKanjis), ...parseArray(newProgress?.viewedKanjis)]));
+    const mergedFlashcards = { ...parseFlashcards(latestSaved?.flashcards), ...parseFlashcards(newProgress?.flashcards) };
+    const mergedQuizHistory = [...parseArray(latestSaved?.quizHistory), ...parseArray(newProgress?.quizHistory)];
 
     const merged = {
       viewedKanjis: mergedViewed,
@@ -128,7 +176,11 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
     };
 
     setUserProgress(merged);
-    localStorage.setItem("kanji_n3_progress", JSON.stringify(merged));
+    try {
+      localStorage.setItem("kanji_n3_progress", JSON.stringify(merged));
+    } catch (e) {
+      console.warn("Failed to write kanji_n3_progress to localStorage:", e);
+    }
   };
 
   // Flattened vocabulary list for Flashcards and Quizzes
@@ -266,27 +318,37 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
 
   const handleHfcResult = (isMastered: boolean) => {
     if (hfcCurrentQueue.length === 0) return;
-    playSound.click();
+    try {
+      playSound.click();
+    } catch (e) {}
 
-    const currentVocab = hfcCurrentQueue[hfcCurrentIndex];
-    const prevStats = userProgress.flashcards[currentVocab.word] || { attempts: 0, mastered: false };
-    
-    const updatedFlashcards = {
-      ...userProgress.flashcards,
-      [currentVocab.word]: {
-        attempts: prevStats.attempts + 1,
-        mastered: isMastered
+    const currentVocab = hfcCurrentQueue[hfcCurrentIndex] || hfcCurrentQueue[0];
+    if (currentVocab) {
+      const flashcards = userProgress.flashcards || {};
+      const prevStats = (flashcards[currentVocab.word] && typeof flashcards[currentVocab.word] === "object")
+        ? flashcards[currentVocab.word]
+        : { attempts: 0, mastered: false };
+      
+      const updatedFlashcards = {
+        ...flashcards,
+        [currentVocab.word]: {
+          attempts: (Number(prevStats.attempts) || 0) + 1,
+          mastered: isMastered
+        }
+      };
+
+      try {
+        saveProgress({
+          ...userProgress,
+          flashcards: updatedFlashcards
+        });
+      } catch (e) {
+        console.error("Error saving progress in handleHfcResult:", e);
       }
-    };
-
-    saveProgress({
-      ...userProgress,
-      flashcards: updatedFlashcards
-    });
-
-    if (hfcCurrentIndex < hfcCurrentQueue.length - 1) {
-      setHfcCurrentIndex(prev => prev + 1);
     }
+
+    // Advance to next card, or loop back to start if at the end of queue
+    setHfcCurrentIndex(prev => (prev < hfcCurrentQueue.length - 1 ? prev + 1 : 0));
   };
 
   const hfcStats = useMemo(() => {
@@ -356,23 +418,34 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
 
   const handleFcResult = (isMastered: boolean) => {
     if (fcCurrentQueue.length === 0) return;
-    playSound.click();
+    try {
+      playSound.click();
+    } catch (e) {}
 
-    const currentVocab = fcCurrentQueue[fcCurrentIndex];
-    const prevStats = userProgress.flashcards[currentVocab.word] || { attempts: 0, mastered: false };
-    
-    const updatedFlashcards = {
-      ...userProgress.flashcards,
-      [currentVocab.word]: {
-        attempts: prevStats.attempts + 1,
-        mastered: isMastered
+    const currentVocab = fcCurrentQueue[fcCurrentIndex] || fcCurrentQueue[0];
+    if (currentVocab) {
+      const flashcards = userProgress.flashcards || {};
+      const prevStats = (flashcards[currentVocab.word] && typeof flashcards[currentVocab.word] === "object")
+        ? flashcards[currentVocab.word]
+        : { attempts: 0, mastered: false };
+      
+      const updatedFlashcards = {
+        ...flashcards,
+        [currentVocab.word]: {
+          attempts: (Number(prevStats.attempts) || 0) + 1,
+          mastered: isMastered
+        }
+      };
+
+      try {
+        saveProgress({
+          ...userProgress,
+          flashcards: updatedFlashcards
+        });
+      } catch (e) {
+        console.error("Error saving progress in handleFcResult:", e);
       }
-    };
-
-    saveProgress({
-      ...userProgress,
-      flashcards: updatedFlashcards
-    });
+    }
 
     setFcCurrentIndex(prev => prev + 1);
     setIsCardFlipped(false);
@@ -543,15 +616,17 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
   // --- TAB 4: KẾT QUẢ (RESULTS/METRICS) CALCULATIONS ---
   const dashboardStats = useMemo(() => {
     const totalAppKanjis = KANJI_N3_DATA.reduce((acc, lesson) => acc + lesson.kanjis.length, 0);
-    const viewedKanjisCount = userProgress.viewedKanjis.length;
+    const viewedKanjisCount = (userProgress.viewedKanjis || []).length;
 
     const totalVocab = allVocabularies.length;
-    const masteredCount = Object.keys(userProgress.flashcards).filter(key => userProgress.flashcards[key].mastered).length;
+    const flashcards = userProgress.flashcards || {};
+    const masteredCount = Object.keys(flashcards).filter(key => flashcards[key]?.mastered).length;
 
-    const quizTaken = userProgress.quizHistory.length;
+    const quizHistory = userProgress.quizHistory || [];
+    const quizTaken = quizHistory.length;
     let avgScore = 0;
     if (quizTaken > 0) {
-      const totalPercent = userProgress.quizHistory.reduce((acc, curr) => acc + curr.percent, 0);
+      const totalPercent = quizHistory.reduce((acc, curr) => acc + (curr?.percent || 0), 0);
       avgScore = Math.round(totalPercent / quizTaken);
     }
 
@@ -883,7 +958,7 @@ export default function KanjiN3Lessons({ onGoBack }: KanjiN3LessonsProps) {
                 onChange={(e) => setFcLessonSelect(e.target.value)}
                 className="bg-white border-2 border-[#1A1A1A] text-gray-800 text-sm font-bold rounded-lg p-2 focus:ring-[#8B0000] focus:border-[#8B0000] outline-none"
               >
-                <option value="all">Tất cả bài chưa nhớ ({allVocabularies.length - Object.keys(userProgress.flashcards).filter(key => userProgress.flashcards[key].mastered).length})</option>
+                <option value="all">Tất cả bài chưa nhớ ({allVocabularies.length - Object.keys(userProgress.flashcards || {}).filter(key => userProgress.flashcards[key]?.mastered).length})</option>
                 {KANJI_N3_DATA.map(lesson => (
                   <option key={lesson.id} value={lesson.id}>{lesson.title}</option>
                 ))}

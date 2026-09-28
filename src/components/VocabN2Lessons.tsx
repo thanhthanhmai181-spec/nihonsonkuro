@@ -89,21 +89,23 @@ export default function VocabN2Lessons({ onGoBack }: VocabN2LessonsProps) {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          const stateMap: Record<number, "new" | "learning" | "mastered"> = {};
-          RAW_N2_VOCAB.forEach((w) => {
-            stateMap[w.id] = parsed[w.id] || "new";
-          });
-          setWordStates(stateMap);
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            const stateMap: Record<number, "new" | "learning" | "mastered"> = {};
+            RAW_N2_VOCAB.forEach((w) => {
+              stateMap[w.id] = parsed[w.id] || "new";
+            });
+            setWordStates(stateMap);
+            return;
+          }
         } catch (e) {
           console.error("Failed to load N2 Vocab progress:", e);
         }
-      } else {
-        const defaultState: Record<number, "new" | "learning" | "mastered"> = {};
-        RAW_N2_VOCAB.forEach((w) => {
-          defaultState[w.id] = "new";
-        });
-        setWordStates(defaultState);
       }
+      const defaultState: Record<number, "new" | "learning" | "mastered"> = {};
+      RAW_N2_VOCAB.forEach((w) => {
+        defaultState[w.id] = "new";
+      });
+      setWordStates(defaultState);
     };
 
     loadFromStorage();
@@ -130,10 +132,12 @@ export default function VocabN2Lessons({ onGoBack }: VocabN2LessonsProps) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        Object.keys(parsed).forEach((k) => {
-          const id = Number(k);
-          if (parsed[id]) currentMap[id] = parsed[id];
-        });
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          Object.keys(parsed).forEach((k) => {
+            const id = Number(k);
+            if (parsed[id]) currentMap[id] = parsed[id];
+          });
+        }
       } catch (e) {
         console.error("Failed to parse existing N2 storage:", e);
       }
@@ -142,6 +146,7 @@ export default function VocabN2Lessons({ onGoBack }: VocabN2LessonsProps) {
     currentMap[wordId] = newStatus;
     setWordStates(currentMap);
     localStorage.setItem("sk_vocab_n2_progress", JSON.stringify(currentMap));
+    window.dispatchEvent(new CustomEvent("local-storage-changed", { detail: { key: "sk_vocab_n2_progress" } }));
   };
 
   // Distinct lessons from RAW_N2_VOCAB

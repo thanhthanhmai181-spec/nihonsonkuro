@@ -195,9 +195,11 @@ export function calculateDetailedUserStats(
     const saved = getItem("sk_vocab_n4_progress");
     if (saved) {
       const parsed = typeof saved === "object" ? saved : JSON.parse(saved);
-      for (const k in parsed) {
-        if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
-          n4LearnedSet.add(String(k));
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        for (const k in parsed) {
+          if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
+            n4LearnedSet.add(String(k));
+          }
         }
       }
     }
@@ -222,9 +224,11 @@ export function calculateDetailedUserStats(
     const saved = getItem("sk_vocab_n3_progress");
     if (saved) {
       const parsed = typeof saved === "object" ? saved : JSON.parse(saved);
-      for (const k in parsed) {
-        if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
-          n3LearnedSet.add(String(k));
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        for (const k in parsed) {
+          if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
+            n3LearnedSet.add(String(k));
+          }
         }
       }
     }
@@ -249,9 +253,11 @@ export function calculateDetailedUserStats(
     const saved = getItem("sk_vocab_n2_progress");
     if (saved) {
       const parsed = typeof saved === "object" ? saved : JSON.parse(saved);
-      for (const k in parsed) {
-        if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
-          n2LearnedSet.add(String(k));
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        for (const k in parsed) {
+          if (parsed[k] === "mastered" || parsed[k] === "learning" || parsed[k] === true) {
+            n2LearnedSet.add(String(k));
+          }
         }
       }
     }

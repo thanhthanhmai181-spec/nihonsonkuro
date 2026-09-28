@@ -68,6 +68,9 @@ const SYNCABLE_STORAGE_KEYS = [
   "n5_settings_v8",
   "sk_vocab_n4_progress",
   "sk_vocab_n3_progress",
+  "sk_vocab_n2_progress",
+  "kanji_n2_progress",
+  "sk_n2_grammar_mastered_ids",
   "hac_tong_high_score",
   "driftGame_stars",
   "sk_test_history",
@@ -323,24 +326,48 @@ export default function App() {
         .catch(err => console.error("Error saving progress to Firestore:", err))
         .finally(() => setIsSyncing(false));
 
-      // Also sync public leaderboard entry
+      // Also sync public leaderboard entry while strictly preserving highest scores
       const detailed = calculateDetailedUserStats(progress, PRESET_VOCABULARY);
 
-      const leaderboardData = {
-        uid: user.uid,
-        userName: user.displayName || progress.userName || "Học trò ngoan",
-        selectedAvatarId: progress.selectedAvatarId || "hero",
-        customAvatarUrl: progress.customAvatarUrl || user.photoURL || "",
-        xp: progress.xp || 0,
-        streak: progress.streak || 1,
-        quizHighScore: progress.quizHighScore || 0,
-        learnedWordsCount: detailed.vocab,
-        learnedGrammarCount: detailed.grammar,
-        learnedKanjiCount: detailed.kanji,
-        totalMasteredCount: detailed.total,
-        updatedAt: new Date().toISOString()
-      };
-      setDoc(doc(db, "leaderboard", user.uid), leaderboardData).catch(() => {});
+      getDoc(doc(db, "leaderboard", user.uid)).then(existingSnap => {
+        const existing = existingSnap.exists() ? existingSnap.data() : null;
+        const v = Math.max(detailed.vocab, existing?.learnedWordsCount || 0);
+        const g = Math.max(detailed.grammar, existing?.learnedGrammarCount || 0);
+        const k = Math.max(detailed.kanji, existing?.learnedKanjiCount || 0);
+        const tot = Math.max(detailed.total, v + g + k, existing?.totalMasteredCount || 0);
+
+        const leaderboardData = {
+          uid: user.uid,
+          userName: user.displayName || progress.userName || existing?.userName || "Học trò ngoan",
+          selectedAvatarId: progress.selectedAvatarId || existing?.selectedAvatarId || "hero",
+          customAvatarUrl: progress.customAvatarUrl || user.photoURL || existing?.customAvatarUrl || "",
+          xp: Math.max(progress.xp || 0, existing?.xp || 0),
+          streak: Math.max(progress.streak || 1, existing?.streak || 1),
+          quizHighScore: Math.max(progress.quizHighScore || 0, existing?.quizHighScore || 0),
+          learnedWordsCount: v,
+          learnedGrammarCount: g,
+          learnedKanjiCount: k,
+          totalMasteredCount: tot,
+          updatedAt: new Date().toISOString()
+        };
+        setDoc(doc(db, "leaderboard", user.uid), leaderboardData).catch(() => {});
+      }).catch(() => {
+        const fallbackData = {
+          uid: user.uid,
+          userName: user.displayName || progress.userName || "Học trò ngoan",
+          selectedAvatarId: progress.selectedAvatarId || "hero",
+          customAvatarUrl: progress.customAvatarUrl || user.photoURL || "",
+          xp: progress.xp || 0,
+          streak: progress.streak || 1,
+          quizHighScore: progress.quizHighScore || 0,
+          learnedWordsCount: detailed.vocab,
+          learnedGrammarCount: detailed.grammar,
+          learnedKanjiCount: detailed.kanji,
+          totalMasteredCount: detailed.total,
+          updatedAt: new Date().toISOString()
+        };
+        setDoc(doc(db, "leaderboard", user.uid), fallbackData).catch(() => {});
+      });
     } else {
       localStorage.setItem(PROGRESS_LOCAL_STORAGE_KEY, JSON.stringify(progress));
     }

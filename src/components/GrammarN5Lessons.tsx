@@ -6,6 +6,7 @@ import {
   qData, 
   addFuriganaHtml 
 } from "../data/grammarN5Data";
+import { getQuizSentenceMeaning } from "../data/grammar/n5QuizTranslations";
 import { 
   ArrowLeft, 
   Volume2, 
@@ -38,6 +39,8 @@ interface ParsedQuestion {
   text: string;
   correct: string;
   opts: string[];
+  meaning?: string;
+  fullSentence?: string;
 }
 
 export default function GrammarN5Lessons({ onGoBack }: GrammarN5LessonsProps) {
@@ -216,10 +219,17 @@ export default function GrammarN5Lessons({ onGoBack }: GrammarN5LessonsProps) {
             .sort((a, b) => a.sort - b.sort)
             .map(item => item.value);
 
+          const meaning = getQuizSentenceMeaning(currentLesson, cat, idx);
+          const fullSentence = text.includes("___") 
+            ? text.replace("___", correct) 
+            : `${text} ${correct}`;
+
           questions.push({
             text,
             correct,
-            opts: seededShuffle
+            opts: seededShuffle,
+            meaning,
+            fullSentence
           });
         }
       });
@@ -749,22 +759,52 @@ export default function GrammarN5Lessons({ onGoBack }: GrammarN5LessonsProps) {
 
                         {/* Correction banner */}
                         {isQuizSubmitted && (
-                          <div className={`mt-3 ml-9 p-3 rounded-xl border text-xs font-bold flex items-start gap-2 ${
+                          <div className={`mt-3 ml-9 p-3.5 rounded-xl border text-xs flex flex-col gap-2.5 transition-all ${
                             isCorrect 
-                              ? "bg-green-50 text-green-700 border-green-200" 
-                              : "bg-red-50 text-red-700 border-red-200"
+                              ? "bg-green-50/90 text-green-800 border-green-200 dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-800/60" 
+                              : "bg-red-50/90 text-red-800 border-red-200 dark:bg-rose-950/40 dark:text-rose-200 dark:border-rose-800/60"
                           }`}>
-                            {isCorrect ? (
-                              <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
-                            ) : (
-                              <XCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-                            )}
-                            <div>
-                              <span>{isCorrect ? "ĐÚNG" : "SAI"}</span>
-                              <span className="text-slate-500 ml-1.5 font-normal">
-                                - Đáp án chính xác: <strong className="text-slate-800">{q.correct}</strong>
-                              </span>
+                            <div className="flex items-start gap-2 font-bold">
+                              {isCorrect ? (
+                                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+                              ) : (
+                                <XCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+                              )}
+                              <div>
+                                <span className={isCorrect ? "text-green-700 dark:text-green-300 font-black" : "text-red-700 dark:text-red-300 font-black"}>
+                                  {isCorrect ? "ĐÚNG" : "CHƯA ĐÚNG"}
+                                </span>
+                                <span className="text-slate-600 dark:text-slate-300 ml-1.5 font-normal">
+                                  - Đáp án chính xác: <strong className="text-slate-900 dark:text-white font-bold bg-white/80 dark:bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-200/70 dark:border-slate-700 inline-block">{q.correct}</strong>
+                                </span>
+                              </div>
                             </div>
+
+                            {/* Full sentence and Vietnamese translation */}
+                            {(q.fullSentence || q.meaning) && (
+                              <div className="pt-2.5 border-t border-slate-200/80 dark:border-slate-700/80 flex flex-col gap-2">
+                                {q.fullSentence && (
+                                  <div className="flex items-baseline gap-1.5 text-slate-700 dark:text-slate-300">
+                                    <span className="font-bold text-slate-500 dark:text-slate-400 shrink-0 text-[11px] uppercase tracking-wider">
+                                      Câu hoàn chỉnh:
+                                    </span>
+                                    <span className="font-bold text-slate-900 dark:text-white text-sm font-jp-rounded">
+                                      {q.fullSentence}
+                                    </span>
+                                  </div>
+                                )}
+                                {q.meaning && (
+                                  <div className="flex items-start gap-2 bg-white/85 dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs">
+                                    <span className="font-bold text-amber-800 dark:text-amber-300 shrink-0 text-xs flex items-center gap-1">
+                                      💡 Giải nghĩa tiếng Việt:
+                                    </span>
+                                    <span className="font-semibold text-slate-800 dark:text-slate-100 text-xs leading-relaxed">
+                                      {q.meaning}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

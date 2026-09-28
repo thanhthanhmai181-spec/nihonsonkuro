@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { playSound } from "../utils/audio";
 import { RAW_N3_VOCAB, VocabN3Item } from "../data/vocabN3";
 import { getGeminiHeaders } from "../utils/geminiKey";
+import VocabN3FlashcardsTab from "./VocabN3FlashcardsTab";
 import { 
   ArrowLeft, 
   Volume2, 
@@ -37,21 +38,6 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
   const [libTab, setLibTab] = useState<"all" | "learning" | "mastered">("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Study Queue states
-  const [studyQueue, setStudyQueue] = useState<VocabN3Item[]>([]);
-  const [studyIndex, setStudyIndex] = useState<number>(0);
-  const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [studyFinished, setStudyFinished] = useState<boolean>(false);
-
-  // AI Sentence Evaluator States
-  const [userSentence, setUserSentence] = useState<string>("");
-  const [isEvaluating, setIsEvaluating] = useState<boolean>(false);
-  const [evaluationResult, setEvaluationResult] = useState<{
-    isCorrect: boolean;
-    feedback: string;
-    correctedSentence: string;
-  } | null>(null);
-
   // Quiz states
   const [quizList, setQuizList] = useState<{
     word: VocabN3Item;
@@ -73,21 +59,23 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          const stateMap: Record<number, "new" | "learning" | "mastered"> = {};
-          RAW_N3_VOCAB.forEach((w) => {
-            stateMap[w.id] = parsed[w.id] || "new";
-          });
-          setWordStates(stateMap);
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            const stateMap: Record<number, "new" | "learning" | "mastered"> = {};
+            RAW_N3_VOCAB.forEach((w) => {
+              stateMap[w.id] = parsed[w.id] || "new";
+            });
+            setWordStates(stateMap);
+            return;
+          }
         } catch (e) {
           console.error("Failed to load N3 Vocab progress:", e);
         }
-      } else {
-        const defaultState: Record<number, "new" | "learning" | "mastered"> = {};
-        RAW_N3_VOCAB.forEach((w) => {
-          defaultState[w.id] = "new";
-        });
-        setWordStates(defaultState);
       }
+      const defaultState: Record<number, "new" | "learning" | "mastered"> = {};
+      RAW_N3_VOCAB.forEach((w) => {
+        defaultState[w.id] = "new";
+      });
+      setWordStates(defaultState);
     };
 
     loadFromStorage();
@@ -194,64 +182,7 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
   // Start study session (flashcards)
   const handleStartLearning = (filterType?: "all" | "new" | "learning" | "mastered") => {
     playSound.click();
-    let targets = [...dashboardWords];
-
-    if (filterType) {
-      if (filterType === "new") {
-        targets = targets.filter((w) => (wordStates[w.id] || "new") === "new");
-      } else if (filterType === "learning") {
-        targets = targets.filter((w) => (wordStates[w.id] || "new") === "learning");
-      } else if (filterType === "mastered") {
-        targets = targets.filter((w) => (wordStates[w.id] || "new") === "mastered");
-      }
-    } else {
-      targets = targets.filter((w) => (wordStates[w.id] || "new") !== "mastered");
-    }
-
-    if (targets.length === 0) {
-      alert("Không có từ vựng nào phù hợp trong bài học này để học.");
-      return;
-    }
-
-    const shuffled = [...targets].sort(() => Math.random() - 0.5);
-    setStudyQueue(shuffled);
-    setStudyIndex(0);
-    setIsFlipped(false);
-    setStudyFinished(false);
-    setUserSentence("");
-    setEvaluationResult(null);
     setActiveTab("flashcard");
-  };
-
-  const handleFlip = () => {
-    playSound.flip();
-    setIsFlipped(!isFlipped);
-  };
-
-  const handleGradeCard = (status: "learning" | "mastered") => {
-    const currentWord = studyQueue[studyIndex];
-    if (!currentWord) return;
-
-    updateWordStatus(currentWord.id, status);
-
-    if (status === "mastered") {
-      playSound.correct();
-    } else {
-      playSound.click();
-    }
-
-    // Go to next card
-    if (studyIndex + 1 < studyQueue.length) {
-      setIsFlipped(false);
-      setUserSentence("");
-      setEvaluationResult(null);
-      setTimeout(() => {
-        setStudyIndex(studyIndex + 1);
-      }, 250);
-    } else {
-      playSound.achievement();
-      setStudyFinished(true);
-    }
   };
 
   // Filtered Library list
@@ -358,49 +289,6 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
     }
   };
 
-  // Submit sentence to Express Backend for Gemini AI Review
-  const handleEvaluateSentence = async () => {
-    const currentWord = studyQueue[studyIndex];
-    if (!currentWord || !userSentence.trim()) return;
-
-    playSound.click();
-    setIsEvaluating(true);
-    setEvaluationResult(null);
-
-    try {
-      const response = await fetch("/api/gemini/evaluate-sentence", {
-        method: "POST",
-        headers: getGeminiHeaders(),
-        body: JSON.stringify({
-          word: currentWord.kanji,
-          meaning: currentWord.meaning,
-          userSentence: userSentence,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("API call failed");
-      }
-
-      const data = await response.json();
-      setEvaluationResult(data);
-      if (data.isCorrect) {
-        playSound.correct();
-      } else {
-        playSound.wrong();
-      }
-    } catch (error) {
-      console.error("Failed to evaluate sentence:", error);
-      setEvaluationResult({
-        isCorrect: false,
-        feedback: "Học trò ơi, hệ thống AI Thầy Sơn đang bận chấm bài một chút. Đừng nản lòng nhé, hãy tiếp tục đặt câu thật hay nha! 💪",
-        correctedSentence: userSentence
-      });
-    } finally {
-      setIsEvaluating(false);
-    }
-  };
-
   return (
     <div className="washi-pattern min-h-screen p-4 sm:p-8 -mx-4 sm:-mx-8 rounded-[40px] border-2 border-[#1A1A1A] text-[#1A1A1A]" style={{ fontFamily: "'Lora', 'Noto Serif JP', serif" }}>
       {/* Top Banner Navigation */}
@@ -425,28 +313,36 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
         </button>
       </div>
 
-      {/* Navigation Tabs (Only visible when not actively in a session) */}
-      {activeTab !== "flashcard" && !quizActive && (
-        <div className="flex border-b-2 border-[#1A1A1A] mb-8 bg-white p-1 rounded-xl shadow-[3px_3px_0px_#1A1A1A] max-w-md">
+      {/* Navigation Tabs (Only visible when not actively in a quiz session) */}
+      {!quizActive && (
+        <div className="flex border-2 border-[#1A1A1A] mb-8 bg-[#FDFBF7] p-1.5 rounded-2xl shadow-[4px_4px_0px_#1A1A1A] max-w-lg">
           <button
             onClick={() => { playSound.click(); setActiveTab("dashboard"); }}
-            className={`flex-1 py-2 text-center rounded-lg font-bold text-sm sm:text-base transition-all ${
-              activeTab === "dashboard" ? "bg-[#1A1A1A] text-white" : "text-[#1A1A1A] hover:bg-gray-100"
+            className={`flex-1 py-2 text-center rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
+              activeTab === "dashboard" ? "bg-[#8B0000] text-white shadow-[2px_2px_0px_#1A1A1A]" : "text-[#1A1A1A] hover:bg-gray-100"
             }`}
           >
             Học Từ
           </button>
           <button
             onClick={() => { playSound.click(); setActiveTab("library"); }}
-            className={`flex-1 py-2 text-center rounded-lg font-bold text-sm sm:text-base transition-all ${
-              activeTab === "library" ? "bg-[#1A1A1A] text-white" : "text-[#1A1A1A] hover:bg-gray-100"
+            className={`flex-1 py-2 text-center rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
+              activeTab === "library" ? "bg-[#1A1A1A] text-white shadow-[2px_2px_0px_#8B0000]" : "text-[#1A1A1A] hover:bg-gray-100"
             }`}
           >
             Thư Viện
           </button>
           <button
+            onClick={() => { playSound.click(); setActiveTab("flashcard"); }}
+            className={`flex-1 py-2 text-center rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
+              activeTab === "flashcard" ? "bg-[#8B0000] text-white shadow-[2px_2px_0px_#1A1A1A]" : "text-[#1A1A1A] hover:bg-gray-100"
+            }`}
+          >
+            Flashcard
+          </button>
+          <button
             onClick={() => { playSound.click(); handleStartQuiz(); }}
-            className="flex-1 py-2 text-center rounded-lg font-bold text-sm sm:text-base transition-all text-[#1A1A1A] hover:bg-gray-100"
+            className="flex-1 py-2 text-center rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all text-[#1A1A1A] hover:bg-gray-100 cursor-pointer"
           >
             Luyện Test
           </button>
@@ -713,215 +609,15 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
       )}
 
       {/* 3. FLASHCARDS STUDY VIEW */}
-      {activeTab === "flashcard" && studyQueue.length > 0 && (
-        <div className="max-w-xl mx-auto space-y-8">
-          {/* Progress Mini Bar */}
-          <div className="flex justify-between items-center bg-white border-2 border-[#1A1A1A] px-4 py-2 rounded-xl shadow-[3px_3px_0px_#1A1A1A]">
-            <span className="font-bold text-xs">Học từ: {studyIndex + 1} / {studyQueue.length}</span>
-            <div className="w-32 bg-gray-100 h-2 border border-[#1A1A1A] rounded-full overflow-hidden">
-              <div 
-                style={{ width: `${((studyIndex + 1) / studyQueue.length) * 100}%` }} 
-                className="bg-[#8B0000] h-full transition-all duration-300"
-              />
-            </div>
-            <span className="text-[10px] font-black uppercase text-[#8B0000] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md">
-              Bài {studyQueue[studyIndex]?.lesson}
-            </span>
-          </div>
-
-          {!studyFinished ? (
-            <div className="space-y-6">
-              {/* Study Card Container */}
-              <div className="perspective-1000 w-full min-h-[280px]">
-                <div 
-                  onClick={handleFlip}
-                  className={`relative w-full min-h-[280px] transition-transform duration-500 transform-style-3d cursor-pointer ${
-                    isFlipped ? "rotate-y-180" : ""
-                  }`}
-                >
-                  {/* Front Side (Kanji + Audio Button) */}
-                  <div className="absolute inset-0 w-full h-full bg-white border-4 border-[#1A1A1A] rounded-3xl p-8 flex flex-col justify-between shadow-[8px_8px_0px_#1A1A1A] backface-hidden">
-                    <div className="flex justify-between items-start">
-                      <span className="text-xs bg-gray-100 border border-gray-300 rounded px-2.5 py-1 text-gray-500 font-extrabold uppercase">
-                        MẶT TRƯỚC
-                      </span>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          speakJapanese(studyQueue[studyIndex].kanji);
-                        }}
-                        className="w-10 h-10 border-2 border-[#1A1A1A] rounded-xl flex items-center justify-center bg-gray-50 hover:bg-[#8B0000]/10 text-gray-600 hover:text-[#8B0000] transition-colors cursor-pointer"
-                        title="Phát âm tiếng Nhật"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    <div className="text-center space-y-3">
-                      <div className="text-5xl font-serif font-black tracking-tight text-[#1A1A1A]">
-                        {studyQueue[studyIndex].kanji}
-                      </div>
-                      <div className="text-sm font-bold text-gray-400 font-sans tracking-wide">
-                        (Nhấp vào thẻ để lật xem nghĩa)
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                      <span>Cố lên học trò!</span>
-                      <span>Thẻ từ N3</span>
-                    </div>
-                  </div>
-
-                  {/* Back Side (Kana + Meaning + Collocation) */}
-                  <div className="absolute inset-0 w-full h-full bg-[#FDFBF7] border-4 border-[#1A1A1A] rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-[8px_8px_0px_#1A1A1A] backface-hidden rotate-y-180">
-                    <div className="flex justify-between items-start">
-                      <span className="text-xs bg-red-50 border border-red-200 rounded px-2.5 py-1 text-[#8B0000] font-extrabold uppercase">
-                        MẶT SAU (Ý NGHĨA)
-                      </span>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          speakJapanese(studyQueue[studyIndex].kanji);
-                        }}
-                        className="w-10 h-10 border-2 border-[#1A1A1A] rounded-xl flex items-center justify-center bg-white hover:bg-[#8B0000]/10 text-gray-600 hover:text-[#8B0000] transition-colors cursor-pointer"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    <div className="text-center space-y-4">
-                      <div className="text-2xl font-black text-gray-500 font-sans">{studyQueue[studyIndex].kana}</div>
-                      <div className="text-3xl font-black text-[#8B0000]">{studyQueue[studyIndex].meaning}</div>
-                      
-                      <div className="bg-white border-2 border-[#1A1A1A] p-3 rounded-xl max-w-sm mx-auto text-left space-y-1.5 shadow-[2px_2px_0px_#1A1A1A]">
-                        <div className="text-xs font-extrabold text-[#8B0000] uppercase tracking-wide">Cụm từ liên kết:</div>
-                        <div className="text-sm font-bold text-[#1A1A1A]">{studyQueue[studyIndex].collocation}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase">
-                      <span>Lớp học Thầy Sơn</span>
-                      <span>Học liệu N3 100%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Study Response Options (Buttons) */}
-              <div className="flex gap-4">
-                <button
-                  onClick={() => handleGradeCard("learning")}
-                  className="flex-1 bg-white hover:bg-gray-50 text-[#1A1A1A] border-4 border-[#1A1A1A] py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-[4px_4px_0px_#1A1A1A] hover:translate-y-[-1px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <RotateCcw className="w-5 h-5 text-[#F1C40F]" />
-                  <span>CHƯA THUỘC (ÔN LẠI)</span>
-                </button>
-                <button
-                  onClick={() => handleGradeCard("mastered")}
-                  className="flex-1 bg-[#2ECC71] hover:bg-[#27AE60] text-white border-4 border-[#1A1A1A] py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-[4px_4px_0px_#1A1A1A] hover:translate-y-[-1px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Check className="w-5 h-5" />
-                  <span>ĐÃ THUỘC (ĐẠT CHUẨN)</span>
-                </button>
-              </div>
-
-              {/* AI PRACTICE PANEL: Try writing a sentence! */}
-              <div className="bg-white p-5 rounded-3xl border-4 border-[#1A1A1A] shadow-[6px_6px_0px_#1A1A1A] space-y-4">
-                <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                  <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
-                  <h4 className="font-black text-sm sm:text-base text-[#1A1A1A]">Luyện Đặt Câu Với Thầy Sơn AI</h4>
-                </div>
-
-                <p className="text-xs text-gray-500 leading-relaxed font-sans">
-                  Hãy thử tự đặt câu có chứa từ <span className="font-extrabold text-[#8B0000]">「{studyQueue[studyIndex].kanji}」</span>. Thầy Sơn AI sẽ nhận xét ngữ pháp và sửa lại giúp học trò chuẩn xác 100%!
-                </p>
-
-                <div className="space-y-3">
-                  <textarea
-                    rows={2}
-                    value={userSentence}
-                    onChange={(e) => setUserSentence(e.target.value)}
-                    placeholder="Nhập câu tiếng Nhật của em vào đây..."
-                    className="w-full border-2 border-[#1A1A1A] bg-[#FDFBF7] p-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#8B0000]"
-                  />
-
-                  <div className="flex justify-end">
-                    <button
-                      onClick={handleEvaluateSentence}
-                      disabled={isEvaluating || !userSentence.trim()}
-                      className="bg-[#8B0000] text-white font-black text-xs px-4 py-2 border-2 border-[#1A1A1A] rounded-xl hover:bg-[#A30000] active:translate-y-0.5 shadow-[2px_2px_0px_#1A1A1A] flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      {isEvaluating ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          <span>Đang chấm...</span>
-                        </>
-                      ) : (
-                        <>
-                          <MessageSquare className="w-3.5 h-3.5" />
-                          <span>Thầy Sơn Nhận Xét</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* AI Review Result */}
-                {evaluationResult && (
-                  <div className={`p-4 rounded-xl border-2 border-[#1A1A1A] font-sans space-y-3 shadow-[2px_2px_0px_#1A1A1A] ${
-                    evaluationResult.isCorrect ? "bg-[#EAFaf1]" : "bg-[#FDEDEC]"
-                  }`}>
-                    <div className="flex items-center gap-2 font-bold text-xs sm:text-sm">
-                      {evaluationResult.isCorrect ? (
-                        <CheckCircle2 className="w-5 h-5 text-[#27AE60]" />
-                      ) : (
-                        <AlertCircle className="w-5 h-5 text-[#E74C3C]" />
-                      )}
-                      <span>
-                        {evaluationResult.isCorrect ? "Hoàn hảo! Câu viết hoàn toàn chính xác." : "Cần sửa đổi một chút học trò ơi!"}
-                      </span>
-                    </div>
-
-                    <div className="text-xs leading-relaxed text-gray-700 whitespace-pre-line">
-                      {evaluationResult.feedback}
-                    </div>
-
-                    <div className="bg-white border border-gray-300 p-2.5 rounded-lg space-y-1">
-                      <div className="text-[10px] font-black uppercase text-gray-400">Câu đề xuất chuẩn:</div>
-                      <div className="text-sm font-bold text-gray-800 font-serif">{evaluationResult.correctedSentence}</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            /* Finished queue screen */
-            <div className="bg-white p-8 rounded-3xl border-4 border-[#1A1A1A] shadow-[8px_8px_0px_#1A1A1A] text-center space-y-6">
-              <span className="text-5xl">🏆</span>
-              <h3 className="text-2xl font-black text-[#8B0000]" style={{ fontFamily: "'Noto Serif JP', serif" }}>
-                Hoàn Thành Phiên Học!
-              </h3>
-              <p className="text-sm text-gray-600 leading-relaxed font-sans max-w-sm mx-auto">
-                Tuyệt vời học trò ơi! Ngươi đã hoàn tất nghiên cứu toàn bộ thẻ từ vựng đã chọn. Hãy tiến vào thư viện để xem lại hoặc kiểm tra bằng bài test để tăng thực lực nhé!
-              </p>
-              
-              <div className="flex gap-4 max-w-xs mx-auto">
-                <button
-                  onClick={() => handleStartLearning()}
-                  className="flex-1 border-2 border-[#1A1A1A] py-3 rounded-xl font-bold bg-[#FDFBF7] hover:bg-gray-100 transition-colors cursor-pointer"
-                >
-                  Học lại tiếp
-                </button>
-                <button
-                  onClick={() => { playSound.click(); setActiveTab("dashboard"); }}
-                  className="flex-1 bg-[#8B0000] text-white border-2 border-[#1A1A1A] py-3 rounded-xl font-bold hover:bg-[#A30000] shadow-[2px_2px_0px_#1A1A1A] transition-colors cursor-pointer"
-                >
-                  Về Trang Chủ
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+      {activeTab === "flashcard" && !quizActive && (
+        <VocabN3FlashcardsTab
+          wordStates={wordStates}
+          updateWordStatus={updateWordStatus}
+          selectedLesson={selectedLesson}
+          onSelectLesson={setSelectedLesson}
+          lessons={lessons}
+          speakJapanese={speakJapanese}
+        />
       )}
 
       {/* 4. MCQ QUIZ TEST SECTION */}

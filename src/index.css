@@ -219,6 +219,37 @@ body {
   color: #CBD5E1 !important;
 }
 
+/* Emerald and Green accents in dark mode */
+.dark .text-emerald-950,
+.dark .text-emerald-900,
+.dark .text-emerald-800 {
+  color: #A7F3D0 !important;
+}
+.dark .text-emerald-700,
+.dark .text-emerald-600 {
+  color: #6EE7B7 !important;
+}
+.dark .bg-emerald-50 {
+  background-color: rgba(6, 78, 59, 0.4) !important;
+}
+.dark .bg-emerald-100 {
+  background-color: rgba(6, 78, 59, 0.55) !important;
+}
+
+/* Blue accents in dark mode */
+.dark .text-blue-950,
+.dark .text-blue-900,
+.dark .text-blue-800 {
+  color: #BAE6FD !important;
+}
+.dark .text-blue-700,
+.dark .text-blue-600 {
+  color: #93C5FD !important;
+}
+.dark .bg-blue-50 {
+  background-color: rgba(30, 58, 138, 0.4) !important;
+}
+
 /* Black icon boxes / header badges (e.g. "詞", "文", "漢") */
 .dark [class*="bg-[#1A1A1A]"],
 .dark [class*="bg-[#1a1a1a]"] {

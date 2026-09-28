@@ -52,26 +52,76 @@ export function mergeDataValues(localVal: any, cloudVal: any): any {
     return localVal || cloudVal;
   }
 
+  // Detect corrupted status arrays like ["mastered"] or ["mastered", "learning"]
+  const isCorruptedStatusArray = (val: any): boolean => {
+    if (!Array.isArray(val) || val.length === 0) return false;
+    const statusSet = new Set(["mastered", "learning", "not_learned", "new"]);
+    return val.every(item => typeof item === "string" && statusSet.has(item.toLowerCase()));
+  };
+
+  // If one is a corrupted status array and the other is a valid progress object, discard the corrupt array!
+  if (isCorruptedStatusArray(localVal) && cloudVal && typeof cloudVal === "object" && !Array.isArray(cloudVal)) {
+    return cloudVal;
+  }
+  if (isCorruptedStatusArray(cloudVal) && localVal && typeof localVal === "object" && !Array.isArray(localVal)) {
+    return localVal;
+  }
+  if (isCorruptedStatusArray(localVal) && isCorruptedStatusArray(cloudVal)) {
+    return {};
+  }
+
+  // Check if an object is genuinely an array stored with sequential 0-indexed numeric keys
+  const isGenuineArrayObject = (val: any): boolean => {
+    if (!val || typeof val !== "object" || Array.isArray(val)) return false;
+    const keys = Object.keys(val);
+    if (keys.length === 0) return false;
+
+    // Progress status map check: if values are statuses (like "mastered", "learning"), it is a map, NEVER an array!
+    const statusSet = new Set(["mastered", "learning", "not_learned", "new"]);
+    if (Object.values(val).some(v => typeof v === "string" && statusSet.has(v.toLowerCase()))) {
+      return false;
+    }
+
+    // Must have strictly 0-indexed contiguous integer keys: "0", "1", ..., "N-1"
+    for (let i = 0; i < keys.length; i++) {
+      if (!Object.prototype.hasOwnProperty.call(val, String(i))) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const normalizePotentialArray = (val: any) => {
+    if (Array.isArray(val)) return val;
+    if (isGenuineArrayObject(val)) {
+      return Object.values(val);
+    }
+    return val;
+  };
+
+  const normLocal = normalizePotentialArray(localVal);
+  const normCloud = normalizePotentialArray(cloudVal);
+
   // Handle Arrays
-  if (Array.isArray(localVal) && Array.isArray(cloudVal)) {
+  if (Array.isArray(normLocal) && Array.isArray(normCloud)) {
     // If array contains primitives (strings, numbers)
     if (
-      localVal.every(x => typeof x !== "object") &&
-      cloudVal.every(x => typeof x !== "object")
+      normLocal.every(x => typeof x !== "object") &&
+      normCloud.every(x => typeof x !== "object")
     ) {
-      return Array.from(new Set([...localVal, ...cloudVal]));
+      return Array.from(new Set([...normLocal, ...normCloud]));
     }
 
     // SRS Tuple Arrays e.g. [interval, nextReview, efactor, repCount]
     if (
-      localVal.length === 4 && cloudVal.length === 4 &&
-      typeof localVal[3] === "number" && typeof cloudVal[3] === "number"
+      normLocal.length === 4 && normCloud.length === 4 &&
+      typeof normLocal[3] === "number" && typeof normCloud[3] === "number"
     ) {
-      return localVal[3] >= cloudVal[3] ? localVal : cloudVal;
+      return normLocal[3] >= normCloud[3] ? normLocal : normCloud;
     }
 
     // Object arrays (e.g. test history)
-    const combined = [...localVal, ...cloudVal];
+    const combined = [...normLocal, ...normCloud];
     const seen = new Set<string>();
     const result: any[] = [];
 
@@ -79,12 +129,16 @@ export function mergeDataValues(localVal: any, cloudVal: any): any {
       const key = item.id || item.word || item.date || item.timestamp || JSON.stringify(item);
       if (!seen.has(key)) {
         seen.add(key);
-        result.push(item);
       }
+      result.push(item);
     });
 
     return result;
   }
+
+  // If one is array and other is not (and not corrupted status array)
+  if (Array.isArray(normLocal) && !isCorruptedStatusArray(normLocal)) return normLocal;
+  if (Array.isArray(normCloud) && !isCorruptedStatusArray(normCloud)) return normCloud;
 
   // Handle Objects
   if (typeof localVal === "object" && typeof cloudVal === "object") {

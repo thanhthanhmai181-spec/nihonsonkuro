@@ -94,21 +94,23 @@ export default function VocabN4Lessons({ onGoBack }: VocabN4LessonsProps) {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          const stateMap: Record<number, "new" | "learning" | "mastered"> = {};
-          RAW_N4_VOCAB.forEach((w) => {
-            stateMap[w.id] = parsed[w.id] || "new";
-          });
-          setWordStates(stateMap);
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            const stateMap: Record<number, "new" | "learning" | "mastered"> = {};
+            RAW_N4_VOCAB.forEach((w) => {
+              stateMap[w.id] = parsed[w.id] || "new";
+            });
+            setWordStates(stateMap);
+            return;
+          }
         } catch (e) {
           console.error("Failed to load N4 Vocab progress:", e);
         }
-      } else {
-        const defaultState: Record<number, "new" | "learning" | "mastered"> = {};
-        RAW_N4_VOCAB.forEach((w) => {
-          defaultState[w.id] = "new";
-        });
-        setWordStates(defaultState);
       }
+      const defaultState: Record<number, "new" | "learning" | "mastered"> = {};
+      RAW_N4_VOCAB.forEach((w) => {
+        defaultState[w.id] = "new";
+      });
+      setWordStates(defaultState);
     };
 
     loadFromStorage();
