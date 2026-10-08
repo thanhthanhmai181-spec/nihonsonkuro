@@ -12,7 +12,10 @@ import {
   Sparkles,
   BookOpen,
   Check,
-  AlertCircle
+  AlertCircle,
+  CheckCheck,
+  ThumbsUp,
+  CheckSquare
 } from "lucide-react";
 import { playSound } from "../utils/audio";
 
@@ -673,33 +676,290 @@ const THEORY_DATA: Record<string, string> = {
   `
 };
 
+// ================= NLP & SEMANTIC EVALUATOR ENGINE =================
+// Vietnamese string normalizer: NFKC, lowercase, remove punctuation, trim
+function normalizeVietnamese(text: string): string {
+  return (text || "")
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[.,!?;:()"“”‘’…\-\/\\]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// Synonyms mapping table for interchangeable expressions in translation
+const VIETNAMESE_SYNONYMS: [RegExp, string][] = [
+  // Pronouns
+  [/\b(mình|tớ|em|anh|chúng mình|bản thân)\b/g, "tôi"],
+  [/\b(các bạn|cậu|bác|chú|cô)\b/g, "bạn"],
+  [/\b(của tôi|của mình)\b/g, "tôi"],
+  
+  // Prepositions & connectors
+  [/\b(cùng với|cùng)\b/g, "với"],
+  [/\b(ở tại|tại)\b/g, "ở"],
+  [/\b(vào lúc)\b/g, "lúc"],
+  [/\b(vào ngày)\b/g, "ngày"],
+  [/\b(bởi vì|do)\b/g, "vì"],
+  [/\b(tuy nhiên|dẫu vậy)\b/g, "nhưng"],
+  
+  // Modals & verbs
+  [/\b(làm ơn|xin hãy|xin vui lòng)\b/g, "hãy"],
+  [/\b(cần phải)\b/g, "phải"],
+  [/\b(sinh viên)\b/g, "học sinh"],
+  [/\b(bài toán|câu hỏi)\b/g, "bài tập"],
+  [/\b(đồ vật|đồ dùng)\b/g, "đồ"],
+  [/\b(công việc|nghề nghiệp)\b/g, "việc"],
+  [/\b(chỗ ở|nơi ở|chỗ đang sống)\b/g, "nơi đang sống"],
+  [/\b(bộ phim)\b/g, "phim"],
+  [/\b(cuốn sách|quyển sách)\b/g, "sách"],
+  [/\b(chiếc đồng hồ|cái đồng hồ)\b/g, "đồng hồ"],
+  [/\b(ngôi nhà|căn nhà)\b/g, "nhà"],
+  [/\b(con cá)\b/g, "cá"],
+  [/\b(xe điện|tàu điện|chuyến tàu)\b/g, "tàu"],
+  [/\b(tàu siêu tốc|tàu shinkansen)\b/g, "shinkansen"],
+  [/\b(nhà vệ sinh|phòng vệ sinh)\b/g, "toilet"],
+  [/\b(tiền bạc)\b/g, "tiền"],
+  [/\b(ăn cơm|dùng bữa)\b/g, "ăn"],
+  [/\b(nấu nướng|nấu cơm)\b/g, "nấu ăn"],
+  [/\b(viết thư|gửi thư)\b/g, "gửi thư"],
+  [/\b(rất nhiều)\b/g, "nhiều"],
+  [/\b(không chút nào|chút nào)\b/g, "không"]
+];
+
+function applySynonyms(text: string): string {
+  let result = normalizeVietnamese(text);
+  for (const [regex, rep] of VIETNAMESE_SYNONYMS) {
+    result = result.replace(regex, rep);
+  }
+  return result.replace(/\s+/g, " ").trim();
+}
+
+// Stop words / filler words that shouldn't penalize keyword coverage
+const STOP_WORDS = new Set([
+  "thì", "là", "mà", "nhé", "nhỉ", "nha", "ạ", "ơi", "nào", "thôi", "đấy", "chứ",
+  "cái", "con", "chiếc", "những", "các", "một", "sự", "việc", "ở", "vào", "lúc",
+  "với", "cho", "của", "ra", "lên", "về", "lại", "đến", "đi", "được", "bị", "rồi", "vậy"
+]);
+
+// Extract key semantic components from reference translation
+function extractKeywords(sentence: string): string[] {
+  const parts = sentence.split(/[,.;?!]+/).map(p => normalizeVietnamese(p)).filter(Boolean);
+  const keywords: string[] = [];
+
+  parts.forEach(part => {
+    const words = part.split(/\s+/).filter(w => w.length > 0 && !STOP_WORDS.has(w));
+    for (let i = 0; i < words.length; i++) {
+      if (i < words.length - 1) {
+        const bigram = `${words[i]} ${words[i + 1]}`;
+        if (!keywords.includes(bigram) && bigram.length >= 4) {
+          keywords.push(bigram);
+          i++; // skip next to avoid overlapping sub-tokens
+          continue;
+        }
+      }
+      if (!keywords.includes(words[i]) && words[i].length > 1) {
+        keywords.push(words[i]);
+      }
+    }
+  });
+
+  return keywords.length > 0 ? keywords : [normalizeVietnamese(sentence)];
+}
+
+interface EvaluationResult {
+  score: number; // 0 - 100
+  tier: "excellent" | "good" | "needs_work";
+  matchedKeywords: string[];
+  missingKeywords: string[];
+  totalKeywords: string[];
+}
+
+function evaluateTranslation(userText: string, targetVi: string): EvaluationResult {
+  const cleanUser = normalizeVietnamese(userText);
+  const cleanTarget = normalizeVietnamese(targetVi);
+
+  // Exact match immediately 100%
+  if (cleanUser === cleanTarget) {
+    const allKeywords = extractKeywords(targetVi);
+    return {
+      score: 100,
+      tier: "excellent",
+      matchedKeywords: allKeywords,
+      missingKeywords: [],
+      totalKeywords: allKeywords
+    };
+  }
+
+  const synUser = applySynonyms(userText);
+  const synTarget = applySynonyms(targetVi);
+
+  // Match with synonyms applied
+  if (synUser === synTarget) {
+    const allKeywords = extractKeywords(targetVi);
+    return {
+      score: 98,
+      tier: "excellent",
+      matchedKeywords: allKeywords,
+      missingKeywords: [],
+      totalKeywords: allKeywords
+    };
+  }
+
+  const allKeywords = extractKeywords(targetVi);
+  const matchedKeywords: string[] = [];
+  const missingKeywords: string[] = [];
+
+  for (const kw of allKeywords) {
+    const synKw = applySynonyms(kw);
+    // Check if kw or synonym is present in user text
+    if (cleanUser.includes(kw) || synUser.includes(synKw) || synUser.includes(kw) || cleanUser.includes(synKw)) {
+      matchedKeywords.push(kw);
+    } else {
+      missingKeywords.push(kw);
+    }
+  }
+
+  const keywordRatio = allKeywords.length > 0 ? matchedKeywords.length / allKeywords.length : 1;
+
+  // Word token overlap
+  const userWords = new Set(synUser.split(/\s+/).filter(w => !STOP_WORDS.has(w)));
+  const targetWords = new Set(synTarget.split(/\s+/).filter(w => !STOP_WORDS.has(w)));
+  let intersection = 0;
+  targetWords.forEach(w => {
+    if (userWords.has(w)) intersection++;
+  });
+  const wordSimilarity = targetWords.size > 0 ? intersection / targetWords.size : 1;
+
+  // Combined score formula
+  const rawScore = (keywordRatio * 0.65 + wordSimilarity * 0.35) * 100;
+  let score = Math.round(rawScore);
+
+  if (keywordRatio >= 0.85) score = Math.max(score, 88);
+  else if (keywordRatio >= 0.65) score = Math.max(score, 75);
+  else if (keywordRatio >= 0.5) score = Math.max(score, 62);
+  
+  score = Math.min(100, Math.max(10, score));
+
+  let tier: "excellent" | "good" | "needs_work" = "needs_work";
+  if (score >= 85) {
+    tier = "excellent";
+  } else if (score >= 60) {
+    tier = "good";
+  } else {
+    tier = "needs_work";
+  }
+
+  return {
+    score,
+    tier,
+    matchedKeywords,
+    missingKeywords,
+    totalKeywords: allKeywords
+  };
+}
+
+interface ProgressItem {
+  userAnswer: string;
+  score: number;
+  tier: "excellent" | "good" | "needs_work" | "self_confirmed";
+  isCorrect: boolean;
+}
+
+interface TranslationFeedback {
+  show: boolean;
+  type: "evaluation" | "answer";
+  score: number;
+  tier: "excellent" | "good" | "needs_work" | "self_confirmed";
+  message: string;
+  userText: string;
+  referenceText: string;
+  matchedKeywords: string[];
+  missingKeywords: string[];
+  isSelfConfirmed: boolean;
+}
+
 export default function TranslationPractice({ onGoBack }: TranslationPracticeProps) {
   const modules = ["Từ ghép", "Câu đơn", "Câu đơn đầy đủ", "Câu hỏi", "Câu đơn 2 chủ thể", "Câu theo ngữ pháp", "Câu ghép"];
   const [currentModule, setCurrentModule] = useState<string>(modules[0]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userInputText, setUserInputText] = useState<string>("");
-  const [feedback, setFeedback] = useState<{
-    show: boolean;
-    type: "correct" | "incorrect" | "answer";
-    message: string;
-    answer: string;
-  }>({
+  const [feedback, setFeedback] = useState<TranslationFeedback>({
     show: false,
-    type: "correct",
+    type: "evaluation",
+    score: 0,
+    tier: "good",
     message: "",
-    answer: ""
+    userText: "",
+    referenceText: "",
+    matchedKeywords: [],
+    missingKeywords: [],
+    isSelfConfirmed: false
   });
 
-  // Track progress locally by unique item ID / key
-  const [progress, setProgress] = useState<Record<string, { userAnswer: string; isCorrect: boolean }>>({});
+  // Track progress locally by unique item ID / key with persistent localStorage
+  const [progress, setProgress] = useState<Record<string, ProgressItem>>(() => {
+    try {
+      const saved = localStorage.getItem("sk_trans_n5_progress_v3");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // Save progress changes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("sk_trans_n5_progress_v3", JSON.stringify(progress));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [progress]);
 
   // Filter translation data based on current module
   const filteredData = deduplicatedData.filter(item => item.module === currentModule);
 
   // Load progress if any on mount/change
   useEffect(() => {
-    setUserInputText("");
-    setFeedback({ show: false, type: "correct", message: "", answer: "" });
+    const key = `${currentModule}-${currentIndex}`;
+    const saved = progress[key];
+    const currentItem = filteredData[currentIndex];
+
+    if (saved && currentItem) {
+      setUserInputText(saved.userAnswer);
+      const evalRes = evaluateTranslation(saved.userAnswer, currentItem.vi);
+      setFeedback({
+        show: true,
+        type: "evaluation",
+        score: saved.score,
+        tier: saved.tier,
+        message: saved.tier === "self_confirmed"
+          ? "🌟 Đã tự xác nhận: Đúng nghĩa theo cách dịch của bạn!"
+          : saved.tier === "excellent"
+          ? "🎉 Rất chuẩn xác! Bản dịch truyền tải trọn vẹn ngữ nghĩa."
+          : saved.tier === "good"
+          ? "✨ Đúng ý chính! Bản dịch đã nắm đúng cấu trúc cốt lõi."
+          : "📝 Cần đối chiếu lại với đáp án tham khảo bên dưới.",
+        userText: saved.userAnswer,
+        referenceText: currentItem.vi,
+        matchedKeywords: evalRes.matchedKeywords,
+        missingKeywords: evalRes.missingKeywords,
+        isSelfConfirmed: saved.tier === "self_confirmed"
+      });
+    } else {
+      setUserInputText("");
+      setFeedback({
+        show: false,
+        type: "evaluation",
+        score: 0,
+        tier: "good",
+        message: "",
+        userText: "",
+        referenceText: "",
+        matchedKeywords: [],
+        missingKeywords: [],
+        isSelfConfirmed: false
+      });
+    }
   }, [currentModule, currentIndex]);
 
   const handleSwitchModule = (moduleName: string) => {
@@ -728,60 +988,146 @@ export default function TranslationPractice({ onGoBack }: TranslationPracticePro
     if (!userAns) {
       setFeedback({
         show: true,
-        type: "incorrect",
+        type: "evaluation",
+        score: 0,
+        tier: "needs_work",
         message: "⚠️ Vui lòng nhập bản dịch của bạn trước khi kiểm tra.",
-        answer: ""
+        userText: "",
+        referenceText: item.vi,
+        matchedKeywords: [],
+        missingKeywords: [],
+        isSelfConfirmed: false
       });
       return;
     }
 
-    // Helper to normalize strings for comparison (Vietnamese accents, spacing, punctuation, and lowercase)
-    const normalize = (str: string) => {
-      return str
-        .normalize("NFKC")
-        .toLowerCase()
-        // Replace typical punctuation
-        .replace(/[.,!?;:()"']/g, "")
-        // Replace Vietnamese tones variance if needed, but a standard comparison is safer
-        .replace(/\s+/g, " ")
-        .trim();
-    };
-
-    const isCorrect = normalize(userAns) === normalize(item.vi);
+    const evalResult = evaluateTranslation(userAns, item.vi);
     const key = `${currentModule}-${currentIndex}`;
+    const isPassing = evalResult.tier === "excellent" || evalResult.tier === "good";
 
     setProgress(prev => ({
       ...prev,
-      [key]: { userAnswer: userAns, isCorrect }
+      [key]: {
+        userAnswer: userAns,
+        score: evalResult.score,
+        tier: evalResult.tier,
+        isCorrect: isPassing
+      }
     }));
 
-    if (isCorrect) {
+    if (evalResult.tier === "excellent") {
       playSound.correct();
       setFeedback({
         show: true,
-        type: "correct",
-        message: "🎉 Chính xác! Bạn đã dịch rất chuẩn xác và tự nhiên.",
-        answer: ""
+        type: "evaluation",
+        score: evalResult.score,
+        tier: evalResult.tier,
+        message: "🎉 Rất chuẩn xác! Bản dịch truyền tải trọn vẹn và tự nhiên ý nghĩa câu.",
+        userText: userAns,
+        referenceText: item.vi,
+        matchedKeywords: evalResult.matchedKeywords,
+        missingKeywords: evalResult.missingKeywords,
+        isSelfConfirmed: false
+      });
+    } else if (evalResult.tier === "good") {
+      playSound.correct();
+      setFeedback({
+        show: true,
+        type: "evaluation",
+        score: evalResult.score,
+        tier: evalResult.tier,
+        message: "✨ Đúng ý chính! Bạn đã nắm vững khung ngữ nghĩa của câu.",
+        userText: userAns,
+        referenceText: item.vi,
+        matchedKeywords: evalResult.matchedKeywords,
+        missingKeywords: evalResult.missingKeywords,
+        isSelfConfirmed: false
       });
     } else {
       playSound.wrong();
       setFeedback({
         show: true,
-        type: "incorrect",
-        message: "❌ Chưa hoàn toàn chính xác. Hãy so sánh với đáp án tham khảo bên dưới nhé!",
-        answer: `📖 Đáp án tham khảo: ${item.vi}`
+        type: "evaluation",
+        score: evalResult.score,
+        tier: evalResult.tier,
+        message: "📝 Bản dịch có thể còn thiếu một số ý hoặc từ ngữ quan trọng. Hãy đối chiếu bảng so sánh bên dưới nhé!",
+        userText: userAns,
+        referenceText: item.vi,
+        matchedKeywords: evalResult.matchedKeywords,
+        missingKeywords: evalResult.missingKeywords,
+        isSelfConfirmed: false
       });
+    }
+  };
+
+  const handleToggleSelfConfirm = () => {
+    playSound.click();
+    const item = filteredData[currentIndex];
+    const key = `${currentModule}-${currentIndex}`;
+    const userAns = userInputText.trim() || item.vi;
+    const currentIsConfirmed = feedback.isSelfConfirmed || progress[key]?.tier === "self_confirmed";
+
+    if (!currentIsConfirmed) {
+      playSound.correct();
+      setProgress(prev => ({
+        ...prev,
+        [key]: {
+          userAnswer: userAns,
+          score: Math.max(feedback.score, 95),
+          tier: "self_confirmed",
+          isCorrect: true
+        }
+      }));
+      setFeedback(prev => ({
+        ...prev,
+        show: true,
+        tier: "self_confirmed",
+        isSelfConfirmed: true,
+        message: "🌟 Đã tự xác nhận: Bản dịch của bạn đúng nghĩa và được tính điểm hoàn thành!"
+      }));
+    } else {
+      // Revert to evaluated state
+      const evalResult = evaluateTranslation(userAns, item.vi);
+      const isPassing = evalResult.tier === "excellent" || evalResult.tier === "good";
+      setProgress(prev => ({
+        ...prev,
+        [key]: {
+          userAnswer: userAns,
+          score: evalResult.score,
+          tier: evalResult.tier,
+          isCorrect: isPassing
+        }
+      }));
+      setFeedback(prev => ({
+        ...prev,
+        tier: evalResult.tier,
+        isSelfConfirmed: false,
+        message: evalResult.tier === "excellent"
+          ? "🎉 Rất chuẩn xác! Bản dịch truyền tải trọn vẹn ý nghĩa."
+          : evalResult.tier === "good"
+          ? "✨ Đúng ý chính! Bạn đã nắm vững khung ngữ nghĩa của câu."
+          : "📝 Đã bỏ tự xác nhận. Hãy so sánh với bản dịch tham khảo."
+      }));
     }
   };
 
   const handleShowAnswer = () => {
     playSound.click();
     const item = filteredData[currentIndex];
+    const userAns = userInputText.trim();
+    const evalResult = evaluateTranslation(userAns, item.vi);
+
     setFeedback({
       show: true,
       type: "answer",
-      message: "💡 Đáp án mẫu từ thầy Sơn:",
-      answer: item.vi
+      score: userAns ? evalResult.score : 0,
+      tier: userAns ? evalResult.tier : "good",
+      message: "💡 Bản dịch tham khảo chuẩn từ Thầy Sơn:",
+      userText: userAns || "(Bạn chưa nhập bản dịch)",
+      referenceText: item.vi,
+      matchedKeywords: evalResult.matchedKeywords,
+      missingKeywords: evalResult.missingKeywords,
+      isSelfConfirmed: false
     });
   };
 
@@ -794,7 +1140,18 @@ export default function TranslationPractice({ onGoBack }: TranslationPracticePro
       return copy;
     });
     setUserInputText("");
-    setFeedback({ show: false, type: "correct", message: "", answer: "" });
+    setFeedback({
+      show: false,
+      type: "evaluation",
+      score: 0,
+      tier: "good",
+      message: "",
+      userText: "",
+      referenceText: "",
+      matchedKeywords: [],
+      missingKeywords: [],
+      isSelfConfirmed: false
+    });
   };
 
   const handlePrev = () => {
@@ -811,9 +1168,15 @@ export default function TranslationPractice({ onGoBack }: TranslationPracticePro
     } else {
       setFeedback({
         show: true,
-        type: "correct",
+        type: "evaluation",
+        score: 100,
+        tier: "excellent",
         message: "🎉 Chúc mừng! Bạn đã hoàn thành tất cả câu luyện dịch trong chủ đề này!",
-        answer: "Hãy tiếp tục chọn các chủ đề khác phía trên để thử sức nhé."
+        userText: "",
+        referenceText: "Hãy tiếp tục chọn các chủ đề khác phía trên để thử sức nhé.",
+        matchedKeywords: [],
+        missingKeywords: [],
+        isSelfConfirmed: false
       });
     }
   };
@@ -875,8 +1238,8 @@ export default function TranslationPractice({ onGoBack }: TranslationPracticePro
           <span className="text-sm font-extrabold text-[#1A1A1A] block">{doneInModule} / {totalInModule} câu</span>
         </div>
         <div className="space-y-1">
-          <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider block">Số câu đúng</span>
-          <span className="text-sm font-extrabold text-emerald-600 block">✨ {correctInModule} câu đúng</span>
+          <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider block">Số câu đạt yêu cầu</span>
+          <span className="text-sm font-extrabold text-emerald-600 block">✨ {correctInModule} / {totalInModule} câu đạt</span>
         </div>
       </div>
 
@@ -961,36 +1324,209 @@ export default function TranslationPractice({ onGoBack }: TranslationPracticePro
                 </div>
               </div>
 
-              {/* Feedback Card */}
+              {/* Enhanced Semantic Feedback & Comparison Card */}
               <AnimatePresence mode="wait">
                 {feedback.show && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className={`p-4 rounded-xl border-l-4 leading-relaxed text-sm ${
-                      feedback.type === "correct"
-                        ? "bg-emerald-50/60 border-emerald-500 text-emerald-800"
-                        : feedback.type === "incorrect"
-                        ? "bg-rose-50/60 border-rose-500 text-rose-800"
-                        : "bg-blue-50/60 border-blue-500 text-blue-800"
+                    exit={{ opacity: 0, y: 12 }}
+                    className={`rounded-2xl border-2 p-5 sm:p-6 space-y-5 transition-all shadow-[4px_4px_0px_#1A1A1A] ${
+                      feedback.tier === "self_confirmed"
+                        ? "bg-teal-50/80 border-teal-600"
+                        : feedback.tier === "excellent"
+                        ? "bg-emerald-50/80 border-emerald-600"
+                        : feedback.tier === "good"
+                        ? "bg-amber-50/80 border-amber-600"
+                        : feedback.type === "answer"
+                        ? "bg-blue-50/80 border-blue-600"
+                        : "bg-rose-50/80 border-rose-600"
                     }`}
                   >
-                    <div className="flex gap-2.5 items-start">
-                      {feedback.type === "correct" ? (
-                        <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      ) : feedback.type === "incorrect" ? (
-                        <XCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                      ) : (
-                        <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-                      )}
-                      <div className="space-y-1">
-                        <p className="font-extrabold">{feedback.message}</p>
-                        {feedback.answer && (
-                          <p className="font-mono text-xs bg-white/60 p-2 rounded border border-gray-100 mt-2 text-gray-800 font-bold leading-normal">
-                            {feedback.answer}
+                    {/* Top Banner & Match Meter */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-black/10">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-white ${
+                          feedback.tier === "self_confirmed"
+                            ? "bg-teal-600 shadow-[2px_2px_0px_#115e59]"
+                            : feedback.tier === "excellent"
+                            ? "bg-emerald-600 shadow-[2px_2px_0px_#065f46]"
+                            : feedback.tier === "good"
+                            ? "bg-amber-600 shadow-[2px_2px_0px_#92400e]"
+                            : feedback.type === "answer"
+                            ? "bg-blue-600 shadow-[2px_2px_0px_#1e40af]"
+                            : "bg-rose-600 shadow-[2px_2px_0px_#9f1239]"
+                        }`}>
+                          {feedback.tier === "self_confirmed" ? (
+                            <CheckCheck className="w-5 h-5 stroke-[2.5]" />
+                          ) : feedback.tier === "excellent" ? (
+                            <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                          ) : feedback.tier === "good" ? (
+                            <Sparkles className="w-5 h-5 stroke-[2.5]" />
+                          ) : feedback.type === "answer" ? (
+                            <Eye className="w-5 h-5 stroke-[2.5]" />
+                          ) : (
+                            <AlertCircle className="w-5 h-5 stroke-[2.5]" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-black text-sm text-[#1A1A1A]">
+                              {feedback.tier === "self_confirmed"
+                                ? "ĐÃ TỰ XÁC NHẬN ĐÚNG NGHĨA"
+                                : feedback.tier === "excellent"
+                                ? "CHUẨN XÁC XUẤT SẮC"
+                                : feedback.tier === "good"
+                                ? "ĐÚNG Ý CHÍNH (GẦN ĐÚNG)"
+                                : feedback.type === "answer"
+                                ? "ĐÁP ÁN THAM KHẢO"
+                                : "CẦN ĐỐI CHIẾU LẠI"}
+                            </span>
+                            {feedback.type !== "answer" && (
+                              <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-black border ${
+                                feedback.tier === "self_confirmed"
+                                  ? "bg-teal-100 text-teal-900 border-teal-300"
+                                  : feedback.tier === "excellent"
+                                  ? "bg-emerald-100 text-emerald-900 border-emerald-300"
+                                  : feedback.tier === "good"
+                                  ? "bg-amber-100 text-amber-900 border-amber-300"
+                                  : "bg-rose-100 text-rose-900 border-rose-300"
+                              }`}>
+                                {feedback.tier === "self_confirmed" ? "100% Đạt" : `${feedback.score}% Tương đồng`}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-700 mt-0.5 font-medium leading-relaxed">
+                            {feedback.message}
                           </p>
-                        )}
+                        </div>
+                      </div>
+
+                      {/* Score Progress Bar (Only when evaluated) */}
+                      {feedback.type !== "answer" && (
+                        <div className="w-full sm:w-44 bg-white/80 border border-black/10 rounded-xl p-2 shrink-0">
+                          <div className="flex justify-between items-center text-[10px] font-black text-gray-500 mb-1">
+                            <span>ĐỘ TRÙNG KHỚP Ý</span>
+                            <span className="font-mono text-gray-800 font-bold">{feedback.isSelfConfirmed ? 100 : feedback.score}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full transition-all duration-500 rounded-full ${
+                                feedback.isSelfConfirmed || feedback.tier === "excellent"
+                                  ? "bg-emerald-500"
+                                  : feedback.tier === "good"
+                                  ? "bg-amber-500"
+                                  : "bg-rose-500"
+                              }`}
+                              style={{ width: `${feedback.isSelfConfirmed ? 100 : feedback.score}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Side-by-Side Comparison Columns */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {/* Left Column: Bản dịch của bạn */}
+                      <div className="bg-white border-2 border-[#1A1A1A] rounded-xl p-4 shadow-[2px_2px_0px_#1A1A1A] flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-gray-100">
+                            <span className="text-[11px] font-black text-gray-500 uppercase tracking-wider flex items-center gap-1">
+                              <span>👤 Bản dịch của bạn</span>
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                              feedback.isSelfConfirmed || feedback.tier === "excellent"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : feedback.tier === "good"
+                                ? "bg-amber-50 text-amber-700 border border-amber-200"
+                                : "bg-rose-50 text-rose-700 border border-rose-200"
+                            }`}>
+                              {feedback.isSelfConfirmed
+                                ? "✓ Tự công nhận"
+                                : feedback.tier === "excellent"
+                                ? "✓ Chuẩn mực"
+                                : feedback.tier === "good"
+                                ? "○ Đạt ý chính"
+                                : "✕ Chưa đạt"}
+                            </span>
+                          </div>
+                          <p className="text-sm sm:text-base font-bold text-gray-900 leading-relaxed break-words">
+                            {feedback.userText || <span className="text-gray-400 italic font-normal">(Chưa nhập câu dịch)</span>}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Right Column: Bản dịch mẫu từ Thầy Sơn */}
+                      <div className="bg-white border-2 border-[#8B0000] rounded-xl p-4 shadow-[2px_2px_0px_#8B0000] flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-100">
+                            <span className="text-[11px] font-black text-[#8B0000] uppercase tracking-wider flex items-center gap-1">
+                              <span>📖 Bản dịch tham khảo (Thầy Sơn)</span>
+                            </span>
+                            <span className="text-[10px] font-bold px-2 py-0.5 bg-red-50 text-[#8B0000] rounded border border-red-200">
+                              Chuẩn ngữ pháp
+                            </span>
+                          </div>
+                          <p className="text-sm sm:text-base font-bold text-[#8B0000] leading-relaxed break-words">
+                            {feedback.referenceText}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Keywords & Semantic Highlights */}
+                    {feedback.matchedKeywords.length > 0 && (
+                      <div className="space-y-1.5 bg-white/70 border border-black/10 rounded-xl p-3">
+                        <div className="text-[11px] font-black text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                          <span>Thành phần ý nghĩa cốt lõi trong câu:</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {feedback.matchedKeywords.map((kw, i) => (
+                            <span
+                              key={i}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 text-xs font-bold"
+                            >
+                              <Check className="w-3 h-3 text-emerald-600 stroke-[3]" />
+                              <span>{kw}</span>
+                            </span>
+                          ))}
+                          {feedback.missingKeywords.map((kw, i) => (
+                            <span
+                              key={i}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gray-100 text-gray-600 border border-gray-300 text-xs font-medium"
+                              title="Ý bổ trợ có thể tham khảo thêm"
+                            >
+                              <span className="text-gray-400">○</span>
+                              <span>{kw}</span>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Self-Evaluation Action Bar */}
+                    <div className="pt-3 border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleToggleSelfConfirm}
+                          className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wide flex items-center gap-2 border-2 transition-all cursor-pointer shadow-sm active:translate-x-0.5 active:translate-y-0.5 ${
+                            feedback.isSelfConfirmed
+                              ? "bg-teal-600 text-white border-[#1A1A1A] shadow-[2px_2px_0px_#1A1A1A]"
+                              : "bg-white hover:bg-teal-50 text-teal-800 border-teal-600 shadow-[2px_2px_0px_#0d9488]"
+                          }`}
+                        >
+                          <CheckCheck className="w-4 h-4 stroke-[2.5]" />
+                          <span>
+                            {feedback.isSelfConfirmed
+                              ? "✓ ĐÃ TỰ CÔNG NHẬN ĐÚNG NGHĨA"
+                              : "✓ CÂU CỦA TÔI VẪN ĐÚNG NGHĨA (TỰ XÁC NHẬN)"}
+                          </span>
+                        </button>
+                      </div>
+
+                      <div className="text-[11px] text-gray-500 italic">
+                        💡 Dịch thuật linh hoạt: Bấm nút trên nếu cách diễn đạt của bạn đã sát nghĩa.
                       </div>
                     </div>
                   </motion.div>

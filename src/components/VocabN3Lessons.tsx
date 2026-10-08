@@ -3,6 +3,7 @@ import { playSound } from "../utils/audio";
 import { RAW_N3_VOCAB, VocabN3Item } from "../data/vocabN3";
 import { getGeminiHeaders } from "../utils/geminiKey";
 import VocabN3FlashcardsTab from "./VocabN3FlashcardsTab";
+import VocabN3ReviewFlashcards from "./VocabN3ReviewFlashcards";
 import { 
   ArrowLeft, 
   Volume2, 
@@ -27,7 +28,7 @@ interface VocabN3LessonsProps {
 
 export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
   // Navigation & Screen states
-  const [activeTab, setActiveTab] = useState<"dashboard" | "library" | "flashcard" | "quiz">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "library" | "flashcard" | "review_flashcard" | "quiz">("dashboard");
   const [selectedLesson, setSelectedLesson] = useState<string>("all");
   
   // Progress states mapped by word ID
@@ -315,7 +316,7 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
 
       {/* Navigation Tabs (Only visible when not actively in a quiz session) */}
       {!quizActive && (
-        <div className="flex border-2 border-[#1A1A1A] mb-8 bg-[#FDFBF7] p-1.5 rounded-2xl shadow-[4px_4px_0px_#1A1A1A] max-w-lg">
+        <div className="flex border-2 border-[#1A1A1A] mb-8 bg-[#FDFBF7] p-1.5 rounded-2xl shadow-[4px_4px_0px_#1A1A1A] max-w-2xl">
           <button
             onClick={() => { playSound.click(); setActiveTab("dashboard"); }}
             className={`flex-1 py-2 text-center rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
@@ -338,7 +339,15 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
               activeTab === "flashcard" ? "bg-[#8B0000] text-white shadow-[2px_2px_0px_#1A1A1A]" : "text-[#1A1A1A] hover:bg-gray-100"
             }`}
           >
-            Flashcard
+            Flashcard Chia Thể
+          </button>
+          <button
+            onClick={() => { playSound.click(); setActiveTab("review_flashcard"); }}
+            className={`flex-1 py-2 text-center rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
+              activeTab === "review_flashcard" ? "bg-[#8B0000] text-white shadow-[2px_2px_0px_#1A1A1A]" : "text-[#1A1A1A] hover:bg-gray-100"
+            }`}
+          >
+            Flashcard Ôn Tập
           </button>
           <button
             onClick={() => { playSound.click(); handleStartQuiz(); }}
@@ -450,14 +459,24 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
               </div>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={() => handleStartLearning()}
                 disabled={currentLessonStats.mastered === currentLessonStats.total}
-                className="w-full bg-[#8B0000] text-white border-2 border-[#1A1A1A] hover:bg-[#A30000] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#1A1A1A] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none transition-all py-4 rounded-2xl font-black text-lg shadow-[2px_2px_0px_#1A1A1A] flex items-center justify-center gap-2"
+                className="w-full bg-[#8B0000] text-white border-2 border-[#1A1A1A] hover:bg-[#A30000] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#1A1A1A] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none transition-all py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-[2px_2px_0px_#1A1A1A] flex items-center justify-center gap-2 cursor-pointer"
               >
-                <GraduationCap className="w-6 h-6" />
-                <span>BẮT ĐẦU HỌC TOÀN BỘ</span>
+                <GraduationCap className="w-5 h-5" />
+                <span>HỌC CHIA THỂ</span>
+              </button>
+              <button
+                onClick={() => {
+                  playSound.click();
+                  setActiveTab("review_flashcard");
+                }}
+                className="w-full bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] hover:bg-black hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#8B0000] transition-all py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-[2px_2px_0px_#8B0000] flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Sparkles className="w-5 h-5 text-[#F1C40F]" />
+                <span>FLASHCARD ÔN TẬP</span>
               </button>
             </div>
           </div>
@@ -608,7 +627,7 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
         </div>
       )}
 
-      {/* 3. FLASHCARDS STUDY VIEW */}
+      {/* 3. FLASHCARDS STUDY VIEW (CONJUGATED FORMS) */}
       {activeTab === "flashcard" && !quizActive && (
         <VocabN3FlashcardsTab
           wordStates={wordStates}
@@ -620,7 +639,19 @@ export default function VocabN3Lessons({ onGoBack }: VocabN3LessonsProps) {
         />
       )}
 
-      {/* 4. MCQ QUIZ TEST SECTION */}
+      {/* 4. FLASHCARDS REVIEW VIEW (KANJI FRONT, READING & MEANING BACK) */}
+      {activeTab === "review_flashcard" && !quizActive && (
+        <VocabN3ReviewFlashcards
+          wordStates={wordStates}
+          updateWordStatus={updateWordStatus}
+          selectedLesson={selectedLesson}
+          onSelectLesson={setSelectedLesson}
+          lessons={lessons}
+          speakJapanese={speakJapanese}
+        />
+      )}
+
+      {/* 5. MCQ QUIZ TEST SECTION */}
       {quizActive && quizList.length > 0 && (
         <div className="max-w-xl mx-auto space-y-8">
           {/* Progress Mini bar */}

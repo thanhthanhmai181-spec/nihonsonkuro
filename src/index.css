@@ -11,6 +11,10 @@
   font-family: "Yu Gothic", "YuGothic", "Yu Gothic Medium", "Yu Gothic UI", "Hiragino Sans", "Meiryo", sans-serif;
 }
 
+.font-ms-mincho {
+  font-family: "MS Mincho", "MS PMincho", "ＭＳ 明朝", "ＭＳ Ｐ明朝", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+}
+
 @theme {
   --color-natural-bg: #FEF9F3;
   --color-natural-text: #4A3F35;
