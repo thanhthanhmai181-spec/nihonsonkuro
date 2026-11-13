@@ -1059,7 +1059,7 @@ export const KANJI_N3_DATA_PART3: LessonItem[] = [
         meaning: "Họp, bàn luận",
         vocabularies: [
           { word: "会議", reading: "かいぎ", meaning: "Cuộc họp" },
-          { word: "議員", reading: "giいん", meaning: "Nghị viên, đại biểu" },
+          { word: "議員", reading: "ぎいん", meaning: "Nghị viên, đại biểu" },
           { word: "抗議", reading: "こうぎ", meaning: "Sự kháng nghị, phản đối" }
         ]
       },

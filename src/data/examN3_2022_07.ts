@@ -164,7 +164,7 @@ export const EXAM_DATA_N3_2022_07: N3ExamData = {
     { 
         id: 'c11', 
         question: '5番. 社長はこの商品をどう変えると言っていますか。', 
-        options: ['明るい色にする', 'ねだんuを安くする', 'サイズをかえる', '軽いざいりょうにする'], 
+        options: ['明るい色にする', 'ねだんを安くする', 'サイズをかえる', '軽いざいりょうにする'], 
         correct: 3, 
         explanation: '<div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-2 text-sm max-h-64 overflow-y-auto"><p class="font-bold text-blue-800 border-b border-gray-300 pb-2 mb-2"><i class="fa-solid fa-file-lines mr-1"></i> Script (Nội dung nghe):</p><p class="text-gray-700 mb-4 leading-relaxed">社長: 去年の春に出したバッグは、人気商品になりました。若者が好きそうな明るい色やデザイン、買いやすい値段にしたのがよかったのでしょう。しかし、買った人に行った調査では、価格とサイズは良いが、少し重いと感じている人が多いことがわかりました。今後は今の色やサイズはそのままで、材料をもう少し軽いものにしたいと思います。価格を上げずにどうするか、工夫が必要です。</p><p class="font-bold text-green-700 border-b border-gray-300 pb-2 mb-2"><i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i> Giải thích:</p><p class="text-gray-700">Giám đốc đánh giá màu sắc, kích cỡ, giá cả đang tốt và sẽ giữ nguyên. Do khách hàng phàn nàn túi xách hơi nặng nên thay đổi duy nhất là <b>đổi sang chất liệu nhẹ hơn</b>.</p></div>' 
     },

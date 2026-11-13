@@ -1207,7 +1207,7 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
   return (
     <div id="listening-shadowing-container" className="space-y-8 animate-fade-in pb-12">
       {/* Top Header */}
-      <div className="bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 text-white rounded-3xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#2C3554] via-[#3A325C] to-[#4E335A] dark:from-[#1D2238] dark:via-[#251E3B] dark:to-[#311D3A] border border-indigo-400/20 dark:border-amber-500/25 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 opacity-15 pointer-events-none text-9xl font-black">
           🎧
         </div>
@@ -1218,14 +1218,14 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
               {onGoBack && (
                 <button
                   onClick={() => { playSound.click(); stopPlayback(); onGoBack(); }}
-                  className="p-2.5 bg-white/20 hover:bg-white/30 rounded-2xl transition-all cursor-pointer text-white"
+                  className="p-2.5 bg-white/15 hover:bg-white/25 rounded-2xl transition-all cursor-pointer text-white"
                   title="Quay lại"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
               )}
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase">
-                <Radio className="w-4 h-4 text-amber-300 animate-pulse" />
+              <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase border border-white/15">
+                <Radio className="w-4 h-4 text-amber-300" />
                 <span>Podcast & Shadowing Tiếng Nhật</span>
               </div>
             </div>
@@ -1256,7 +1256,7 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
                 onClick={() => { playSound.click(); setSelectedLevel(lvl); }}
                 className={`px-4 py-1.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer ${
                   selectedLevel === lvl
-                    ? "bg-white text-pink-700 shadow-sm scale-105"
+                    ? "bg-amber-400 text-slate-950 shadow-sm scale-105"
                     : "bg-white/10 text-white hover:bg-white/20"
                 }`}
               >
@@ -1274,12 +1274,12 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
         <div className="lg:col-span-4 space-y-4">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-sm font-black text-natural-deep uppercase tracking-wider flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-pink-600" />
+              <BookOpen className="w-4 h-4 text-amber-500" />
               <span>Danh Sách Bài Nghe ({filteredEpisodes.length})</span>
             </h3>
             <button
               onClick={() => { playSound.click(); handleAddNewEpisode(); }}
-              className="px-2.5 py-1 bg-pink-100 hover:bg-pink-200 text-pink-700 font-extrabold text-[11px] rounded-xl transition-all flex items-center gap-1 cursor-pointer"
+              className="px-2.5 py-1 bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-extrabold text-[11px] rounded-xl transition-all flex items-center gap-1 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Tạo Thẻ Mới</span>
@@ -1300,16 +1300,16 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
                   }}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col gap-2 relative ${
                     isActive
-                      ? "bg-pink-50/80 border-pink-400 shadow-sm ring-2 ring-pink-300"
-                      : "bg-white border-natural-border hover:border-pink-200 hover:shadow-sm"
+                      ? "bg-amber-500/15 border-amber-500 shadow-sm ring-2 ring-amber-400/50"
+                      : "bg-white dark:bg-[#1A1622] border-natural-border hover:border-amber-400/60 hover:shadow-sm"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xl">{ep.icon}</span>
                     <div className="flex items-center gap-1.5">
                       <span className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase ${
-                        ep.level === "N5" ? "bg-emerald-100 text-emerald-700" :
-                        ep.level === "N4" ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"
+                        ep.level === "N5" ? "bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30" :
+                        ep.level === "N4" ? "bg-blue-100 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-500/30" : "bg-purple-100 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border border-purple-500/30"
                       }`}>
                         {ep.level}
                       </span>
@@ -2145,7 +2145,7 @@ export default function ListeningShadowing({ onGoBack }: ListeningShadowingProps
                   onClick={() => {
                     speakJapaneseLine("こんにちは！一緒(いっしょ)に日本語(にほんご)を勉強(べんきょう)しましょう！", "Thầy Sơn");
                   }}
-                  className="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-black rounded-2xl text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 bg-gradient-to-r from-[#2C3554] to-[#4E335A] hover:brightness-110 dark:from-amber-500 dark:to-orange-500 text-white dark:text-slate-950 font-black rounded-2xl text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Volume2 className="w-4 h-4" />
                   <span>▶ Nghe Thử Giọng "Konnichiwa! Issho ni nihongo o benkyou shimashou!"</span>

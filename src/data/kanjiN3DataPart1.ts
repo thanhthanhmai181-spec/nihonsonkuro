@@ -368,7 +368,7 @@ export const KANJI_N3_DATA_PART1: LessonItem[] = [
         sino_vietnamese: "TỐC",
         meaning: "Nhanh (tốc độ)",
         vocabularies: [
-          { word: "速度", reading: "そくdo", meaning: "Tốc độ" },
+          { word: "速度", reading: "そくど", meaning: "Tốc độ" },
           { word: "早速", reading: "さっそく", meaning: "Ngay lập tức" },
           { word: "速断", reading: "そくだん", meaning: "Kết luận vội vàng" },
           { word: "速い", reading: "はやい", meaning: "Nhanh" },
@@ -752,7 +752,7 @@ export const KANJI_N3_DATA_PART1: LessonItem[] = [
         sino_vietnamese: "ÁN",
         meaning: "Dự án, đề án",
         vocabularies: [
-          { word: "提案", reading: "ていan", meaning: "Đề án, đề xuất" },
+          { word: "提案", reading: "ていあん", meaning: "Đề án, đề xuất" },
           { word: "案", reading: "あん", meaning: "Ý kiến, ý tưởng" }
         ]
       },
@@ -1136,7 +1136,7 @@ export const KANJI_N3_DATA_PART1: LessonItem[] = [
         meaning: "Nữ, phụ nữ",
         vocabularies: [
           { word: "婦女", reading: "ふじょ", meaning: "Phụ nữ" },
-          { word: "産婦人科", reading: "sanふじんか", meaning: "Khoa phụ sản" }
+          { word: "産婦人科", reading: "さんふじんか", meaning: "Khoa phụ sản" }
         ]
       },
       {
@@ -1341,7 +1341,7 @@ export const KANJI_N3_DATA_PART1: LessonItem[] = [
         sino_vietnamese: "ĐỘ",
         meaning: "Qua, vượt qua",
         vocabularies: [
-          { word: "渡船", reading: "toせん", meaning: "Phà, đò" },
+          { word: "渡船", reading: "とせん", meaning: "Phà, đò" },
           { word: "渡る", reading: "わたる", meaning: "Băng qua" },
           { word: "渡す", reading: "わたす", meaning: "Trao, đưa" },
           { word: "渡硝子", reading: "わたりがらす", meaning: "Quạ (quạ di cư)" }
@@ -1354,7 +1354,7 @@ export const KANJI_N3_DATA_PART1: LessonItem[] = [
         vocabularies: [
           { word: "昔時", reading: "せきじ", meaning: "Thời xưa" },
           { word: "昔年", reading: "せきねん", meaning: "Năm xưa" },
-          { word: "昔日", reading: "sえきじつ", meaning: "Ngày xưa" },
+          { word: "昔日", reading: "せきじつ", meaning: "Ngày xưa" },
           { word: "昔話", reading: "むかしばなし", meaning: "Truyện cổ tích" },
           { word: "昔", reading: "むかし", meaning: "Ngày xưa" }
         ]

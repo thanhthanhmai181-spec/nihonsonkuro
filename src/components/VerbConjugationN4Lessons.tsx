@@ -463,7 +463,7 @@ const THEORY_ITEMS: TheoryFormItem[] = [
     g2: {
       rule: "Bỏ ます rồi thêm られます vào sau (dạng lịch sự) hoặc られる (dạng ngắn). Trong giao tiếp thực tế, người Nhật thường bỏ bớt âm 'ら' (thành れます) gọi là ら抜き言葉.",
       formula: "V_ます ➔ V_られます",
-      example: "たべます ➔ たべられます (có thể ăn)\nおきます ➔ おkiられます\nねます ➔ ねられます"
+      example: "たべます ➔ たべられます (có thể ăn)\nおきます ➔ おきられます\nねます ➔ ねられます"
     },
     g3: {
       rule: "Bất quy tắc hoàn toàn cố định.",
@@ -600,7 +600,7 @@ const THEORY_ITEMS: TheoryFormItem[] = [
     g2: {
       rule: "Bỏ ます rồi thêm させます vào sau (hoặc させる ở dạng ngắn).",
       formula: "V_ます ➔ V_させます",
-      example: "たべます ➔ たべさせます (bắt ăn)\nおきます ➔ おkiさせます\nみます ➔ みさせます"
+      example: "たべます ➔ たべさせます (bắt ăn)\nおきます ➔ おきさせます\nみます ➔ みさせます"
     },
     g3: {
       rule: "Bất quy tắc cố định.",

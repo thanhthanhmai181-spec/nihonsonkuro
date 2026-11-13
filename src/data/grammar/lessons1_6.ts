@@ -193,7 +193,7 @@ grammar1_6[3] = [
     { jp: "それは中国の靴です。", vn: "Đó là giày Trung Quốc." },
     { jp: "あれはアメリカの時計です。", vn: "Kia là đồng hồ Mỹ." },
     { jp: "これはどこのカメラですか。", vn: "Đây là máy ảnh của nước nào?" },
-    { jp: "それはイタリア의 ワインです。", vn: "Đó là rượu vang Ý." }
+    { jp: "それはイタリアのワインです。", vn: "Đó là rượu vang Ý." }
   ]},
   { pattern: "N は いくら ですか", meaning: "N giá bao nhiêu tiền?", note: "Dùng để hỏi giá tiền của sản phẩm hàng hóa.", examples: [
     { jp: "A: この時計はいくらですか。B: 3000円です。", vn: "Hỏi: Chiếc đồng hồ này giá bao nhiêu? Đáp: 3000 Yên." },

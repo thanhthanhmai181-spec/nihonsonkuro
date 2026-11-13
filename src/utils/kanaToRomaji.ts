@@ -6,7 +6,7 @@ export function kanaToRomaji(kana: string): string {
     "きゃ": "kya", "きゅ": "kyu", "きょ": "kyo",
     "しゃ": "sha", "しゅ": "shu", "しょ": "sho",
     "ちゃ": "cha", "ちゅ": "chu", "ちょ": "cho",
-    "にゃ": "nya", "niゅ": "nyu", "にゅ": "nyu", "にょ": "nyo",
+    "にゃ": "nya", "にゅ": "nyu", "にょ": "nyo",
     "ひゃ": "hya", "ひゅ": "hyu", "ひょ": "hyo",
     "みゃ": "mya", "みゅ": "myu", "みょ": "myo",
     "りゃ": "rya", "りゅ": "ryu", "りょ": "ryo",

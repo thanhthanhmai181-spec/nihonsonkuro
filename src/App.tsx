@@ -9,6 +9,7 @@ import QuizGame from "./components/QuizGame";
 import MatchGame from "./components/MatchGame";
 import SonkuroDrift from "./components/SonkuroDrift";
 import CraneKanji from "./components/CraneKanji";
+import SwordKyoto3D from "./components/SwordKyoto3D";
 import ThaySonChat from "./components/ThaySonChat";
 import JapaneseAiChat from "./components/JapaneseAiChat";
 import PersonalVocab from "./components/PersonalVocab";
@@ -543,24 +544,24 @@ export default function App() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
         {isNightMode ? (
           <>
-            {/* Glowing Night Sakura petals & gentle moonlit ambiance */}
-            <div className="absolute top-8 left-10 text-pink-300 text-2xl animate-pulse night-sakura-glow opacity-80">🌸</div>
-            <div className="absolute top-36 right-20 text-pink-400 text-xl animate-pulse delay-500 night-sakura-glow opacity-60">🌸</div>
-            <div className="absolute top-1/4 left-1/3 text-amber-100 text-xs animate-ping delay-1000 opacity-40">✨</div>
-            <div className="absolute bottom-24 left-1/4 text-pink-300 text-3xl animate-bounce delay-700 night-sakura-glow opacity-75">🌸</div>
-            <div className="absolute bottom-44 right-1/3 text-pink-400 text-2xl animate-pulse delay-300 night-sakura-glow opacity-70">🌸</div>
-            <div className="absolute top-1/2 left-3/4 text-pink-300 text-4xl animate-bounce delay-1000 night-sakura-glow opacity-50">🌸</div>
-            <div className="absolute top-16 right-1/4 text-amber-200 text-sm animate-pulse delay-700 opacity-60">✨</div>
-            <div className="absolute bottom-16 right-16 text-pink-200 text-xs animate-ping delay-500 opacity-50">✨</div>
-            <div className="absolute top-12 right-12 text-amber-100 text-2xl animate-pulse delay-1000 opacity-30">🌙</div>
+            {/* Gentle warm-amber lantern ambiance & soft night blossoms */}
+            <div className="absolute top-8 left-10 text-amber-200/40 text-2xl night-sakura-glow opacity-35">🌸</div>
+            <div className="absolute top-36 right-20 text-pink-300/35 text-xl night-sakura-glow opacity-30">🌸</div>
+            <div className="absolute top-1/4 left-1/3 text-amber-100 text-xs opacity-25">✨</div>
+            <div className="absolute bottom-24 left-1/4 text-pink-300/35 text-3xl night-sakura-glow opacity-30">🌸</div>
+            <div className="absolute bottom-44 right-1/3 text-amber-200/35 text-2xl night-sakura-glow opacity-30">🌸</div>
+            <div className="absolute top-1/2 left-3/4 text-pink-200/30 text-3xl night-sakura-glow opacity-25">🌸</div>
+            <div className="absolute top-16 right-1/4 text-amber-200 text-sm opacity-35">✨</div>
+            <div className="absolute bottom-16 right-16 text-amber-100 text-xs opacity-25">✨</div>
+            <div className="absolute top-12 right-12 text-amber-200 text-2xl opacity-30">🌙</div>
           </>
         ) : (
           <>
-            <div className="absolute top-10 left-10 text-pink-400/20 text-2xl animate-pulse">🌸</div>
-            <div className="absolute top-40 right-20 text-pink-400/10 text-xl animate-pulse delay-500">🌸</div>
-            <div className="absolute bottom-20 left-1/4 text-pink-400/15 text-3xl animate-bounce delay-1000">🌸</div>
-            <div className="absolute bottom-40 right-1/3 text-pink-400/20 text-2xl animate-pulse delay-300">🌸</div>
-            <div className="absolute top-1/2 left-2/3 text-pink-400/10 text-4xl animate-bounce delay-700">🌸</div>
+            <div className="absolute top-10 left-10 text-rose-400/18 text-2xl">🌸</div>
+            <div className="absolute top-40 right-20 text-rose-400/12 text-xl">🌸</div>
+            <div className="absolute bottom-20 left-1/4 text-rose-400/15 text-3xl">🌸</div>
+            <div className="absolute bottom-40 right-1/3 text-rose-400/18 text-2xl">🌸</div>
+            <div className="absolute top-1/2 left-2/3 text-rose-400/12 text-3xl">🌸</div>
           </>
         )}
       </div>
@@ -568,10 +569,10 @@ export default function App() {
       {/* Primary Navigation Header */}
       <header 
         id="primary-header" 
-        className={`sticky top-0 z-40 backdrop-blur-md border-b shadow-sm h-20 flex items-center transition-colors duration-300 ${
+        className={`sticky top-0 z-40 backdrop-blur-md border-b h-20 flex items-center transition-colors duration-300 ${
           isNightMode 
-            ? "bg-[#131324]/85 border-[#2D2D4A] shadow-black/20" 
-            : "bg-white/60 border-natural-border"
+            ? "bg-[#15121B]/92 border-[#3A3142] shadow-sm shadow-black/40" 
+            : "bg-[#FFFDF9]/92 border-[#E6DAC6] shadow-[0_2px_12px_-4px_rgba(74,63,53,0.08)]"
         }`}
       >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -586,7 +587,7 @@ export default function App() {
               <h1 className="font-sans font-black text-natural-deep text-base sm:text-lg tracking-tight leading-none">
                 Học cùng thầy Sơn
               </h1>
-              <p className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${isNightMode ? "text-pink-400" : "text-pink-500"}`}>
+              <p className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${isNightMode ? "text-amber-300" : "text-[#9E4244]"}`}>
                 ĐỊA NGỤC TRẦN GIAN ACADEMY
               </p>
             </div>
@@ -594,7 +595,7 @@ export default function App() {
 
           {/* Quick Info, Theme Toggle & Authentication Badge */}
           <div className="flex items-center gap-2 sm:gap-3 select-none shrink-0">
-            {/* Theme Toggle Button (Day ☀️ / Night 🌙 Yozakura) */}
+            {/* Theme Toggle Button (Day ☀️ / Night 🌙 Warm Amber) */}
             <ThemeToggle 
               isNightMode={isNightMode} 
               onToggle={() => setIsNightMode(prev => !prev)} 
@@ -604,15 +605,15 @@ export default function App() {
             {user && (
               <button 
                 onClick={() => { playSound.click(); performCloudSync(); }}
-                className={`flex items-center gap-1 px-2 py-1 rounded-full border text-[10px] font-bold transition-all cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all cursor-pointer ${
                   isNightMode
-                    ? "bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-400 border-emerald-500/30"
-                    : "bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border-emerald-200"
+                    ? "bg-emerald-950/45 hover:bg-emerald-900/55 text-emerald-300 border-emerald-500/35"
+                    : "bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200"
                 }`}
                 title={isSyncing ? "Đang đồng bộ đám mây..." : "Đã đồng bộ an toàn! Bấm để đồng bộ ngay lập tức"}
               >
                 {isSyncing ? (
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-pink-500" />
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-500" />
                 ) : (
                   <Cloud className="w-3.5 h-3.5 text-emerald-500" />
                 )}
@@ -624,8 +625,8 @@ export default function App() {
               <div 
                 className={`hidden md:flex items-center justify-center p-1.5 rounded-full border cursor-pointer ${
                   isNightMode 
-                    ? "bg-amber-950/40 text-amber-300 border-amber-500/30" 
-                    : "bg-amber-50 text-amber-600 border-amber-100"
+                    ? "bg-amber-950/45 text-amber-300 border-amber-500/35" 
+                    : "bg-amber-50 text-amber-700 border-amber-200"
                 }`}
                 onClick={() => { playSound.click(); setAuthModalOpen(true); }}
                 title="Sử dụng Chế độ Khách (Bấm để đăng nhập và lưu đám mây)"
@@ -639,14 +640,14 @@ export default function App() {
               <span className="font-bold text-xs text-natural-deep leading-none">
                 {user ? user.displayName || progress.userName : "Khách (Chưa lưu)"}
               </span>
-              <span className={`text-[10px] font-bold mt-1 ${isNightMode ? "text-pink-400" : "text-pink-600"}`}>
+              <span className={`text-[10px] font-bold mt-1 ${isNightMode ? "text-amber-300" : "text-[#9E4244]"}`}>
                 {progress.xp} XP
               </span>
             </div>
             
             {/* User Avatar */}
-            <div className={`w-10 h-10 rounded-full border-2 shadow-md flex items-center justify-center text-lg shrink-0 overflow-hidden ${
-              isNightMode ? "border-slate-700 bg-slate-800" : "border-white bg-orange-100"
+            <div className={`w-10 h-10 rounded-full border-2 shadow-sm flex items-center justify-center text-lg shrink-0 overflow-hidden ${
+              isNightMode ? "border-amber-500/45 bg-[#1E1928]" : "border-[#E6DAC6] bg-amber-50"
             }`}>
               {progress.customAvatarUrl ? (
                 <img 
@@ -666,8 +667,8 @@ export default function App() {
             {/* Streak */}
             <div className={`hidden xs:flex items-center gap-1 border px-2.5 py-1 rounded-full ${
               isNightMode 
-                ? "bg-[#1D1D34] border-[#2D2D4A] text-slate-200" 
-                : "bg-natural-soft border-natural-border text-natural-deep"
+                ? "bg-[#1E1928] border-[#3A3142] text-amber-200" 
+                : "bg-[#FAF4EA] border-[#E6DAC6] text-natural-deep"
             }`}>
               <span className="text-xs">🔥</span>
               <span className="font-extrabold text-[10px] sm:text-xs text-natural-deep">{progress.streak} ngày</span>
@@ -677,7 +678,11 @@ export default function App() {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 border border-rose-100 rounded-xl transition-all cursor-pointer flex items-center justify-center animate-pulse"
+                className={`p-2 border rounded-xl transition-all cursor-pointer flex items-center justify-center ${
+                  isNightMode
+                    ? "bg-rose-950/50 hover:bg-rose-900/60 text-rose-300 hover:text-rose-200 border-rose-500/35"
+                    : "bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-800 border-rose-200"
+                }`}
                 title="Đăng xuất khỏi tài khoản"
               >
                 <LogOut className="w-4 h-4" />
@@ -685,7 +690,7 @@ export default function App() {
             ) : (
               <button
                 onClick={() => { playSound.click(); setAuthModalOpen(true); }}
-                className="px-3 py-1.5 bg-pink-600 hover:bg-pink-700 text-white text-[11px] font-extrabold rounded-xl shadow-sm transition-all cursor-pointer flex items-center gap-1"
+                className="px-3 py-1.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:brightness-110 text-white text-[11px] font-extrabold rounded-xl shadow-sm transition-all cursor-pointer flex items-center gap-1"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Đăng nhập</span>
@@ -701,8 +706,8 @@ export default function App() {
         id="iconic-navigation-bar" 
         className={`sticky top-20 z-30 py-2 px-1 sm:px-4 shadow-sm backdrop-blur-md transition-colors duration-300 border-b ${
           isNightMode 
-            ? "bg-[#18182B]/90 border-[#2D2D4A]" 
-            : "bg-white/90 border-natural-border"
+            ? "bg-[#181420]/92 border-[#3A3142]" 
+            : "bg-[#FFFDF9]/92 border-[#E6DAC6]"
         }`}
       >
         <div className="max-w-7xl mx-auto">
@@ -711,8 +716,8 @@ export default function App() {
               onClick={() => handleNavigate("dashboard")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
                 activeTab === "dashboard" 
-                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/50 border border-amber-500/40" : "text-[#8B261D] bg-[#FBF1EA] border border-[#E7C6B9] shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <Home className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -723,13 +728,13 @@ export default function App() {
               onClick={() => handleNavigate("leaderboard")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${
                 activeTab === "leaderboard" 
-                  ? (isNightMode ? "text-amber-300 bg-amber-950/40 font-black border border-amber-500/30" : "text-amber-600 bg-amber-50/80 font-black border border-amber-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/60 font-black border border-amber-500/40" : "text-amber-800 bg-amber-50 font-black border border-amber-200 shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <Trophy className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-amber-500" />
               <span>Bảng Vàng</span>
-              <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase scale-90 shadow-sm">
+              <span className="absolute -top-1 -right-1 bg-amber-500 text-slate-950 text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase scale-90 shadow-sm">
                 TOP
               </span>
             </button>
@@ -738,8 +743,8 @@ export default function App() {
               onClick={() => handleNavigate("courses")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
                 activeTab === "courses" 
-                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/50 border border-amber-500/40" : "text-[#8B261D] bg-[#FBF1EA] border border-[#E7C6B9] shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <GraduationCap className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -750,13 +755,13 @@ export default function App() {
               onClick={() => handleNavigate("japanese-ai-chat")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl relative ${
                 activeTab === "japanese-ai-chat" 
-                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/50 border border-amber-500/40" : "text-[#8B261D] bg-[#FBF1EA] border border-[#E7C6B9] shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <MessageSquare className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               <span>Trò chuyện AI</span>
-              <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase scale-90">
+              <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase scale-90">
                 JP
               </span>
             </button>
@@ -765,8 +770,8 @@ export default function App() {
               onClick={() => handleNavigate("knowledge")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
                 activeTab === "knowledge" 
-                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/50 border border-amber-500/40" : "text-[#8B261D] bg-[#FBF1EA] border border-[#E7C6B9] shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <BookOpen className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -777,8 +782,8 @@ export default function App() {
               onClick={() => handleNavigate("games")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
                 activeTab === "games" || activeTab === "quiz" || activeTab === "match" 
-                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/50 border border-amber-500/40" : "text-[#8B261D] bg-[#FBF1EA] border border-[#E7C6B9] shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <Gamepad2 className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -789,8 +794,8 @@ export default function App() {
               onClick={() => handleNavigate("personal")}
               className={`flex flex-col items-center justify-center gap-1 py-1.5 text-[10px] sm:text-xs font-bold transition-all cursor-pointer rounded-xl ${
                 activeTab === "personal" 
-                  ? (isNightMode ? "text-pink-400 bg-pink-950/40 border border-pink-500/30" : "text-pink-600 bg-pink-50/70 border border-pink-200/60") 
-                  : (isNightMode ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40" : "text-natural-muted hover:text-natural-text hover:bg-natural-soft/40")
+                  ? (isNightMode ? "text-amber-300 bg-amber-950/50 border border-amber-500/40" : "text-[#8B261D] bg-[#FBF1EA] border border-[#E7C6B9] shadow-xs") 
+                  : (isNightMode ? "text-[#C7BBA8] hover:text-[#F5EEDB] hover:bg-[#241E2D]/70" : "text-[#6E5D4F] hover:text-[#2D241E] hover:bg-[#F5ECE0]/70")
               }`}
             >
               <Notebook className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
@@ -985,6 +990,14 @@ export default function App() {
 
         {activeTab === "crane" && (
           <CraneKanji 
+            onGoBack={() => handleNavigate("games")}
+            progress={progress}
+            updateProgress={updateProgress}
+          />
+        )}
+
+        {activeTab === "sword-kyoto-3d" && (
+          <SwordKyoto3D 
             onGoBack={() => handleNavigate("games")}
             progress={progress}
             updateProgress={updateProgress}

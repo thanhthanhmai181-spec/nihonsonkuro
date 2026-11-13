@@ -54,7 +54,7 @@ export const EXAM_DATA_N3_2022_12: N3ExamData = {
     { id: 'b9', question: 'B「ああ、東図書館ですね。この坂を( ) 郵便局がありますから、その角を右に曲がってください。」', options: ['のぼっていくと', 'のぼっていきながら', 'のぼってくるには', 'のぼってくるとき'], correct: 0, explanation: 'Vていくと: Cứ đi (lên) tiếp thì sẽ thấy... (Dùng khi chỉ đường)' },
     { id: 'b10', question: 'A「さくら駅の近くに新しくできたラーメン屋、( )?」<br>B「ううん、知らない。」', options: ['知っとく', '知っちゃう', '知ってく', '知ってる'], correct: 3, explanation: '知ってる？: Dạng nói tắt của 知っている (Bạn có biết không?)' },
     { id: 'b11', question: '山下「はい、中川が( )ので、今、代わります。」', options: ['いたします', 'おります', 'いただきます', 'ございます'], correct: 1, explanation: 'おります: Khiêm nhường ngữ của います. Trung Nakagawa đang ở đây' },
-    { id: 'b12', question: '私は美術館が好きで、今までいろいろなs美術館に行った。国内の美術館が多いが、海外の美術館に( )。', options: ['行ったこともある', '行ったことはない', '行くこともできる', '行くこともできない'], correct: 0, explanation: 'Vた + こともある: Cũng đã từng có việc làm V. (Trong nước thì nhiều nhưng cũng đã từng đi bảo tàng nước ngoài)' },
+    { id: 'b12', question: '私は美術館が好きで、今までいろいろな美術館に行った。国内の美術館が多いが、海外の美術館に( )。', options: ['行ったこともある', '行ったことはない', '行くこともできる', '行くこともできない'], correct: 0, explanation: 'Vた + こともある: Cũng đã từng có việc làm V. (Trong nước thì nhiều nhưng cũng đã từng đi bảo tàng nước ngoài)' },
     { id: 'b13', question: '(靴屋で) 客「すみません。この靴、( )」', options: ['履いてもらえませんか', '履かないんですか', '履いてみてもいいですか', '履くことになりますか'], correct: 2, explanation: 'Vてみてもいいですか: Thử làm V có được không? (Tôi đi thử đôi giày này được không?)' },
 
     { id: 'b14', instruction: '問題2 次の文の ★ に入る最もよいものを、1・2・3・4から一つ選びなさい。', question: '留学している息子 ＿＿ ＿＿ ★ ＿＿ 毎日楽しく過ごしていると書かれていて安心した。', options: ['メール', 'から', 'に', 'の'], correct: 2, explanation: 'Thứ tự đúng: 息子の(4) メール(1) に(3) から(2). ★ là số 3 (ni). Câu hoàn chỉnh: 息子のメールに、毎日楽しく過ごしていると書かれていて安心した.' },

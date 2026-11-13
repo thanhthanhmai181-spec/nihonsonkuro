@@ -246,7 +246,7 @@ export default function Auth({ isOpen, onClose, onAuthSuccess, currentLocalProgr
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 bg-pink-600 hover:bg-pink-700 disabled:bg-pink-400 text-white font-extrabold rounded-xl shadow-md transition-all text-sm flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:brightness-110 disabled:opacity-50 text-white font-extrabold rounded-xl shadow-md transition-all text-sm flex items-center justify-center gap-2 cursor-pointer"
           >
             {isLoading ? (
               <>
@@ -255,7 +255,7 @@ export default function Auth({ isOpen, onClose, onAuthSuccess, currentLocalProgr
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 text-amber-200" />
                 <span>{isSignUp ? "Đăng Ký Ngay" : "Đăng Nhập"}</span>
               </>
             )}
@@ -306,7 +306,7 @@ export default function Auth({ isOpen, onClose, onAuthSuccess, currentLocalProgr
               setIsSignUp(!isSignUp);
               setError(null);
             }}
-            className="text-xs text-pink-600 hover:text-pink-700 font-bold hover:underline cursor-pointer"
+            className="text-xs text-amber-600 dark:text-amber-400 hover:underline font-bold cursor-pointer"
           >
             {isSignUp ? "Đã có tài khoản? Đăng nhập ngay" : "Chưa có tài khoản? Đăng ký học viên mới"}
           </button>

@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 .font-jp-rounded {
   font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Noto Sans JP", sans-serif;
@@ -41,15 +42,15 @@
 }
 
 .dark {
-  --color-natural-bg: #0F0F1A;
-  --color-natural-text: #E5E1DA;
-  --color-natural-deep: #FFFFFF;
-  --color-natural-border: #2D2D4A;
-  --color-natural-olive: #A3A36B;
-  --color-natural-pink: #FF85A2;
-  --color-natural-sand: #161629;
-  --color-natural-soft: #1D1D34;
-  --color-natural-muted: #A39EB5;
+  --color-natural-bg: #121016;
+  --color-natural-text: #F5EEDB;
+  --color-natural-deep: #FFF8EE;
+  --color-natural-border: #3A3142;
+  --color-natural-olive: #C5A059;
+  --color-natural-pink: #F59E0B;
+  --color-natural-sand: #1A1622;
+  --color-natural-soft: #241E2D;
+  --color-natural-muted: #C4B7A5;
   color-scheme: dark;
 }
 
@@ -60,27 +61,27 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Cozy Night Sakura & Dark Mode Global Styles */
+/* Cozy Warm Amber Eye-Care Dark Mode Global Styles */
 .dark body {
-  background-color: #0F0F1A;
-  color: #EDE8E3;
+  background-color: #121016;
+  color: #F5EEDB;
 }
 
-/* Night sakura glowing petals and ambient night atmosphere */
+/* Warm Amber Lantern glowing ambiance */
 .dark .night-sakura-glow {
-  filter: drop-shadow(0 0 8px rgba(255, 133, 162, 0.7)) drop-shadow(0 0 16px rgba(244, 114, 182, 0.4));
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.3));
 }
 
 .dark .yozakura-ambient {
-  background: radial-gradient(ellipse at 80% 10%, rgba(255, 117, 151, 0.12), transparent 50%),
-              radial-gradient(ellipse at 20% 80%, rgba(99, 102, 241, 0.08), transparent 50%),
-              #0F0F1A;
+  background: radial-gradient(ellipse at 80% 10%, rgba(245, 158, 11, 0.08), transparent 50%),
+              radial-gradient(ellipse at 20% 80%, rgba(217, 119, 6, 0.05), transparent 50%),
+              #121016;
 }
 
 /* Dark Mode Universal Typography & Text Contrast Overrides */
 .dark,
 .dark body {
-  color: #EDE8E3;
+  color: #F5EEDB;
 }
 
 /* High-contrast headings and primary text in Dark Mode */
@@ -93,7 +94,6 @@ body {
 .dark [class*="text-[#333]"],
 .dark [class*="text-[#222]"],
 .dark [class*="text-[#111]"],
-.dark [class*="text-black"],
 .dark .text-black,
 .dark .text-natural-deep,
 .dark .text-natural-text,
@@ -114,10 +114,24 @@ body {
 .dark .text-zinc-700,
 .dark .text-amber-950,
 .dark .text-amber-900 {
-  color: #EDE8E3 !important;
+  color: #F5EEDB !important;
 }
 
-/* Secondary muted text with WCAG AA contrast */
+/* Preserve dark ink on bright gold/amber/yellow surfaces in Dark Mode */
+.dark .bg-amber-300,
+.dark .bg-amber-400,
+.dark .bg-yellow-300,
+.dark .bg-yellow-400,
+.dark .from-amber-400,
+.dark .from-amber-500.text-slate-950,
+.dark .bg-amber-300 *,
+.dark .bg-amber-400 *,
+.dark .bg-yellow-300 *,
+.dark .bg-yellow-400 * {
+  color: #18131A !important;
+}
+
+/* Secondary muted text with WCAG AA contrast (Warm Sand) */
 .dark .text-natural-muted,
 .dark .text-gray-600,
 .dark .text-slate-600,
@@ -127,46 +141,69 @@ body {
 .dark .text-slate-500,
 .dark .text-neutral-500,
 .dark .text-stone-500,
+.dark .text-gray-400,
+.dark .text-slate-400,
 .dark [class*="text-[#555]"],
 .dark [class*="text-[#666]"],
 .dark [class*="text-[#777]"] {
-  color: #A9A4BA !important;
+  color: #C7BBA8 !important;
 }
 
-/* Crimson / Dark Red accents converted to bright, vibrant Sakura Pink / Rose */
+/* Crimson / Dark Red accents converted to warm amber gold / peach cinnabar */
 .dark [class*="text-[#8B0000]"],
 .dark [class*="text-[#8b0000]"],
 .dark .text-red-900,
 .dark .text-red-800,
+.dark .text-red-700,
 .dark .text-rose-900,
-.dark .text-rose-800 {
-  color: #FF7597 !important;
+.dark .text-rose-800,
+.dark .text-rose-700,
+.dark .text-pink-800,
+.dark .text-pink-700 {
+  color: #FBBF24 !important;
 }
 
-/* Dark mode surface & card adaptations */
+/* Dark mode surface & card adaptations (ONLY opaque/high-opacity white surfaces, preserving glass white/10..30) */
 .dark .bg-white,
-.dark [class*="bg-white"] {
-  background-color: #18182B !important;
-  color: #EDE8E3;
-}
-
-.dark .bg-white\/60,
-.dark .bg-white\/70,
-.dark .bg-white\/80,
+.dark .bg-white\/95,
 .dark .bg-white\/90,
-.dark .bg-white\/95 {
-  background-color: rgba(24, 24, 43, 0.92) !important;
+.dark .bg-white\/80,
+.dark .bg-white\/70,
+.dark .bg-white\/60 {
+  background-color: #1A1622 !important;
+  color: #F5EEDB;
 }
 
+/* Anti-glare rules for light parchment & warm paper backgrounds */
 .dark .washi-pattern,
 .dark .bg-natural-bg,
 .dark [class*="bg-[#FEF9F3]"],
 .dark [class*="bg-[#FAF7F2]"],
 .dark [class*="bg-[#FDF8F3]"],
 .dark [class*="bg-[#FDFBF7]"],
-.dark [class*="bg-[#F5F1E8]"] {
-  background-color: #0F0F1A !important;
-  color: #EDE8E3 !important;
+.dark [class*="bg-[#F5F1E8]"],
+.dark [class*="bg-[#F9F9FB]"],
+.dark [class*="bg-[#f9f9fb]"],
+.dark [class*="bg-[#F8F9FA]"],
+.dark [class*="bg-[#f8f9fa]"],
+.dark [class*="bg-[#FAFAFA]"],
+.dark [class*="bg-[#fafafa]"],
+.dark [class*="bg-[#fbf1da]"],
+.dark [class*="bg-[#fcf7ee]"],
+.dark [class*="bg-[#f5f0eb]"],
+.dark [class*="bg-[#fffde7]"],
+.dark [class*="bg-[#FFFDE7]"] {
+  background-color: #1A1622 !important;
+  color: #F5EEDB !important;
+  border-color: #3A3142 !important;
+}
+
+.dark [class*="bg-[#8B0000]/5"],
+.dark [class*="bg-[#8B0000]/10"],
+.dark [class*="bg-[#8b0000]/5"],
+.dark [class*="bg-[#8b0000]/10"] {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #FCD34D !important;
 }
 
 .dark .bg-natural-soft,
@@ -175,52 +212,52 @@ body {
 .dark [class*="bg-slate-50"],
 .dark [class*="bg-stone-50"],
 .dark [class*="bg-neutral-50"] {
-  background-color: #151528 !important;
+  background-color: #1A1622 !important;
 }
 
 .dark [class*="bg-gray-100"],
 .dark [class*="bg-slate-100"],
 .dark [class*="bg-stone-100"],
 .dark [class*="bg-neutral-100"] {
-  background-color: #202038 !important;
+  background-color: #241E2D !important;
 }
 
 .dark [class*="bg-gray-200"],
 .dark [class*="bg-slate-200"],
 .dark [class*="bg-stone-200"],
 .dark [class*="bg-neutral-200"] {
-  background-color: #2B2B48 !important;
+  background-color: #2E273A !important;
 }
 
 /* Status Cards & Badges in Lessons (e.g. Mastered / Review / New) */
 .dark [class*="bg-[#EAFaf1]"],
 .dark [class*="bg-[#eafaf1]"] {
-  background-color: rgba(46, 204, 113, 0.15) !important;
-  border-color: rgba(46, 204, 113, 0.5) !important;
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.45) !important;
 }
 .dark [class*="bg-[#EAFaf1]"] *,
 .dark [class*="bg-[#eafaf1]"] * {
-  color: #4ADE80 !important;
+  color: #6EE7B7 !important;
 }
 
 .dark [class*="bg-[#FEF9E7]"],
 .dark [class*="bg-[#fef9e7]"] {
-  background-color: rgba(241, 196, 15, 0.15) !important;
-  border-color: rgba(241, 196, 15, 0.5) !important;
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
 }
 .dark [class*="bg-[#FEF9E7]"] *,
 .dark [class*="bg-[#fef9e7]"] * {
-  color: #FDE047 !important;
+  color: #FCD34D !important;
 }
 
 .dark [class*="bg-[#EBEDEF]"],
 .dark [class*="bg-[#ebedef]"] {
-  background-color: #1F1F38 !important;
-  border-color: #363659 !important;
+  background-color: #201A29 !important;
+  border-color: #3A3142 !important;
 }
 .dark [class*="bg-[#EBEDEF]"] *,
 .dark [class*="bg-[#ebedef]"] * {
-  color: #CBD5E1 !important;
+  color: #D6CEBE !important;
 }
 
 /* Emerald and Green accents in dark mode */
@@ -234,10 +271,10 @@ body {
   color: #6EE7B7 !important;
 }
 .dark .bg-emerald-50 {
-  background-color: rgba(6, 78, 59, 0.4) !important;
+  background-color: rgba(6, 78, 59, 0.35) !important;
 }
 .dark .bg-emerald-100 {
-  background-color: rgba(6, 78, 59, 0.55) !important;
+  background-color: rgba(6, 78, 59, 0.5) !important;
 }
 
 /* Blue accents in dark mode */
@@ -251,53 +288,55 @@ body {
   color: #93C5FD !important;
 }
 .dark .bg-blue-50 {
-  background-color: rgba(30, 58, 138, 0.4) !important;
+  background-color: rgba(30, 58, 138, 0.35) !important;
 }
 
 /* Black icon boxes / header badges (e.g. "詞", "文", "漢") */
 .dark [class*="bg-[#1A1A1A]"],
 .dark [class*="bg-[#1a1a1a]"] {
-  background-color: #2D2D4E !important;
-  border-color: #4B4B70 !important;
-  color: #FFFFFF !important;
+  background-color: #241E2D !important;
+  border-color: #4A3E54 !important;
+  color: #FCD34D !important;
 }
 
 /* Navigation active tab buttons */
 .dark button[class*="bg-[#1A1A1A]"],
 .dark button[class*="bg-[#1a1a1a]"] {
-  background-color: #FF5C8A !important;
-  color: #FFFFFF !important;
-  border-color: #FF85A2 !important;
-  box-shadow: 0 0 12px rgba(255, 92, 138, 0.4) !important;
+  background-color: #B45309 !important;
+  color: #FFFDF7 !important;
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.4) !important;
 }
 
-/* Buttons (White action/return buttons) */
+/* Buttons (Only solid/opaque white buttons, preserving translucent bg-white/10, bg-white/20) */
 .dark button.bg-white,
-.dark button[class*="bg-white"] {
-  background-color: #1F1F36 !important;
-  color: #EDE8E3 !important;
-  border-color: #363659 !important;
+.dark button.bg-white\/90,
+.dark button.bg-white\/80 {
+  background-color: #241E2D !important;
+  color: #F5EEDB !important;
+  border-color: #3A3142 !important;
 }
 
 .dark button.bg-white:hover,
-.dark button[class*="bg-white"]:hover {
-  background-color: #2A2A48 !important;
-  color: #FF85A2 !important;
-  border-color: #FF5C8A !important;
+.dark button.bg-white\/90:hover,
+.dark button.bg-white\/80:hover {
+  background-color: #2E273A !important;
+  color: #FCD34D !important;
+  border-color: #F59E0B !important;
 }
 
 /* Primary Crimson CTA buttons in Dark Mode */
 .dark [class*="bg-[#8B0000]"],
 .dark [class*="bg-[#8b0000]"] {
-  background-color: #9E0A24 !important;
-  color: #FFFFFF !important;
-  border-color: #FF5C8A !important;
+  background-color: #8C2415 !important;
+  color: #FFFDF7 !important;
+  border-color: #F59E0B !important;
 }
 
 .dark [class*="bg-[#8B0000]"]:hover,
 .dark [class*="bg-[#8b0000]"]:hover {
-  background-color: #B50C2A !important;
-  box-shadow: 0 0 16px rgba(255, 92, 138, 0.4) !important;
+  background-color: #A32B18 !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35) !important;
 }
 
 /* Borders in Dark Mode */
@@ -312,48 +351,64 @@ body {
 .dark .border-slate-300,
 .dark .border-neutral-200,
 .dark .border-stone-200 {
-  border-color: #363659 !important;
+  border-color: #3A3142 !important;
 }
 
 .dark .border-gray-100,
 .dark .border-slate-100 {
-  border-color: #222238 !important;
+  border-color: #26202E !important;
 }
 
 .dark [class*="border-[#8B0000]"],
 .dark [class*="border-[#8b0000]"] {
-  border-color: #FF5C8A !important;
+  border-color: #D97706 !important;
 }
 
 /* Shadows & 3D Offsets */
 .dark [class*="shadow-["][class*="#1A1A1A]"],
 .dark [class*="shadow-["][class*="#1a1a1a]"] {
-  box-shadow: 4px 4px 0px #080812, 0 0 12px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 4px 4px 0px #09080C, 0 4px 16px rgba(0, 0, 0, 0.6) !important;
 }
 
 .dark [class*="shadow-["][class*="#8B0000]"],
 .dark [class*="shadow-["][class*="#8b0000]"] {
-  box-shadow: 4px 4px 0px #8B0000, 0 0 14px rgba(255, 92, 138, 0.35) !important;
+  box-shadow: 4px 4px 0px #3D1E0C, 0 4px 16px rgba(245, 158, 11, 0.2) !important;
 }
 
-/* Accent themes in Dark Mode */
+/* Accent themes in Dark Mode: Warm Amber / Golden Lantern */
 .dark .bg-pink-50,
 .dark .bg-pink-50\/50,
 .dark .bg-pink-50\/80,
-.dark .bg-rose-50 {
-  background-color: rgba(255, 117, 151, 0.14) !important;
+.dark .bg-pink-100,
+.dark .bg-rose-50,
+.dark .bg-rose-100 {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+  color: #FCD34D !important;
 }
 
 .dark .border-pink-100,
 .dark .border-pink-200,
+.dark .border-pink-300,
 .dark .border-rose-100,
 .dark .border-rose-200 {
-  border-color: rgba(255, 117, 151, 0.3) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
 }
 
+.dark .text-pink-500,
 .dark .text-pink-600,
 .dark .text-rose-600 {
-  color: #FF85A2 !important;
+  color: #F59E0B !important;
+}
+
+.dark .bg-pink-600,
+.dark .bg-pink-500,
+.dark .bg-rose-600 {
+  background-color: #B45309 !important;
+}
+
+.dark .hover\:bg-pink-700:hover,
+.dark .hover\:bg-pink-600:hover {
+  background-color: #D97706 !important;
 }
 
 .dark .bg-amber-50,
@@ -400,17 +455,56 @@ body {
 }
 
 .dark .bg-purple-50,
-.dark .bg-fuchsia-50 {
-  background-color: rgba(168, 85, 247, 0.14) !important;
+.dark .bg-fuchsia-50,
+.dark .bg-indigo-50,
+.dark .bg-violet-50 {
+  background-color: rgba(139, 92, 246, 0.16) !important;
+}
+
+.dark .bg-purple-100,
+.dark .bg-indigo-100,
+.dark .bg-violet-100 {
+  background-color: rgba(139, 92, 246, 0.24) !important;
 }
 
 .dark .border-purple-100,
-.dark .border-purple-200 {
-  border-color: rgba(168, 85, 247, 0.3) !important;
+.dark .border-purple-200,
+.dark .border-indigo-100,
+.dark .border-indigo-200 {
+  border-color: rgba(168, 85, 247, 0.32) !important;
 }
 
-.dark .text-purple-600 {
-  color: #C084FC !important;
+.dark .text-purple-600,
+.dark .text-purple-700,
+.dark .text-indigo-600,
+.dark .text-indigo-700,
+.dark .text-violet-600,
+.dark .text-violet-700 {
+  color: #C4B5FD !important;
+}
+
+.dark .bg-orange-50,
+.dark .bg-yellow-50,
+.dark .bg-red-50 {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+}
+
+.dark .bg-teal-50,
+.dark .bg-cyan-50 {
+  background-color: rgba(20, 184, 166, 0.14) !important;
+}
+
+.dark .text-teal-600,
+.dark .text-teal-700,
+.dark .text-cyan-600,
+.dark .text-cyan-700 {
+  color: #5EEAD4 !important;
+}
+
+.dark .text-orange-600,
+.dark .text-orange-700,
+.dark .text-amber-800 {
+  color: #FDBA74 !important;
 }
 
 /* Dark mode inputs, textareas, selects */
@@ -420,37 +514,37 @@ body {
 .dark input[type="email"],
 .dark textarea,
 .dark select {
-  background-color: #141424 !important;
-  color: #FFFFFF !important;
-  border-color: #363659 !important;
+  background-color: #16131C !important;
+  color: #F5EEDB !important;
+  border-color: #3A3142 !important;
 }
 
 .dark select option {
-  background-color: #18182B !important;
-  color: #FFFFFF !important;
+  background-color: #1A1622 !important;
+  color: #F5EEDB !important;
 }
 
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: #78738D !important;
+  color: #9E9284 !important;
 }
 
 /* Dark mode antique card */
 .dark .card-antique {
-  background-color: #18182B;
-  border: 2px solid #363654;
-  box-shadow: 6px 6px 0px #0A0A12;
+  background-color: #1A1622;
+  border: 2px solid #3A3142;
+  box-shadow: 6px 6px 0px #09080C;
 }
 
 .dark .card-antique:hover {
   transform: translate(-4px, -4px);
-  box-shadow: 10px 10px 0px #FF5C8A;
-  border-color: #FF5C8A;
+  box-shadow: 10px 10px 0px #B45309;
+  border-color: #F59E0B;
 }
 
 /* Dark mode Washi pattern */
 .dark .washi-pattern {
-  background-color: #0F0F1A !important;
+  background-color: #121016 !important;
   background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
 }
 
@@ -460,6 +554,25 @@ body {
   color: #8B0000;
   border-radius: 4px;
   display: inline-block;
+}
+
+.dark .hanko-seal {
+  border: 2px solid #F59E0B !important;
+  color: #FCD34D !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
+/* Dark Mode Table Anti-Glare */
+.dark table thead th {
+  background-color: #241E2D !important;
+  color: #FCD34D !important;
+  border-color: #3A3142 !important;
+}
+.dark table tbody tr {
+  border-color: #2D2536 !important;
+}
+.dark table tbody tr:hover {
+  background-color: #241E2D !important;
 }
 
 /* Vertical Japanese text alignment */
@@ -493,142 +606,142 @@ body {
   animation: shake 0.3s ease-in-out;
 }
 
-/* Custom Knowledge/Bổ ích styles matching the request */
+/* Unified Knowledge/Bổ ích card styling for both Light (Warm Washi Gold) and Dark (Twilight Plum Gold) */
 .card-recommended {
-  background: linear-gradient(145deg, #1a1a2e, #16213e);
-  border: 2px solid #C5A059;
-  box-shadow: 6px 6px 0px #1A1A1A, 0 0 30px rgba(197, 160, 89, 0.2);
-  transition: all 0.3s ease;
+  background: linear-gradient(165deg, #FFFDF9 0%, #FAF3E6 100%);
+  border: 1.5px solid #D8BA80;
+  box-shadow: 0 8px 24px -10px rgba(139, 90, 43, 0.16);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
   position: relative;
   overflow: hidden;
-}
-
-.card-recommended::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 60%, rgba(197, 160, 89, 0.05) 100%);
-  pointer-events: none;
+  color: #2D241E;
 }
 
 .card-recommended:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 10px 10px 0px #1A1A1A, 0 0 50px rgba(197, 160, 89, 0.4);
-  border-color: #D4AF6A;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px -10px rgba(180, 128, 45, 0.28);
+  border-color: #B48A3E;
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(197, 160, 89, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(197, 160, 89, 0.6), 0 0 50px rgba(197, 160, 89, 0.2);
-  }
+.dark .card-recommended {
+  background: linear-gradient(165deg, #1E1928 0%, #15121E 100%);
+  border: 1.5px solid rgba(197, 160, 89, 0.55);
+  box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.55), 0 0 24px rgba(197, 160, 89, 0.12);
+  color: #F5EEDB;
+}
+
+.dark .card-recommended:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.7), 0 0 32px rgba(245, 158, 11, 0.22);
+  border-color: #F59E0B;
 }
 
 .btn-read-more {
-  animation: pulse-glow 2s infinite;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tag-essential {
-  background: #8B0000;
-  color: white;
-  font-weight: bold;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
+  background: #8B261D;
+  color: #FFFDF7;
+  font-weight: 800;
+  font-size: 0.68rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+}
+
+.dark .tag-essential {
+  background: #9A3412;
+  color: #FEF3C7;
+  border: 1px solid rgba(251, 191, 36, 0.35);
 }
 
 .tag-practical {
-  background: #C5A059;
-  color: white;
-  font-weight: bold;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
+  background: #9E7328;
+  color: #FFFDF7;
+  font-weight: 800;
+  font-size: 0.68rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+}
+
+.dark .tag-practical {
+  background: #854D0E;
+  color: #FEF3C7;
+  border: 1px solid rgba(251, 191, 36, 0.35);
 }
 
 .knowledge-title-glow {
-  text-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+  text-shadow: none;
 }
 
-/* Custom Games/Trò chơi styles matching the request */
+/* Unified Games/Trò chơi card styling for both Light (Warm Terracotta Washi) and Dark (Twilight Copper) */
 .game-card-active {
-  background: linear-gradient(145deg, #1a1a2e, #16213e);
-  border: 2px solid #FF6B35;
-  box-shadow: 6px 6px 0px #1A1A1A, 0 0 30px rgba(255, 107, 53, 0.2);
-  transition: all 0.3s ease;
+  background: linear-gradient(165deg, #FFFDF9 0%, #FDF2EB 100%);
+  border: 1.5px solid #E5A07E;
+  box-shadow: 0 8px 24px -10px rgba(180, 68, 28, 0.16);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
   position: relative;
   overflow: hidden;
-}
-
-.game-card-active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 60%, rgba(255, 107, 53, 0.05) 100%);
-  pointer-events: none;
+  color: #2D241E;
 }
 
 .game-card-active:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 10px 10px 0px #1A1A1A, 0 0 50px rgba(255, 107, 53, 0.4);
-  border-color: #FF8C5A;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px -10px rgba(194, 65, 12, 0.28);
+  border-color: #EA580C;
+}
+
+.dark .game-card-active {
+  background: linear-gradient(165deg, #211826 0%, #17121C 100%);
+  border: 1.5px solid rgba(234, 88, 12, 0.55);
+  box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.55), 0 0 24px rgba(234, 88, 12, 0.14);
+  color: #F5EEDB;
+}
+
+.dark .game-card-active:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.7), 0 0 32px rgba(249, 115, 22, 0.24);
+  border-color: #FB923C;
 }
 
 .game-title-glow {
-  text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-}
-
-@keyframes pulse-glow-game {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), 0 0 50px rgba(255, 107, 53, 0.2);
-  }
+  text-shadow: none;
 }
 
 .btn-play-now {
-  animation: pulse-glow-game 2s infinite;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tag-new {
-  background: #FF6B35;
-  color: white;
-  font-weight: bold;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
+  background: #C2410C;
+  color: #FFFDF7;
+  font-weight: 800;
+  font-size: 0.68rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
 }
 
 .tag-dev {
-  background: #666;
-  color: white;
-  font-weight: bold;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
+  background: #57534E;
+  color: #FAF8F5;
+  font-weight: 800;
+  font-size: 0.68rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
 }
 
 .tag-soon {
-  background: #999;
-  color: white;
-  font-weight: bold;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
+  background: #78716C;
+  color: #FAF8F5;
+  font-weight: 800;
+  font-size: 0.68rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
 }
 
 /* 3D Rotating Utilities */
@@ -669,6 +782,193 @@ rt.kanji-rt {
   user-select: none;
   letter-spacing: 0.02em;
   ruby-align: center;
+}
+
+/* ============================================================================
+   PROGRESSIVE COURSE TIER FRAMES (N5 -> N4 -> N3 -> N2)
+   Unified Japanese Bushido Kamon & Sakura Theme — Escalating Craft & Glow
+   ============================================================================ */
+
+@keyframes n2-sheen {
+  0% { transform: translateX(-140%) skewX(-20deg); }
+  45%, 100% { transform: translateX(240%) skewX(-20deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .n2-shimmer-beam {
+    animation: none !important;
+    display: none !important;
+  }
+}
+
+.n2-shimmer-beam {
+  animation: n2-sheen 5.5s ease-in-out infinite;
+}
+
+/* Tier 1: N5 - Sơ Khởi (Warm Bronze / Sakura Bud — Clean Single Frame) */
+.course-card-n5 {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF9FA 100%);
+  border: 1.5px solid #E5A5B4;
+  box-shadow: 0 6px 20px -8px rgba(190, 24, 93, 0.14);
+}
+.course-card-n5:hover {
+  border-color: #DB5A7B;
+  box-shadow: 0 12px 26px -8px rgba(190, 24, 93, 0.24);
+}
+.dark .course-card-n5 {
+  background: linear-gradient(180deg, #1E1824 0%, #17131C 100%);
+  border: 1.5px solid #8A4A5B;
+  box-shadow: 0 8px 24px -10px rgba(244, 114, 182, 0.16);
+}
+.dark .course-card-n5:hover {
+  border-color: #D9778F;
+  box-shadow: 0 12px 30px -8px rgba(244, 114, 182, 0.28);
+}
+
+.course-stage-n5 {
+  background: radial-gradient(circle at 50% 35%, rgba(244, 114, 182, 0.16), rgba(225, 29, 72, 0.04) 75%);
+  border: 1px solid rgba(219, 90, 123, 0.4);
+}
+.dark .course-stage-n5 {
+  background: radial-gradient(circle at 50% 35%, rgba(244, 114, 182, 0.18), rgba(45, 24, 36, 0.55) 75%);
+  border: 1px solid rgba(244, 114, 182, 0.38);
+}
+
+/* Tier 2: N4 - Rèn Giũa (Azure Steel — Double-Rim Frame + Corner Brackets) */
+.course-card-n4 {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4F9FF 100%);
+  border: 2px solid #38BDF8;
+  box-shadow:
+    inset 0 0 0 3px rgba(14, 165, 233, 0.12),
+    0 8px 24px -8px rgba(2, 132, 199, 0.22);
+}
+.course-card-n4:hover {
+  border-color: #0284C7;
+  box-shadow:
+    inset 0 0 0 3px rgba(14, 165, 233, 0.22),
+    0 14px 32px -8px rgba(2, 132, 199, 0.34);
+}
+.dark .course-card-n4 {
+  background: linear-gradient(180deg, #171D2B 0%, #121622 100%);
+  border: 2px solid #2E86C1;
+  box-shadow:
+    inset 0 0 0 3px rgba(56, 189, 248, 0.12),
+    0 10px 28px -8px rgba(56, 189, 248, 0.24);
+}
+.dark .course-card-n4:hover {
+  border-color: #38BDF8;
+  box-shadow:
+    inset 0 0 0 3px rgba(56, 189, 248, 0.22),
+    0 14px 34px -6px rgba(56, 189, 248, 0.38);
+}
+
+.course-stage-n4 {
+  background: radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.22), rgba(14, 116, 144, 0.06) 78%);
+  border: 1.5px solid rgba(2, 132, 199, 0.45);
+  box-shadow: inset 0 0 18px rgba(56, 189, 248, 0.12);
+}
+.dark .course-stage-n4 {
+  background: radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.22), rgba(15, 32, 54, 0.65) 78%);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.16);
+}
+
+/* Tier 3: N3 - Tinh Luyện (Royal Amethyst & Platinum Gold — Triple Layered Engraved Frame) */
+.course-card-n3 {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF5FF 100%);
+  border: 2px solid #8B5CF6;
+  box-shadow:
+    inset 0 0 0 3px rgba(139, 92, 246, 0.15),
+    inset 0 0 0 6px rgba(245, 158, 11, 0.08),
+    0 10px 30px -8px rgba(124, 58, 237, 0.28);
+}
+.course-card-n3:hover {
+  border-color: #7C3AED;
+  box-shadow:
+    inset 0 0 0 3px rgba(139, 92, 246, 0.24),
+    inset 0 0 0 6px rgba(245, 158, 11, 0.14),
+    0 18px 38px -8px rgba(124, 58, 237, 0.4);
+}
+.dark .course-card-n3 {
+  background: linear-gradient(180deg, #211832 0%, #151120 100%);
+  border: 2px solid #9333EA;
+  box-shadow:
+    inset 0 0 0 3px rgba(192, 132, 252, 0.16),
+    inset 0 0 0 6px rgba(251, 191, 36, 0.08),
+    0 12px 32px -8px rgba(168, 85, 247, 0.34);
+}
+.dark .course-card-n3:hover {
+  border-color: #C084FC;
+  box-shadow:
+    inset 0 0 0 3px rgba(192, 132, 252, 0.28),
+    inset 0 0 0 6px rgba(251, 191, 36, 0.15),
+    0 18px 42px -6px rgba(192, 132, 252, 0.48);
+}
+
+.course-stage-n3 {
+  background: radial-gradient(circle at 50% 35%, rgba(168, 85, 247, 0.24), rgba(88, 28, 135, 0.08) 78%);
+  border: 1.5px solid rgba(147, 51, 234, 0.55);
+  box-shadow:
+    inset 0 0 0 2px rgba(251, 191, 36, 0.18),
+    0 4px 16px rgba(124, 58, 237, 0.16);
+}
+.dark .course-stage-n3 {
+  background: radial-gradient(circle at 50% 35%, rgba(192, 132, 252, 0.26), rgba(46, 16, 85, 0.72) 78%);
+  border: 1.5px solid rgba(192, 132, 252, 0.62);
+  box-shadow:
+    inset 0 0 0 2px rgba(251, 191, 36, 0.22),
+    0 6px 22px rgba(168, 85, 247, 0.28);
+}
+
+/* Tier 4: N2 - Đỉnh Cao (Imperial Gold & Crimson Sun — Supreme Multi-Tier Gilded Sanctuary Frame) */
+.course-card-n2 {
+  background:
+    linear-gradient(180deg, #FFFDF7 0%, #FEF6E4 100%) padding-box,
+    linear-gradient(135deg, #FDE68A 0%, #D97706 30%, #B45309 55%, #FBBF24 80%, #92400E 100%) border-box;
+  border: 2.5px solid transparent;
+  box-shadow:
+    inset 0 0 0 4px rgba(245, 158, 11, 0.16),
+    inset 0 0 0 7px rgba(180, 83, 9, 0.08),
+    0 14px 36px -8px rgba(217, 119, 6, 0.36);
+}
+.course-card-n2:hover {
+  box-shadow:
+    inset 0 0 0 4px rgba(245, 158, 11, 0.26),
+    inset 0 0 0 7px rgba(217, 119, 6, 0.15),
+    0 20px 48px -6px rgba(245, 158, 11, 0.52);
+}
+.dark .course-card-n2 {
+  background:
+    linear-gradient(180deg, #271E17 0%, #171219 100%) padding-box,
+    linear-gradient(135deg, #FEF08A 0%, #F59E0B 32%, #B45309 55%, #FDE047 80%, #D97706 100%) border-box;
+  border: 2.5px solid transparent;
+  box-shadow:
+    inset 0 0 0 4px rgba(251, 191, 36, 0.18),
+    inset 0 0 0 7px rgba(245, 158, 11, 0.1),
+    0 14px 40px -6px rgba(245, 158, 11, 0.4);
+}
+.dark .course-card-n2:hover {
+  box-shadow:
+    inset 0 0 0 4px rgba(253, 224, 71, 0.28),
+    inset 0 0 0 7px rgba(245, 158, 11, 0.18),
+    0 22px 54px -4px rgba(251, 191, 36, 0.58);
+}
+
+.course-stage-n2 {
+  background: radial-gradient(circle at 50% 35%, rgba(251, 191, 36, 0.3), rgba(180, 83, 9, 0.08) 78%);
+  border: 2px solid #D97706;
+  box-shadow:
+    inset 0 0 0 2px rgba(253, 224, 71, 0.35),
+    inset 0 0 26px rgba(245, 158, 11, 0.2),
+    0 6px 24px rgba(217, 119, 6, 0.24);
+}
+.dark .course-stage-n2 {
+  background: radial-gradient(circle at 50% 35%, rgba(251, 191, 36, 0.28), rgba(120, 53, 15, 0.42) 55%, rgba(28, 18, 16, 0.85) 85%);
+  border: 2px solid #F59E0B;
+  box-shadow:
+    inset 0 0 0 2px rgba(253, 224, 71, 0.3),
+    inset 0 0 28px rgba(245, 158, 11, 0.24),
+    0 8px 28px rgba(245, 158, 11, 0.34);
 }
 
 

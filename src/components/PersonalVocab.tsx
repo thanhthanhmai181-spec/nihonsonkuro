@@ -161,7 +161,7 @@ export default function PersonalVocab({ customVocab, setCustomVocab, progress, u
           {customVocab.length >= 3 && (
             <button
               onClick={() => { playSound.click(); onPracticeCustom(); }}
-              className="px-4 py-2.5 bg-natural-olive hover:opacity-90 text-white font-extrabold rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+              className="px-4 py-2.5 bg-[#4B523B] hover:bg-[#3E4530] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-extrabold rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
             >
               📖 Ôn luyện sổ tay
             </button>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { UserProgress, Vocabulary } from "../types";
 import { playSound } from "../utils/audio";
 import { calculateDetailedUserStats } from "../utils/stats";
-import { Award, Flame, Star, BookOpen, User, Sparkles, CheckCircle, Gamepad2, Compass, Upload, Camera } from "lucide-react";
+import { Award, Flame, Star, BookOpen, User, Sparkles, Upload } from "lucide-react";
 import { motion } from "motion/react";
 
 interface DashboardProps {
@@ -119,7 +119,6 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
     playSound.click();
     let finalUrl = logoInputUrl.trim();
     if (finalUrl) {
-      // Automatic conversion of Google Drive share links to high-performance direct web view links
       if (finalUrl.includes("drive.google.com")) {
         let fileId = "";
         const dMatch = finalUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
@@ -164,7 +163,6 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Limit to 5MB
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước ảnh quá lớn! Em hãy chọn ảnh nhỏ hơn 5MB nhé.");
       return;
@@ -174,11 +172,10 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
     reader.onload = (event) => {
       const base64String = event.target?.result as string;
       if (base64String) {
-        // Compress/resize image to ensure fast loading & avoid hitting Firestore 1MB document limit
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement("canvas");
-          const MAX_SIZE = 400; // max width/height for avatar
+          const MAX_SIZE = 400;
           let width = img.width;
           let height = img.height;
 
@@ -220,13 +217,6 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
     reader.readAsDataURL(file);
   };
 
-  const getLearnedCountByLevel = (level: string) => {
-    const levelVocab = vocabList.filter(v => v.level === level);
-    if (levelVocab.length === 0) return 0;
-    const learned = levelVocab.filter(v => progress.learnedWordIds.includes(v.id));
-    return Math.round((learned.length / levelVocab.length) * 100);
-  };
-
   const currentLevelLabel = () => {
     if (progress.xp < 100) return "Sơ cấp Nhập môn 🔰";
     if (progress.xp < 300) return "Chiến binh Hiragana ⚔️";
@@ -246,14 +236,13 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
           </h3>
           <button 
             onClick={() => { playSound.click(); setShowAvatarSelector(!showAvatarSelector); }}
-            className="text-pink-600 hover:text-pink-700 text-xs font-bold"
+            className="text-pink-600 hover:text-pink-700 text-xs font-bold cursor-pointer"
           >
             Đổi đại diện
           </button>
         </div>
 
         <div className="flex items-center gap-4">
-          {/* User Avatar Representation */}
           <div className="w-12 h-12 bg-natural-pink rounded-full border-2 border-white shadow-md overflow-hidden flex items-center justify-center text-xl bg-orange-100 shrink-0">
             {progress.customAvatarUrl ? (
               <img 
@@ -279,7 +268,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 />
                 <button 
                   onClick={handleSaveName}
-                  className="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded-xl text-xs font-bold shrink-0"
+                  className="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded-xl text-xs font-bold shrink-0 cursor-pointer"
                 >
                   Lưu
                 </button>
@@ -289,7 +278,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 <span className="font-black text-natural-deep text-lg leading-none">{progress.userName}</span>
                 <button 
                   onClick={() => { playSound.click(); setEditingName(true); }}
-                  className="text-natural-muted hover:text-pink-600 text-xs"
+                  className="text-natural-muted hover:text-pink-600 text-xs cursor-pointer"
                 >
                   ✏️
                 </button>
@@ -316,7 +305,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                     key={av.id}
                     onClick={() => handleSelectAvatar(av.id)}
                     title={av.name}
-                    className={`h-11 rounded-xl flex items-center justify-center text-2xl transition-all border ${(!progress.customAvatarUrl && progress.selectedAvatarId === av.id) ? "bg-pink-50 border-pink-300 scale-110 shadow-sm" : "bg-white border-natural-border hover:scale-105"}`}
+                    className={`h-11 rounded-xl flex items-center justify-center text-2xl transition-all border cursor-pointer ${(!progress.customAvatarUrl && progress.selectedAvatarId === av.id) ? "bg-pink-50 border-pink-300 scale-110 shadow-sm" : "bg-white border-natural-border hover:scale-105"}`}
                   >
                     {av.emoji}
                   </button>
@@ -345,7 +334,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                       updateProgress({ customAvatarUrl: "" });
                       setShowAvatarSelector(false);
                     }}
-                    className="bg-neutral-100 hover:bg-neutral-200 text-neutral-600 border border-neutral-300 px-4 py-2 rounded-xl text-xs font-bold transition-all active:scale-95"
+                    className="bg-neutral-100 hover:bg-neutral-200 text-neutral-600 border border-neutral-300 px-4 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer"
                   >
                     Xóa ảnh tự tải
                   </button>
@@ -378,7 +367,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 />
                 <button 
                   onClick={handleSaveLogo}
-                  className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all active:scale-95 shadow-sm"
+                  className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all active:scale-95 shadow-sm cursor-pointer"
                 >
                   Lưu Logo
                 </button>
@@ -393,7 +382,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                     setShowLogoSelector(false);
                     playSound.achievement();
                   }}
-                  className="text-rose-600 hover:text-rose-700 text-[11px] font-bold"
+                  className="text-rose-600 hover:text-rose-700 text-[11px] font-bold cursor-pointer"
                 >
                   Khôi phục Logo SVG Mặc định (Hình Wolf Duy Son)
                 </button>
@@ -407,37 +396,37 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
       <div id="stats-indicators-container" className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Streak Box */}
-          <div className="bg-natural-olive text-white rounded-[32px] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden h-36">
-            <div className="absolute right-2 bottom-2 text-white/5">
+          <div className="bg-[#4B523B] dark:bg-[#19231E] border border-[#3E4530] dark:border-emerald-500/35 text-[#FFFDF7] rounded-[32px] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden h-36">
+            <div className="absolute right-2 bottom-2 text-white/10">
               <Flame className="w-24 h-24 stroke-[1]" />
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-bold text-[10px] uppercase tracking-wider opacity-80">Chuỗi học tập</span>
+              <span className="font-bold text-[10px] uppercase tracking-wider text-emerald-100/85">Chuỗi học tập</span>
               <span className="text-2xl">🔥</span>
             </div>
             <div className="my-2">
-              <span className="text-5xl font-black tracking-tight">{progress.streak}</span>
-              <span className="text-lg font-bold ml-1">ngày</span>
+              <span className="text-5xl font-black tracking-tight text-[#FFFDF7]">{progress.streak}</span>
+              <span className="text-lg font-bold ml-1 text-emerald-100">ngày</span>
             </div>
-            <p className="text-[10px] opacity-80 leading-relaxed">
+            <p className="text-[11px] text-emerald-100/85 leading-relaxed">
               Duy trì học tập hàng ngày để bồi đắp công lực cùng Thầy Sơn nhé! 💪
             </p>
           </div>
 
           {/* XP Box */}
-          <div className="bg-[#5A5A40] text-white rounded-[32px] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden h-36 opacity-95">
-            <div className="absolute right-2 bottom-2 text-white/5">
+          <div className="bg-[#6B4A35] dark:bg-[#251C16] border border-[#563B29] dark:border-amber-500/35 text-[#FFFDF7] rounded-[32px] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden h-36">
+            <div className="absolute right-2 bottom-2 text-white/10">
               <Star className="w-24 h-24 stroke-[1]" />
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-bold text-[10px] uppercase tracking-wider opacity-80">Tích lũy kinh nghiệm</span>
-              <Award className="w-5 h-5 text-white opacity-80" />
+              <span className="font-bold text-[10px] uppercase tracking-wider text-amber-100/85">Tích lũy kinh nghiệm</span>
+              <Award className="w-5 h-5 text-amber-300" />
             </div>
             <div className="my-2">
-              <span className="text-5xl font-black tracking-tight">{progress.xp}</span>
-              <span className="text-lg font-bold ml-1">XP</span>
+              <span className="text-5xl font-black tracking-tight text-[#FFFDF7]">{progress.xp}</span>
+              <span className="text-lg font-bold ml-1 text-amber-200">XP</span>
             </div>
-            <p className="text-[10px] opacity-80 leading-relaxed">
+            <p className="text-[11px] text-amber-100/85 leading-relaxed">
               Nhận thêm điểm khi vượt qua các mốc bài tập hoặc ôn flashcards. ⭐
             </p>
           </div>
@@ -454,8 +443,8 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Grammar (Ngữ pháp) Progress Card */}
-            <div className="bg-neutral-50/50 rounded-2xl p-5 border border-natural-border/70 space-y-4 hover:border-pink-200 transition-all">
+            {/* Grammar Progress Card */}
+            <div className="bg-[#FAF6EF] dark:bg-[#221D2B] rounded-2xl p-5 border border-[#E6DAC6] dark:border-[#3A3142] space-y-4 hover:border-indigo-300 dark:hover:border-indigo-400/50 transition-all">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
@@ -478,17 +467,17 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
 
               {/* Progress Bar */}
               <div className="space-y-1">
-                <div className="w-full bg-natural-border/40 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-[#E6DAC6]/70 dark:bg-white/10 h-2 rounded-full overflow-hidden">
                   <div 
-                    className="bg-indigo-600 h-full rounded-full transition-all duration-500" 
+                    className="bg-indigo-600 dark:bg-indigo-400 h-full rounded-full transition-all duration-500" 
                     style={{ 
-                      width: `${Math.min(100, Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total)) * 100))}%` 
+                      width: `${Math.min(100, Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total || 1)) * 100))}%` 
                     }}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-indigo-600 font-extrabold">
                   <span>Hoàn thành</span>
-                  <span>{Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total)) * 100) || 0}%</span>
+                  <span>{Math.round(((stats.grammarN5Learned + stats.grammarN4Learned + stats.grammarN3Learned + stats.grammarN2Learned) / (stats.grammarN5Total + stats.grammarN4Total + stats.grammarN3Total + stats.grammarN2Total || 1)) * 100) || 0}%</span>
                 </div>
               </div>
 
@@ -533,8 +522,8 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
               </div>
             </div>
 
-            {/* Kanji (Hán tự) Progress Card */}
-            <div className="bg-neutral-50/50 rounded-2xl p-5 border border-natural-border/70 space-y-4 hover:border-pink-200 transition-all">
+            {/* Kanji Progress Card */}
+            <div className="bg-[#FAF6EF] dark:bg-[#221D2B] rounded-2xl p-5 border border-[#E6DAC6] dark:border-[#3A3142] space-y-4 hover:border-amber-300 dark:hover:border-amber-400/50 transition-all">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="p-2 bg-amber-50 text-amber-600 rounded-xl">
@@ -557,17 +546,17 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
 
               {/* Progress Bar */}
               <div className="space-y-1">
-                <div className="w-full bg-natural-border/40 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-[#E6DAC6]/70 dark:bg-white/10 h-2 rounded-full overflow-hidden">
                   <div 
                     className="bg-amber-500 h-full rounded-full transition-all duration-500" 
                     style={{ 
-                      width: `${Math.min(100, Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total)) * 100))}%` 
+                      width: `${Math.min(100, Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total || 1)) * 100))}%` 
                     }}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-amber-600 font-extrabold">
                   <span>Hoàn thành</span>
-                  <span>{Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total)) * 100) || 0}%</span>
+                  <span>{Math.round(((stats.kanjiN5Learned + stats.kanjiN4Learned + stats.kanjiN3Learned + stats.kanjiN2Learned) / (stats.kanjiN5Total + stats.kanjiN4Total + stats.kanjiN3Total + stats.kanjiN2Total || 1)) * 100) || 0}%</span>
                 </div>
               </div>
 
@@ -612,12 +601,12 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
               </div>
             </div>
 
-            {/* Vocabulary (Từ vựng) Progress Card */}
-            <div className="bg-neutral-50/50 rounded-2xl p-5 border border-natural-border/70 space-y-4 hover:border-pink-200 transition-all">
+            {/* Vocabulary Progress Card */}
+            <div className="bg-[#FAF6EF] dark:bg-[#221D2B] rounded-2xl p-5 border border-[#E6DAC6] dark:border-[#3A3142] space-y-4 hover:border-rose-300 dark:hover:border-amber-400/50 transition-all">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="p-2 bg-pink-50 text-pink-600 rounded-xl">
-                    <Award className="w-5 h-5 text-pink-600" />
+                  <span className="p-2 bg-rose-50 dark:bg-amber-500/15 text-rose-700 dark:text-amber-300 rounded-xl">
+                    <Award className="w-5 h-5" />
                   </span>
                   <div>
                     <h5 className="font-black text-xs text-natural-deep uppercase tracking-wider">Từ Vựng Đã Thuộc</h5>
@@ -625,7 +614,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl font-black text-pink-700">
+                  <span className="text-xl font-black text-rose-700 dark:text-amber-300">
                     {stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned}
                   </span>
                   <span className="text-xs font-bold text-natural-muted">
@@ -636,17 +625,17 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
 
               {/* Progress Bar */}
               <div className="space-y-1">
-                <div className="w-full bg-natural-border/40 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-[#E6DAC6]/70 dark:bg-white/10 h-2 rounded-full overflow-hidden">
                   <div 
-                    className="bg-pink-500 h-full rounded-full transition-all duration-500" 
+                    className="bg-rose-600 dark:bg-amber-400 h-full rounded-full transition-all duration-500" 
                     style={{ 
-                      width: `${Math.min(100, Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total)) * 100))}%` 
+                      width: `${Math.min(100, Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total || 1)) * 100))}%` 
                     }}
                   />
                 </div>
-                <div className="flex justify-between text-[10px] text-pink-600 font-extrabold">
+                <div className="flex justify-between text-[10px] text-rose-700 dark:text-amber-300 font-extrabold">
                   <span>Hoàn thành</span>
-                  <span>{Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total)) * 100) || 0}%</span>
+                  <span>{Math.round(((stats.vocabN5Learned + stats.vocabN4Learned + stats.vocabN3Learned + stats.vocabN2Learned) / (stats.vocabN5Total + stats.vocabN4Total + stats.vocabN3Total + stats.vocabN2Total || 1)) * 100) || 0}%</span>
                 </div>
               </div>
 
@@ -654,7 +643,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
               <div className="pt-2 border-t border-dashed border-natural-border/70 space-y-2">
                 <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
                   <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-pink-400 rounded-full"></span>
+                    <span className="w-1.5 h-1.5 bg-rose-400 dark:bg-amber-300 rounded-full"></span>
                     Cấp độ N5
                   </span>
                   <span className="font-mono text-natural-deep font-bold">
@@ -663,7 +652,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 </div>
                 <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
                   <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
+                    <span className="w-1.5 h-1.5 bg-rose-500 dark:bg-amber-400 rounded-full"></span>
                     Cấp độ N4
                   </span>
                   <span className="font-mono text-natural-deep font-bold">
@@ -672,7 +661,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 </div>
                 <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
                   <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-pink-600 rounded-full"></span>
+                    <span className="w-1.5 h-1.5 bg-rose-600 dark:bg-amber-500 rounded-full"></span>
                     Cấp độ N3
                   </span>
                   <span className="font-mono text-natural-deep font-bold">
@@ -681,7 +670,7 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
                 </div>
                 <div className="flex items-center justify-between text-xs font-semibold text-natural-text">
                   <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-pink-800 rounded-full"></span>
+                    <span className="w-1.5 h-1.5 bg-rose-800 dark:bg-amber-600 rounded-full"></span>
                     Cấp độ N2
                   </span>
                   <span className="font-mono text-natural-deep font-bold">
@@ -699,13 +688,12 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
         id="teacher-greeting-banner"
         className="relative overflow-hidden bg-[#FDF8F3] rounded-[40px] p-6 sm:p-8 border border-natural-border shadow-sm"
       >
-        {/* Abstract design elements to invoke Academy style */}
         <div className="absolute top-0 right-0 p-8 select-none pointer-events-none">
            <span className="text-7xl opacity-5 grayscale">🏮</span>
         </div>
         
         <div className="relative flex flex-col md:flex-row items-center gap-6 z-10">
-          {/* Custom Stylized Avatar for Thầy Sơn (User's high-fidelity custom vector portrait) */}
+          {/* Custom Stylized Avatar for Thầy Sơn */}
           <div className="relative shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-[24px] border-2 border-white shadow-md bg-zinc-900 overflow-hidden group">
             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full transform group-hover:scale-110 transition-transform duration-300">
               <rect width="200" height="200" fill="#1A0000"/>
@@ -737,8 +725,8 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
 
           {/* Greeting Speech Bubble */}
           <div className="flex-1 text-center md:text-left space-y-3">
-            <div className="inline-flex items-center gap-1 bg-pink-100 text-pink-600 rounded-full text-[10px] font-bold tracking-widest px-3 py-1">
-              <Sparkles className="w-3 h-3 text-pink-500 animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 bg-rose-100/80 dark:bg-amber-950/50 text-rose-800 dark:text-amber-300 border border-rose-200/80 dark:border-amber-500/30 rounded-full text-[10px] font-bold tracking-widest px-3 py-1">
+              <Sparkles className="w-3 h-3" />
               <span>TỪ VỰNG & HỌC VỰNG HÔM NAY</span>
             </div>
             
@@ -747,8 +735,8 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
             </h2>
 
             {/* Daily dynamic quote */}
-            <div className="bg-white/80 rounded-2xl p-4 border border-natural-border space-y-1 shadow-sm">
-              <p className="text-pink-600 font-mono text-sm sm:text-base font-bold">
+            <div className="bg-white/90 rounded-2xl p-4 border border-natural-border space-y-1 shadow-sm">
+              <p className="text-[#8B261D] dark:text-amber-300 font-mono text-sm sm:text-base font-bold">
                 {MOTIVATIONAL_QUOTES[quoteIndex].jp} 
                 <span className="text-natural-muted font-normal ml-2 font-sans text-xs">[{MOTIVATIONAL_QUOTES[quoteIndex].romaji}]</span>
               </p>
@@ -761,61 +749,61 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
       </div>
 
       {/* Feature Promotion: Góc Luyện Nghe & Shadowing */}
-      <div className="bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 text-white rounded-[32px] p-6 sm:p-8 shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-[#2C3554] via-[#3A325C] to-[#4E335A] dark:from-[#1D2238] dark:via-[#251E3B] dark:to-[#311D3A] border border-indigo-400/20 dark:border-amber-500/25 text-white rounded-[32px] p-6 sm:p-8 shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2 text-center md:text-left z-10">
-          <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider text-amber-300">
+          <div className="inline-flex items-center gap-1.5 bg-white/12 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider text-amber-300 border border-amber-300/25">
             <span>🎧 Mới Ra Mắt</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-black tracking-tight">
+          <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[#FFFDF7]">
             Góc Luyện Nghe Thụ Động & Shadowing AI
           </h3>
-          <p className="text-xs sm:text-sm text-pink-100 max-w-xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-indigo-100/90 max-w-xl leading-relaxed">
             Luyện tai nghe Podcast nhạy bén, đọc nhại theo kịch bản Karaoke và tự động tạo bài nghe mới cùng Thầy Sơn AI ở cấp độ N5, N4, N3!
           </p>
         </div>
 
         <button
           onClick={() => { playSound.click(); onNavigate("listening-shadowing"); }}
-          className="shrink-0 px-6 py-3.5 bg-amber-400 hover:bg-amber-300 text-slate-900 font-black rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 text-xs uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+          className="shrink-0 px-6 py-3.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-2xl shadow-md transition-all transform hover:scale-[1.02] active:scale-95 text-xs uppercase tracking-wider flex items-center gap-2 cursor-pointer"
         >
           <span>Vào Luyện Nghe ngay</span>
           <span className="text-base">→</span>
         </button>
       </div>
 
-      {/* NEW: Japanese AI Conversation Feature Banner */}
+      {/* Japanese AI Conversation Feature Banner */}
       <div 
         onClick={() => { playSound.click(); onNavigate("japanese-ai-chat"); }}
-        className="bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 text-white rounded-[32px] p-6 sm:p-8 shadow-md hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group"
+        className="bg-gradient-to-r from-[#7A2029] via-[#8B2B32] to-[#984A32] dark:from-[#2C161D] dark:via-[#341A21] dark:to-[#3A221A] border border-rose-300/20 dark:border-amber-500/30 text-white rounded-[32px] p-6 sm:p-8 shadow-md hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group"
       >
         <div className="absolute -right-8 -bottom-8 opacity-10 text-9xl select-none font-black">
           日本語
         </div>
 
         <div className="space-y-2 text-center md:text-left z-10">
-          <span className="bg-white/20 text-white border border-white/30 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-amber-200 animate-spin" />
+          <span className="bg-white/12 text-amber-200 border border-amber-300/25 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1.5">
+            <Sparkles className="w-3 h-3 text-amber-300" />
             <span>TÍNH NĂNG MỚI NỔI BẬT</span>
           </span>
-          <h3 className="text-xl sm:text-2xl font-black tracking-tight font-sans">
+          <h3 className="text-xl sm:text-2xl font-black tracking-tight font-sans text-[#FFFDF7]">
             Luyện Kaiwa Phản Xạ • Trò Chuyện Bằng Tiếng Nhật Với Nhân Vật AI
           </h3>
-          <p className="text-xs sm:text-sm text-pink-50 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-rose-100/90 max-w-2xl leading-relaxed">
             Thực hành phản xạ đàm thoại 100% bằng tiếng Nhật cùng Yuki-chan và Thầy Sơnkuro Sensei. Kèm đọc phát âm tự động & nhận xét sửa lỗi ngữ pháp tức thì!
           </p>
         </div>
 
         <button 
-          className="bg-white text-pink-600 hover:bg-pink-50 font-black text-xs sm:text-sm px-6 py-3.5 rounded-2xl shadow-md transition-all shrink-0 group-hover:scale-105 cursor-pointer z-10"
+          className="bg-[#FFFDF9] text-[#7A2029] hover:bg-amber-50 dark:bg-amber-400 dark:text-slate-950 dark:hover:bg-amber-300 font-black text-xs sm:text-sm px-6 py-3.5 rounded-2xl shadow-md transition-all shrink-0 group-hover:scale-[1.02] cursor-pointer z-10"
         >
           Trò Chuyện Ngay 🌸
         </button>
       </div>
 
-      {/* 4. Demon Teacher Welcome Box & Key Highlights (Integrated from original homepage) */}
+      {/* 4. Demon Teacher Welcome Box & Key Highlights */}
       <div id="demon-teacher-highlights" className="space-y-6">
-        <div className="bg-white/90 border-l-4 border-rose-600 p-6 rounded-r-[32px] border-y border-r border-natural-border shadow-sm">
-          <h3 className="font-sans font-black text-base text-rose-700 mb-2 flex items-center gap-2">
+        <div className="bg-[#FFF8F5] dark:bg-[#22181C] p-6 rounded-[28px] border border-rose-200 dark:border-rose-500/30 shadow-sm">
+          <h3 className="font-sans font-black text-base text-[#8B261D] dark:text-amber-300 mb-2 flex items-center gap-2">
             <span>👹</span> ÁC QUỶ TÔN SƯ GIÁM SÁT
           </h3>
           <p className="text-natural-text text-sm leading-relaxed font-medium">
@@ -841,7 +829,6 @@ export default function Dashboard({ progress, vocabList, updateProgress, onNavig
           </div>
         </div>
       </div>
-
     </div>
   );
 }

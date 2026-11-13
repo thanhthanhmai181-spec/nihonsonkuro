@@ -97,7 +97,7 @@ export const MASTER_SENSEI_DATA: QuestionWordItem[] = [
     id: "donna", word: "どんな (+ N)", reading: "Donna", meaning: "[Danh từ] như thế nào", category: "kosoado", desc: "Đi kèm trước danh từ để hỏi đặc điểm, tính chất, chủng loại của sự vật đó.",
     examples: [
       { q: "どんな音楽が好きですか。", qh: "どんな おんがく が すき です か。", qr: "Donna ongaku ga suki desu ka?", qv: "Bạn thích loại nhạc như thế nào?", a: "クラシックなどの静かな音楽が好きです。", ah: "クラシック など の しずかな おんがく が すき です。", ar: "Kurashikku nado no shizukana ongaku ga suki desu.", av: "Tôi thích nhạc yên tĩnh như nhạc cổ điển." },
-      { q: "ハノイはどんな街ですか。", qh: "ハノイ は どんな まち です か。", qr: "Hanoi wa donna machi desu ka?", qv: "Hà Nội là một thành phố thế nào?", a: "賑やかred、歴史が古い街です。", ah: "にぎやか で、れきし が ふるい まち です。", ar: "Nigiyaka de, rekishi ga furui machi desu.", av: "Là một thành phố náo nhiệt và cổ kính." }
+      { q: "ハノイはどんな街ですか。", qh: "ハノイ は どんな まち です か。", qr: "Hanoi wa donna machi desu ka?", qv: "Hà Nội là một thành phố thế nào?", a: "賑やかで、歴史が古い街です。", ah: "にぎやか で、れきし が ふるい まち です。", ar: "Nigiyaka de, rekishi ga furui machi desu.", av: "Là một thành phố náo nhiệt và cổ kính." }
     ]
   },
 
@@ -231,7 +231,7 @@ export const MASTER_SENSEI_DATA: QuestionWordItem[] = [
   {
     id: "nannin", word: "何人 (なんにん)", reading: "Nannin", meaning: "Mấy người", category: "nani_group", desc: "Đơn vị đếm người. Cần lưu ý phản xạ khi đếm 1 người (Hitori), 2 người (Futari).",
     examples: [
-      { q: "ご家族は何人ですか。", qh: "ごかぞく は なんにん です か。", qr: "Gokazoku wa nannin desu ka?", qv: "Gia đình bạn có mấy người?", a: "4人です。両親と妹と私です。", ah: "よにん です。りょうしん と いもうto と わたし です。", ar: "Yonin desu. Ryoushin to imouto to watashi desu.", av: "Có 4 người. Bố mẹ, em gái và tôi." },
+      { q: "ご家族は何人ですか。", qh: "ごかぞく は なんにん です か。", qr: "Gokazoku wa nannin desu ka?", qv: "Gia đình bạn có mấy người?", a: "4人です。両親と妹と私です。", ah: "よにん です。りょうしん と いもうと と わたし です。", ar: "Yonin desu. Ryoushin to imouto to watashi desu.", av: "Có 4 người. Bố mẹ, em gái và tôi." },
       { q: "この教室に学生は何人いますか。", qh: "この きょうしつ に がくせい は なんにん います か。", qr: "Kono kyoushitsu ni gakusei wa nannin imasu ka?", qv: "Lớp học này có bao nhiêu học sinh?", a: "ちょうど20人います。", ah: "ちょうど にじゅうにん います。", ar: "Choudo nijuunin imasu.", av: "Có đúng 20 học sinh." }
     ]
   },
@@ -281,7 +281,7 @@ export const MASTER_SENSEI_DATA: QuestionWordItem[] = [
     id: "nanban", word: "何番 (なんばん)", reading: "Nanban", meaning: "Số mấy", category: "nani_group", desc: "Dùng để hỏi vị trí số thứ tự, số điện thoại hoặc mã số.",
     examples: [
       { q: "あなたの背番号は何番ですか。", qh: "あなた の せばんごう は なんばん です か。", qr: "Anata no sebangou wa nanban desu ka?", qv: "Số áo thi đấu của bạn là số mấy?", a: "私の背番号は10番です。", ah: "わたし の せばんごう は じゅうばん です。", ar: "Watashi no sebangou wa juuban desu.", av: "Số áo của tôi là số 10." },
-      { q: "電話番号は何番ですか。", qh: "でんわ ばんごう は なんばん です か。", qr: "Denwa bangou wa nanban desu ka?", qv: "Số điện thoại của bạn là số mấy?", a: "090-1234-5678です。", ah: "ぜろきゅうぜろ の いちにさんよん の ごろくななはch です。", ar: "Zero kyuu zero, ichi ni san yon, go roku nana hachi desu.", av: "Là số 090-1234-5678." }
+      { q: "電話番号は何番ですか。", qh: "でんわ ばんごう は なんばん です か。", qr: "Denwa bangou wa nanban desu ka?", qv: "Số điện thoại của bạn là số mấy?", a: "090-1234-5678です。", ah: "ぜろきゅうぜろ の いちにさんよん の ごろくななはち です。", ar: "Zero kyuu zero, ichi ni san yon, go roku nana hachi desu.", av: "Là số 090-1234-5678." }
     ]
   },
   {

@@ -31,6 +31,1065 @@ export interface ListeningEpisode {
 }
 
 export const PRESET_LISTENING_EPISODES: ListeningEpisode[] = [
+  // --- FEATURED YOUTUBE EPISODE: SHIN VÀ HIMAWARI KHI LỚN (SHIN CẬU BÉ BÚT CHÌ) ---
+  {
+    id: "youtube-Mfg6CNp2QRU",
+    title: "Shin và Em Gái Himawari Khi Lớn (Crayon Shin-chan)",
+    level: "N4",
+    category: "Hội Thoại Anime & Gia Đình",
+    icon: "🌻",
+    durationEst: "4 phút 17 giây",
+    description: "Trích đoạn cảm động và hài hước khi Shin-chan và Himawari đã trưởng thành: Màn cãi cọ đáng yêu giữa hai anh em trên đường về nhà và tình cảm gia đình ấm áp.",
+    youtubeId: "Mfg6CNp2QRU",
+    lines: [
+      {
+        id: "yt-shin-hima-1",
+        speaker: "Nam thanh niên 1",
+        japanese: "お姉さん、暇っすか？",
+        furigana: "お ねえさん、ひまっす か？",
+        romaji: "Oneesan, hima ssu ka?",
+        vietnamese: "Chị gái ơi, có rảnh không?",
+        startTime: 11,
+        endTime: 13,
+        keywords: [
+          { word: "お姉さん", reading: "おねえさん", meaning: "Chị gái" },
+          { word: "暇", reading: "ひま", meaning: "Rảnh rỗi" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-2",
+        speaker: "Himawari",
+        japanese: "暇じゃないっす。",
+        furigana: "ひま じゃないっす。",
+        romaji: "Hima janai ssu.",
+        vietnamese: "Không rảnh đâu nha.",
+        startTime: 13,
+        endTime: 16,
+        keywords: [
+          { word: "〜じゃない", reading: "〜じゃない", meaning: "Không phải / Không..." }
+        ]
+      },
+      {
+        id: "yt-shin-hima-3",
+        speaker: "Nam thanh niên 2",
+        japanese: "ねえ、今暇？",
+        furigana: "ねえ、いま ひま？",
+        romaji: "Nee, ima hima?",
+        vietnamese: "Này, giờ rảnh không?",
+        startTime: 21,
+        endTime: 23,
+        keywords: [
+          { word: "今", reading: "いま", meaning: "Bây giờ" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-4",
+        speaker: "Himawari",
+        japanese: "うざ…",
+        furigana: "うざ…",
+        romaji: "Uza...",
+        vietnamese: "Phiền phức...",
+        startTime: 23,
+        endTime: 25,
+        keywords: [
+          { word: "うざい", reading: "うざい", meaning: "Phiền phức / Khó chịu (tiếng lóng)" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-5",
+        speaker: "Nam thanh niên 2",
+        japanese: "は？",
+        furigana: "は？",
+        romaji: "Ha?",
+        vietnamese: "Hả?",
+        startTime: 25,
+        endTime: 27,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-6",
+        speaker: "Shinnosuke",
+        japanese: "ほーい。",
+        furigana: "ほーい。",
+        romaji: "Hooi.",
+        vietnamese: "Hôi~ (Chào nhé).",
+        startTime: 36,
+        endTime: 39,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-7",
+        speaker: "Himawari",
+        japanese: "おーい！何よ、可愛い妹助けなさいよ！",
+        furigana: "おーい！なに よ、かわいい いもうと たすけなさい よ！",
+        romaji: "Ooi! Nani yo, kawaii imouto tasukenasai yo!",
+        vietnamese: "Này! Gì thế hả, thấy đứa em gái đáng yêu gặp chuyện thì phải tới cứu chứ!",
+        startTime: 51,
+        endTime: 54,
+        keywords: [
+          { word: "可愛い", reading: "かわいい", meaning: "Đáng yêu / Dễ thương" },
+          { word: "妹", reading: "いもうと", meaning: "Em gái" },
+          { word: "助ける", reading: "たすける", meaning: "Cứu / Giúp đỡ" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-8",
+        speaker: "Shinnosuke",
+        japanese: "えー、お邪魔かと思って。",
+        furigana: "えー、お じゃま か と おもって。",
+        romaji: "Ee, ojama ka to omotte.",
+        vietnamese: "Ủa, tưởng anh đang làm phiền em chứ.",
+        startTime: 54,
+        endTime: 58,
+        keywords: [
+          { word: "邪魔", reading: "じゃま", meaning: "Làm phiền / Cản trở" },
+          { word: "思う", reading: "おもう", meaning: "Nghĩ là / Tưởng rằng" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-9",
+        speaker: "Himawari",
+        japanese: "なわけあるか！もう、お兄ちゃんモテないでしょ？",
+        furigana: "なわけ あるか！もう、お にいちゃん もてない でしょ？",
+        romaji: "Na wake aru ka! Mou, oniichan motenai desho?",
+        vietnamese: "Làm gì có chuyện đó! Trời đất, anh không có ai tán đúng không?",
+        startTime: 58,
+        endTime: 62,
+        keywords: [
+          { word: "〜わけあるか", reading: "〜わけあるか", meaning: "Làm gì có chuyện đó / Đời nào" },
+          { word: "お兄ちゃん", reading: "おにいちゃん", meaning: "Anh trai" },
+          { word: "モテる", reading: "もてる", meaning: "Được phái khác phái yêu thích, tán tỉnh" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-10",
+        speaker: "Shinnosuke",
+        japanese: "モテモテに決まってるでしょい。",
+        furigana: "もてもて に きまってる でしょい。",
+        romaji: "Motemote ni kimatteru deshoi.",
+        vietnamese: "Anh mà lại, đào hoa hút gái nhất trần đời luôn nhé.",
+        startTime: 62,
+        endTime: 66,
+        keywords: [
+          { word: "モテモテ", reading: "もてもて", meaning: "Cực kỳ đào hoa / Nhiều người theo đuổi" },
+          { word: "〜に決まっている", reading: "〜にきまっている", meaning: "Chắc chắn là... / Hiển nhiên là..." }
+        ]
+      },
+      {
+        id: "yt-shin-hima-11",
+        speaker: "Himawari",
+        japanese: "いや、絶対絶対モテない！",
+        furigana: "いや、ぜったい ぜったい もてない！",
+        romaji: "Iya, zettai zettai motenai!",
+        vietnamese: "Xạo, chắc chắn một trăm phần trăm là ế mốc meo!",
+        startTime: 66,
+        endTime: 70,
+        keywords: [
+          { word: "絶対", reading: "ぜったい", meaning: "Tuyệt đối / Chắc chắn" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-12",
+        speaker: "Himawari",
+        japanese: "ふん！邪魔！",
+        furigana: "ふん！じゃま！",
+        romaji: "Fun! Jama!",
+        vietnamese: "Hứ! Tránh đường ra!",
+        startTime: 74,
+        endTime: 76,
+        keywords: [
+          { word: "邪魔", reading: "じゃま", meaning: "Cản trở / Vướng víu" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-13",
+        speaker: "Himawari",
+        japanese: "…痛ぁーい！痛い痛い痛い…",
+        furigana: "…いたぁーい！いたい いたい いたい…",
+        romaji: "...Itaa-i! Itai itai itai...",
+        vietnamese: "...Đau quá! Đau đau đau...",
+        startTime: 81,
+        endTime: 86,
+        keywords: [
+          { word: "痛い", reading: "いたい", meaning: "Đau đớn" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-14",
+        speaker: "Himawari",
+        japanese: "暑いー。",
+        furigana: "あついー。",
+        romaji: "Atsui-.",
+        vietnamese: "Nóng quá đi~",
+        startTime: 89,
+        endTime: 91,
+        keywords: [
+          { word: "暑い", reading: "あつい", meaning: "Nóng (thời tiết)" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-15",
+        speaker: "Shinnosuke",
+        japanese: "重いー。",
+        furigana: "おもいー。",
+        romaji: "Omoi-.",
+        vietnamese: "Nặng quá đi~",
+        startTime: 91,
+        endTime: 93,
+        keywords: [
+          { word: "重い", reading: "おもい", meaning: "Nặng nề" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-16",
+        speaker: "Himawari",
+        japanese: "は？重くないし。うざっ。",
+        furigana: "は？おもくない し。うざっ。",
+        romaji: "Ha? Omokunai shi. Uza'.",
+        vietnamese: "Hả? Em không hề nặng nha. Khó ưa thật đấy.",
+        startTime: 93,
+        endTime: 97,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-17",
+        speaker: "Shinnosuke",
+        japanese: "限界かも…",
+        furigana: "げんかい かも…",
+        romaji: "Genkai kamo...",
+        vietnamese: "Sắp kiệt sức tới nơi rồi...",
+        startTime: 100,
+        endTime: 102,
+        keywords: [
+          { word: "限界", reading: "げんかい", meaning: "Giới hạn / Hết mức chịu đựng" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-18",
+        speaker: "Himawari",
+        japanese: "がんばれーい！",
+        furigana: "がんばれーい！",
+        romaji: "Ganbareei!",
+        vietnamese: "Cố lên nào~!",
+        startTime: 103,
+        endTime: 106,
+        keywords: [
+          { word: "頑張る", reading: "がんばる", meaning: "Cố gắng lên" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-19",
+        speaker: "Yonro",
+        japanese: "あれ？しんちゃん？",
+        furigana: "あれ？しんちゃん？",
+        romaji: "Are? Shin-chan?",
+        vietnamese: "Ủa? Shin-chan đó hả?",
+        startTime: 110,
+        endTime: 113,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-20",
+        speaker: "Himawari",
+        japanese: "あっつー。",
+        furigana: "あっつー。",
+        romaji: "Attsuu.",
+        vietnamese: "Nóng kinh khủng.",
+        startTime: 122,
+        endTime: 125,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-21",
+        speaker: "Shinnosuke",
+        japanese: "ほぉー、太ももー。",
+        furigana: "ほぉー、ふとももー。",
+        romaji: "Hoo-, futomomoo.",
+        vietnamese: "Ồ, đùi to ghê (chơi chữ 'futomomo' thay cho 'futoppara').",
+        startTime: 135,
+        endTime: 137,
+        keywords: [
+          { word: "太もも", reading: "ふともも", meaning: "Bắp đùi / Vế đùi" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-22",
+        speaker: "Himawari",
+        japanese: "それを言うなら『太っ腹』でしょ！",
+        furigana: "それ を いうなら『ふとっぱら』でしょ！",
+        romaji: "Sore o iu nara 'Futoppara' desho!",
+        vietnamese: "Khen hào phóng thì phải dùng từ 'Futoppara' chứ!",
+        startTime: 137,
+        endTime: 140,
+        keywords: [
+          { word: "言う", reading: "いう", meaning: "Nói" },
+          { word: "太っ腹", reading: "ふとっぱら", meaning: "Hào phóng / Rộng lượng" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-23",
+        speaker: "Shinnosuke",
+        japanese: "サンキュー。",
+        furigana: "さんきゅー。",
+        romaji: "Sankyuu.",
+        vietnamese: "Cảm ơn em nhé (nhận chai trà).",
+        startTime: 141,
+        endTime: 144,
+        keywords: [
+          { word: "サンキュー", reading: "さんきゅー", meaning: "Cảm ơn (Thank you)" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-24",
+        speaker: "Himawari",
+        japanese: "お兄ちゃんって本当変わらないね。",
+        furigana: "お にいちゃん って ほんとう かわらないね。",
+        romaji: "Oniichan tte hontou kawaranai ne.",
+        vietnamese: "Anh đúng là chẳng thay đổi tí nào hết nhỉ.",
+        startTime: 154,
+        endTime: 158,
+        keywords: [
+          { word: "本当", reading: "ほんとう", meaning: "Thật sự" },
+          { word: "変わる", reading: "かわる", meaning: "Thay đổi" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-25",
+        speaker: "Shinnosuke",
+        japanese: "ヒマは…重くなった。",
+        furigana: "ひま は…おもく なった。",
+        romaji: "Hima wa... omoku natta.",
+        vietnamese: "Còn Hima thì... nặng cân hơn rồi.",
+        startTime: 158,
+        endTime: 162,
+        keywords: [
+          { word: "重くなる", reading: "おもくなる", meaning: "Trở nên nặng hơn" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-26",
+        speaker: "Himawari",
+        japanese: "は？うっざ。レディになったでしょ？",
+        furigana: "は？うっざ。れでぃ に なった でしょ？",
+        romaji: "Ha? Uzza. Redi ni natta desho?",
+        vietnamese: "Hả? Đáng ghét thật sự. Người ta trở thành thiếu nữ quý cô rồi chứ bộ?",
+        startTime: 164,
+        endTime: 168,
+        keywords: [
+          { word: "レディ", reading: "れでぃ", meaning: "Quý cô / Thiếu nữ (Lady)" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-27",
+        speaker: "Shinnosuke",
+        japanese: "ヒマおんぶするの、お久しぶり大根だったから。大きくなったねー。",
+        furigana: "ひま おんぶ する の、お ひさしぶり だいこん だった から。おおきく なったねー。",
+        romaji: "Hima onbu suru no, ohisashiburi daikon datta kara. Ookiku natta nee.",
+        vietnamese: "Lâu lắm rồi mới cõng lại Hima (chơi chữ 'daikon' thay cho 'desu'). Lớn bổng lên rồi ha~",
+        startTime: 170,
+        endTime: 178,
+        keywords: [
+          { word: "おんぶ", reading: "おんぶ", meaning: "Cõng trên lưng" },
+          { word: "お久しぶり", reading: "おひさしぶり", meaning: "Đã lâu không gặp / Lâu lắm rồi" },
+          { word: "大根", reading: "だいこん", meaning: "Củ cải trắng" },
+          { word: "大きい", reading: "おおきい", meaning: "To lớn" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-28",
+        speaker: "Himawari",
+        japanese: "てか、そんなデリカシーなくて都会でやっていけてるのか心配だわ。",
+        furigana: "てか、そんな でりかしー なくて とかい で やっていけてる のか しんぱい だわ。",
+        romaji: "Teka, sonna derikashii nakute tokai de yatte iketeru no ka shinpai da wa.",
+        vietnamese: "Cơ mà cái tính thiếu tế nhị thế kia thì sống một mình ở thành phố làm sao được, lo giùm luôn á.",
+        startTime: 182,
+        endTime: 188,
+        keywords: [
+          { word: "デリカシー", reading: "でりかしー", meaning: "Sự tinh tế, tế nhị (Delicacy)" },
+          { word: "都会", reading: "とかい", meaning: "Đô thị / Thành phố lớn" },
+          { word: "心配", reading: "しんぱい", meaning: "Lo lắng / Lo ngại" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-29",
+        speaker: "Misae",
+        japanese: "もしもし、しんのすけ？ねえ、ヒマに会えた？",
+        furigana: "もしもし、しんのすけ？ねえ、ひま に あえた？",
+        romaji: "Moshimoshi, Shinnosuke? Nee, Hima ni aeta?",
+        vietnamese: "A lô, Shinnosuke đấy à? Này, gặp được Hima chưa con?",
+        startTime: 193,
+        endTime: 197,
+        keywords: [
+          { word: "もしもし", reading: "もしもし", meaning: "A lô (nghe điện thoại)" },
+          { word: "会う", reading: "あう", meaning: "Gặp gỡ" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-30",
+        speaker: "Shinnosuke",
+        japanese: "うん。",
+        furigana: "うん。",
+        romaji: "Un.",
+        vietnamese: "Dạ rồi ạ.",
+        startTime: 197,
+        endTime: 198,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-31",
+        speaker: "Misae",
+        japanese: "もうよかったー！ヒマ、多分あんたのお迎え行ったと思うんだけど、スマホ忘れてっちゃって！",
+        furigana: "もう よかったー！ひま、たぶん あんた の お むかえ いった と おもう んだけど、すまほ わすれてっちゃって！",
+        romaji: "Mou yokattaa-! Hima, tabun anta no omukae itta to omou n dakedo, sumaho wasuretecchatte!",
+        vietnamese: "May quá đi mất! Con Hima mẹ nghĩ là nó ra ga đón con đấy, mà lại để quên điện thoại ở nhà!",
+        startTime: 198,
+        endTime: 203,
+        keywords: [
+          { word: "お迎え", reading: "おむかえ", meaning: "Đi đón / Đón rước" },
+          { word: "スマホ", reading: "すまほ", meaning: "Điện thoại thông minh (Smartphone)" },
+          { word: "忘れる", reading: "わすれる", meaning: "Quên" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-32",
+        speaker: "Shinnosuke",
+        japanese: "ほうほう、お迎えに…",
+        furigana: "ほうほう、お むかえ に…",
+        romaji: "Houhou, omukae ni...",
+        vietnamese: "Hô hô, hóa ra là đi đón anh cơ đấy...",
+        startTime: 203,
+        endTime: 206,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-33",
+        speaker: "Himawari",
+        japanese: "は？違うし！",
+        furigana: "は？ちがう し！",
+        romaji: "Ha? Chigau shi!",
+        vietnamese: "Hả? Không có đâu nhé!",
+        startTime: 206,
+        endTime: 208,
+        keywords: [
+          { word: "違う", reading: "ちがう", meaning: "Sai / Không phải như vậy" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-34",
+        speaker: "Misae",
+        japanese: "ヒマー、ありがとねー！",
+        furigana: "ひまー、ありがとねー！",
+        romaji: "Himaa, arigato nee-!",
+        vietnamese: "Hima ơi, cảm ơn con nha!",
+        startTime: 208,
+        endTime: 210,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-35",
+        speaker: "Himawari",
+        japanese: "たまたまだから！バイバイ！",
+        furigana: "たまたま だから！ばいばい！",
+        romaji: "Tamatama da kara! Baibai!",
+        vietnamese: "Con tình cờ đi ngang thôi mẹ ơi! Thôi cúp đây!",
+        startTime: 210,
+        endTime: 213,
+        keywords: [
+          { word: "たまたま", reading: "たまたま", meaning: "Tình cờ / Ngẫu nhiên" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-36",
+        speaker: "Misae",
+        japanese: "え、仲良く帰ってきなさいよー！…あ、切れた。",
+        furigana: "え、なかよく かえってきなさい よー！…あ、きれた。",
+        romaji: "E, nakayoku kaette kinasai yoo-! ...A, kireta.",
+        vietnamese: "Ơ này, hai đứa nhớ hòa thuận về cùng nhau đấy nhé!... Ủa, tắt máy mất rồi.",
+        startTime: 213,
+        endTime: 217,
+        keywords: [
+          { word: "仲良く", reading: "なかよく", meaning: "Hòa thuận / Vui vẻ bên nhau" },
+          { word: "切れる", reading: "きれる", meaning: "Bị ngắt (cuộc gọi)" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-37",
+        speaker: "Himawari",
+        japanese: "てか、あっつ！早く帰ろ。",
+        furigana: "てか、あっつ！はやく かえろ。",
+        romaji: "Teka, attsu! Hayaku kaero.",
+        vietnamese: "Mà thôi, nóng chết mất! Về nhà mau thôi.",
+        startTime: 225,
+        endTime: 228,
+        keywords: [
+          { word: "早く", reading: "はやく", meaning: "Nhanh lên / Sớm" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-38",
+        speaker: "Shinnosuke",
+        japanese: "ほーい。",
+        furigana: "ほーい。",
+        romaji: "Hooi.",
+        vietnamese: "Rõ rồi~",
+        startTime: 229,
+        endTime: 231,
+        keywords: []
+      },
+      {
+        id: "yt-shin-hima-39",
+        speaker: "Himawari",
+        japanese: "出発進行ー！",
+        furigana: "しゅっぱつ しんこうー！",
+        romaji: "Shuppatsu shinkou-!",
+        vietnamese: "Tiến lên phía trước nào~!",
+        startTime: 235,
+        endTime: 237,
+        keywords: [
+          { word: "出発進行", reading: "しゅっぱつしんこう", meaning: "Xuất phát tiến lên / Khởi hành" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-40",
+        speaker: "Shinnosuke",
+        japanese: "くっつくと余計暑い。",
+        furigana: "くっつく と よけい あつい。",
+        romaji: "Kuttsuku to yokei atsui.",
+        vietnamese: "Em cứ bám dính lấy thế này chỉ thấy nóng thêm thôi.",
+        startTime: 242,
+        endTime: 245,
+        keywords: [
+          { word: "くっつく", reading: "くっつく", meaning: "Dính chặt / Bám dính vào" },
+          { word: "余計", reading: "よけい", meaning: "Càng thêm / Dư thừa" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-41",
+        speaker: "Himawari",
+        japanese: "は？好きでおんぶされてるんじゃないから！",
+        furigana: "は？すき で おんぶ されてるんじゃない から！",
+        romaji: "Ha? Suki de onbu sareterun janai kara!",
+        vietnamese: "Hả? Em cũng chẳng thiết tha gì chuyện được cõng đâu nha!",
+        startTime: 245,
+        endTime: 248,
+        keywords: [
+          { word: "好きで〜する", reading: "すきで〜する", meaning: "Tự nguyện / Thiết tha làm gì đó" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-42",
+        speaker: "Shinnosuke",
+        japanese: "こっちのセリフだぞ。",
+        furigana: "こっち の せりふ だぞ。",
+        romaji: "Kocchi no serifu da zo.",
+        vietnamese: "Câu đấy đáng lẽ anh nói mới phải.",
+        startTime: 248,
+        endTime: 250,
+        keywords: [
+          { word: "セリフ", reading: "せりふ", meaning: "Lời thoại / Câu nói" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-43",
+        speaker: "Himawari",
+        japanese: "はいはい、文句言わずに歩くー！",
+        furigana: "はいはい、もんく いわずに あるくー！",
+        romaji: "Haihai, monku iwazu ni aruku-!",
+        vietnamese: "Vâng vâng, đừng có càu nhàu nữa, bước đi nhanh lên!",
+        startTime: 250,
+        endTime: 253,
+        keywords: [
+          { word: "文句", reading: "もんく", meaning: "Lời cằn nhằn, phàn nàn" },
+          { word: "歩く", reading: "あるく", meaning: "Đi bộ / Bước đi" }
+        ]
+      },
+      {
+        id: "yt-shin-hima-44",
+        speaker: "Shinnosuke",
+        japanese: "無邪気なもんですなー。",
+        furigana: "むじゃき な もん です なー。",
+        romaji: "Mujaki na mon desu naa-.",
+        vietnamese: "Đúng là đứa trẻ vô tư, ngây ngô hết chỗ nói~",
+        startTime: 253,
+        endTime: 257,
+        keywords: [
+          { word: "無邪気", reading: "むじゃき", meaning: "Ngây thơ / Hồn nhiên vô tư" }
+        ]
+      }
+    ],
+    summaryKeywords: [
+      { word: "暇", reading: "ひま", meaning: "Rảnh rỗi" },
+      { word: "モテる", reading: "もてる", meaning: "Được nhiều người theo đuổi" },
+      { word: "おんぶ", reading: "おんぶ", meaning: "Cõng trên lưng" },
+      { word: "太っ腹", reading: "ふとっぱら", meaning: "Hào phóng, thoáng tính" },
+      { word: "デリカシー", reading: "でりかしー", meaning: "Sự tinh tế, tế nhị" },
+      { word: "お迎え", reading: "おむかえ", meaning: "Đi đón người khác" },
+      { word: "たまたま", reading: "たまたま", meaning: "Tình cờ, ngẫu nhiên" },
+      { word: "仲良く", reading: "なかよく", meaning: "Hòa thuận, thân thiết" },
+      { word: "文句", reading: "もんく", meaning: "Lời phàn nàn, càu nhàu" },
+      { word: "無邪気", reading: "むじゃき", meaning: "Ngây thơ, hồn nhiên" }
+    ]
+  },
+  // --- FEATURED YOUTUBE EPISODE: BÉ MẪU GIÁO NGĂN CHẶN NGOẠI TÌNH (BRUSH UP LIFE) ---
+  {
+    id: "youtube-b05HKvvq6U8",
+    title: "Bé Mẫu Giáo Ngăn Chặn Vụ Ngoại Tình (Brush Up Life)",
+    level: "N3",
+    category: "Phim Truyền Hình & Đời Sống",
+    icon: "👧",
+    durationEst: "1 phút 50 giây",
+    description: "Trích đoạn hài hước phim Brush Up Life (人生2周目): Asami chuyển sinh làm bé mẫu giáo kiếp thứ 2, dùng trí khôn người lớn để ngăn chặn cô giáo và phụ huynh ngoại tình.",
+    youtubeId: "b05HKvvq6U8",
+    lines: [
+      {
+        id: "yt-brushup-1",
+        speaker: "Asami",
+        japanese: "そんなある日、私はあることに気づいた。",
+        furigana: "そんな ある ひ、わたし は ある こと に きづいた。",
+        romaji: "Sonna aru hi, watashi wa aru koto ni kizuita.",
+        vietnamese: "Vào một ngày nọ, tôi đã nhận ra một điều.",
+        startTime: 0,
+        endTime: 4,
+        keywords: [
+          { word: "ある日", reading: "あるひ", meaning: "Một ngày nọ" },
+          { word: "気づく", reading: "きづく", meaning: "Nhận ra / Chú ý thấy" }
+        ]
+      },
+      {
+        id: "yt-brushup-2",
+        speaker: "Cô Yoko",
+        japanese: "お帰りなさい。レナちゃん、パパ来たよー。",
+        furigana: "お かえりなさい。れなちゃん、ぱぱ きたよー。",
+        romaji: "Okaerinasai. Rena-chan, papa kita yoo.",
+        vietnamese: "Chào phụ huynh ạ. Rena ơi, bố cháu đến đón rồi nàyー.",
+        startTime: 4,
+        endTime: 7,
+        keywords: [
+          { word: "お帰りなさい", reading: "おかえりなさい", meaning: "Chào mừng về / Chào đón phụ huynh" },
+          { word: "来る", reading: "くる", meaning: "Đến" }
+        ]
+      },
+      {
+        id: "yt-brushup-3",
+        speaker: "Bạn học",
+        japanese: "はーい。",
+        furigana: "はーい。",
+        romaji: "Haai.",
+        vietnamese: "Dạ vâng ạ.",
+        startTime: 7,
+        endTime: 8,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-4",
+        speaker: "Cô Yoko",
+        japanese: "今日も元気にしてましたよ。",
+        furigana: "きょう も げんき に してましたよ。",
+        romaji: "Kyou mo genki ni shitemashita yo.",
+        vietnamese: "Hôm nay cháu cũng rất ngoan và hoạt bát đấy ạ.",
+        startTime: 9,
+        endTime: 11,
+        keywords: [
+          { word: "元気", reading: "げんき", meaning: "Khỏe khoắn / Ngoan ngoãn, hoạt bát" }
+        ]
+      },
+      {
+        id: "yt-brushup-5",
+        speaker: "Bố Rena",
+        japanese: "ありがとうございます。",
+        furigana: "ありがとう ございます。",
+        romaji: "Arigatou gozaimasu.",
+        vietnamese: "Cảm ơn cô nhiều.",
+        startTime: 11,
+        endTime: 12,
+        keywords: [
+          { word: "ありがとうございます", reading: "ありがとうございます", meaning: "Xin cảm ơn rất nhiều" }
+        ]
+      },
+      {
+        id: "yt-brushup-6",
+        speaker: "Asami",
+        japanese: "レナちゃんのパパと洋子先生が、最近やけに親しげだということ。",
+        furigana: "れなちゃん の ぱぱ と ようこ せんせい が、さいきん やけに したしげ だ という こと。",
+        romaji: "Rena-chan no papa to Youko-sensei ga, saikin yakeni shitashige da to iu koto.",
+        vietnamese: "Đó là bố của bé Rena và cô Yoko dạo gần đây thân thiết một cách bất thường.",
+        startTime: 12,
+        endTime: 17,
+        keywords: [
+          { word: "最近", reading: "さいきん", meaning: "Gần đây / Dạo này" },
+          { word: "やけに", reading: "やけに", meaning: "Bất thường / Kỳ lạ, dữ dội" },
+          { word: "親しげ", reading: "したしげ", meaning: "Có vẻ thân thiết" }
+        ]
+      },
+      {
+        id: "yt-brushup-7",
+        speaker: "Asami",
+        japanese: "1周目では気づかなかったけど、大人の目線で見ると、明らかに、お互い意識している。",
+        furigana: "いっしゅうめ では きづかなかった けど、おとな の めせん で みる と、あきらか に、おたがい いしき している。",
+        romaji: "Isshuume de wa kizukanakatta kedo, otona no mesen de miru to, akiraka ni, otagai ishiki shite iru.",
+        vietnamese: "Kiếp trước tôi không nhận ra, nhưng nhìn bằng góc nhìn của người lớn thì rõ ràng cả hai đang để ý đến nhau.",
+        startTime: 17,
+        endTime: 23,
+        keywords: [
+          { word: "1周目", reading: "いっしゅうめ", meaning: "Vòng đời đầu tiên / Kiếp trước" },
+          { word: "目線", reading: "めせん", meaning: "Ánh nhìn / Góc nhìn" },
+          { word: "明らか", reading: "あきらか", meaning: "Rõ ràng / Hiển nhiên" },
+          { word: "意識する", reading: "いしきする", meaning: "Để ý / Nhận thức về nhau" }
+        ]
+      },
+      {
+        id: "yt-brushup-8",
+        speaker: "Asami",
+        japanese: "思い出した。そう言えば1周目の今頃、レナちゃんの苗字が突然変わり、どこかへ引っ越した。",
+        furigana: "おもいだした。そう いえば いっしゅうめ の いまごろ、れなちゃん の みょうじ が とつぜん かわり、どこか へ ひっこした。",
+        romaji: "Omoidashita. Sou ieba isshuume no imagoro, Rena-chan no myouji ga totsuzen kawari, dokoka e hikkoshita.",
+        vietnamese: "Tôi nhớ ra rồi. Nhắc mới nhớ, tầm thời gian này ở kiếp trước, họ của Rena đột nhiên đổi và cậu ấy chuyển đi nơi khác.",
+        startTime: 24,
+        endTime: 30,
+        keywords: [
+          { word: "思い出す", reading: "おもいだす", meaning: "Nhớ ra" },
+          { word: "そう言えば", reading: "そういえば", meaning: "Nhắc mới nhớ" },
+          { word: "苗字", reading: "みょうじ", meaning: "Họ (tên họ)" },
+          { word: "突然", reading: "とつぜん", meaning: "Đột nhiên / Bất ngờ" },
+          { word: "引っ越す", reading: "ひっこす", meaning: "Chuyển nhà" }
+        ]
+      },
+      {
+        id: "yt-brushup-9",
+        speaker: "Asami",
+        japanese: "しかも同じタイミングで先生もいなくなった。",
+        furigana: "しかも おなじ たいみんぐ で せんせい も いなくなった。",
+        romaji: "Shikamo onaji taimingu de sensei mo inaku natta.",
+        vietnamese: "Hơn nữa, cô giáo cũng biến mất vào đúng thời điểm đó.",
+        startTime: 30,
+        endTime: 34,
+        keywords: [
+          { word: "しかも", reading: "しかも", meaning: "Hơn nữa / Thêm vào đó" },
+          { word: "タイミング", reading: "たいみんぐ", meaning: "Thời điểm (Timing)" },
+          { word: "いなくなる", reading: "いなくなる", meaning: "Biến mất / Không còn ở đó nữa" }
+        ]
+      },
+      {
+        id: "yt-brushup-10",
+        speaker: "Asami",
+        japanese: "つまり、この後2人は不倫関係になり、それがバレてレナちゃんの両親は離婚。",
+        furigana: "つまり、この あと ふたり は ふりん かんけい に なり、それ が ばれて れなちゃん の りょうしん は りこん。",
+        romaji: "Tsumari, kono ato futari wa furin kankei ni nari, sore ga barete Rena-chan no ryoushin wa rikon.",
+        vietnamese: "Nghĩa là sau đó hai người ngoại tình, vụ việc vỡ lở khiến bố mẹ Rena ly hôn.",
+        startTime: 34,
+        endTime: 41,
+        keywords: [
+          { word: "つまり", reading: "つまり", meaning: "Nghĩa là / Tóm lại là" },
+          { word: "不倫", reading: "ふりん", meaning: "Ngoại tình" },
+          { word: "関係", reading: "かんけい", meaning: "Mối quan hệ" },
+          { word: "バレる", reading: "ばれる", meaning: "Bị lộ / Bị bại lộ" },
+          { word: "両親", reading: "りょうしん", meaning: "Bố mẹ / Nhị thân" },
+          { word: "離婚", reading: "りこん", meaning: "Ly hôn" }
+        ]
+      },
+      {
+        id: "yt-brushup-11",
+        speaker: "Asami",
+        japanese: "レナちゃんはママと一緒に引っ越して、洋子先生は保育園をクビになる。",
+        furigana: "れなちゃん は まま と いっしょ に ひっこして、ようこ せんせい は ほいくえん を くび に なる。",
+        romaji: "Rena-chan wa mama to issho ni hikkoshite, Youko-sensei wa hoikuen o kubi ni naru.",
+        vietnamese: "Rena chuyển nhà cùng mẹ, còn cô Yoko thì bị đuổi việc khỏi nhà trẻ.",
+        startTime: 41,
+        endTime: 46,
+        keywords: [
+          { word: "保育園", reading: "ほいくえん", meaning: "Nhà trẻ / Mẫu giáo" },
+          { word: "クビになる", reading: "くびになる", meaning: "Bị sa thải / Bị đuổi việc" }
+        ]
+      },
+      {
+        id: "yt-brushup-12",
+        speaker: "Bố Rena",
+        japanese: "サイアクじゃん。マジであの親父なんなの？",
+        furigana: "さいあく じゃん。まじ で あの おやじ なんなの？",
+        romaji: "Saiaku jan. Maji de ano oyaji nan na no?",
+        vietnamese: "Tệ thật đấy. Rốt cuộc ông già đó bị làm sao vậy chứ?",
+        startTime: 46,
+        endTime: 49,
+        keywords: [
+          { word: "最悪", reading: "さいあく", meaning: "Tệ nhất / Tồi tệ" },
+          { word: "マジで", reading: "まじで", meaning: "Thật sự / Nghiêm túc đấy" },
+          { word: "親父", reading: "おやじ", meaning: "Ông già / Lão già" }
+        ]
+      },
+      {
+        id: "yt-brushup-13",
+        speaker: "Asami",
+        japanese: "キモッ。",
+        furigana: "きもっ。",
+        romaji: "Kimo'.",
+        vietnamese: "Gớm thật.",
+        startTime: 49,
+        endTime: 50,
+        keywords: [
+          { word: "キモい", reading: "きもい", meaning: "Gớm ghiếc / Kinh tởm (tiếng lóng)" }
+        ]
+      },
+      {
+        id: "yt-brushup-14",
+        speaker: "Cô Yoko",
+        japanese: "お仕事は帰りとか遅いんですか？",
+        furigana: "お しごと は かえり とか おそい んですか？",
+        romaji: "Oshigoto wa kaeri toka osoi n desu ka?",
+        vietnamese: "Công việc của anh thường về muộn lắm ạ?",
+        startTime: 56,
+        endTime: 58,
+        keywords: [
+          { word: "仕事", reading: "しごと", meaning: "Công việc" },
+          { word: "遅い", reading: "おそい", meaning: "Muộn / Chậm" }
+        ]
+      },
+      {
+        id: "yt-brushup-15",
+        speaker: "Bố Rena",
+        japanese: "ああ…",
+        furigana: "ああ…",
+        romaji: "Aa...",
+        vietnamese: "À thì...",
+        startTime: 58,
+        endTime: 59,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-16",
+        speaker: "Asami",
+        japanese: "どうやらまだ親密な距離感ではないが、このまま放っておくと間違いなく不倫に発展する。",
+        furigana: "どうやら まだ しんみつ な きょりかん で は ない が、この まま ほうっておく と まちがいなく ふりん に はってん する。",
+        romaji: "Douyara mada shinmitsu na kyorikan de wa nai ga, kono mama houtte oku to machigainaku furin ni hatten suru.",
+        vietnamese: "Có vẻ như khoảng cách vẫn chưa quá thân mật, nhưng nếu cứ mặc kệ thế này thì chắc chắn sẽ tiến triển thành ngoại tình.",
+        startTime: 59,
+        endTime: 105,
+        keywords: [
+          { word: "どうやら", reading: "どうやら", meaning: "Có vẻ như" },
+          { word: "親密", reading: "しんみつ", meaning: "Thân mật / Gần gũi" },
+          { word: "距離感", reading: "きょりかん", meaning: "Cảm giác khoảng cách" },
+          { word: "放っておく", reading: "ほうっておく", meaning: "Mặc kệ / Bỏ mặc" },
+          { word: "間違いなく", reading: "まちがいなく", meaning: "Chắc chắn / Không sai vào đâu được" },
+          { word: "発展する", reading: "はってんする", meaning: "Phát triển / Tiến triển thành" }
+        ]
+      },
+      {
+        id: "yt-brushup-17",
+        speaker: "Asami",
+        japanese: "せんせー！あのね、レナちゃんたちと、セーラームーンごっこやったよ。",
+        furigana: "せんせー！あのね、れなちゃん たち と、せーらーむーん ごっこ やったよ。",
+        romaji: "Sensee! Ano ne, Rena-chan-tachi to, Seeraamuun gokko yatta yo.",
+        vietnamese: "Cô ơiii! Lúc nãy con vừa chơi trò Thủy thủ Mặt Trăng với nhóm Rena đấy ạ.",
+        startTime: 106,
+        endTime: 110,
+        keywords: [
+          { word: "あのね", reading: "あのね", meaning: "Này cô ơi / Chuyện là thế này này" },
+          { word: "〜ごっこ", reading: "〜ごっこ", meaning: "Trò chơi đóng vai / Nhập vai" }
+        ]
+      },
+      {
+        id: "yt-brushup-18",
+        speaker: "Cô Yoko",
+        japanese: "どうしたの？えー、楽しそう！",
+        furigana: "どうしたの？えー、たのしそう！",
+        romaji: "Doushita no? Ee, tanoshisou!",
+        vietnamese: "Sao thế con? Ồ, nghe vui thế!",
+        startTime: 110,
+        endTime: 114,
+        keywords: [
+          { word: "楽しそう", reading: "たのしそう", meaning: "Trông có vẻ vui / Nghe vui thế" }
+        ]
+      },
+      {
+        id: "yt-brushup-19",
+        speaker: "Asami",
+        japanese: "うん、楽しかったよ！",
+        furigana: "うん、たのしかったよ！",
+        romaji: "Un, tanoshikatta yo!",
+        vietnamese: "Dạ, vui lắm luôn ạ!",
+        startTime: 114,
+        endTime: 116,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-20",
+        speaker: "Bố Rena",
+        japanese: "じゃあ、今度は先生も一緒に遊ぼうかなー。",
+        furigana: "じゃあ、こんど は せんせい も いっしょ に あそぼう かなー。",
+        romaji: "Jaa, kondo wa sensei mo issho ni asobou ka naa.",
+        vietnamese: "Thế lần tới để thầy/cô chơi cùng luôn nhéー.",
+        startTime: 116,
+        endTime: 119,
+        keywords: [
+          { word: "今度", reading: "こんど", meaning: "Lần tới / Lần sau" },
+          { word: "一緒に", reading: "いっしょに", meaning: "Cùng nhau" },
+          { word: "遊ぶ", reading: "あそぶ", meaning: "Chơi đùa" }
+        ]
+      },
+      {
+        id: "yt-brushup-21",
+        speaker: "Trẻ em",
+        japanese: "やったー！",
+        furigana: "やったー！",
+        romaji: "Yattaa-!",
+        vietnamese: "Hoan hôー!",
+        startTime: 119,
+        endTime: 120,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-22",
+        speaker: "Cô Yoko",
+        japanese: "先生は何やろうかな…何がいい？",
+        furigana: "せんせい は なに やろう かな…なに が いい？",
+        romaji: "Sensei wa nani yarou ka na... nani ga ii?",
+        vietnamese: "Cô nên đóng vai gì đây nhỉ... vai nào được ta?",
+        startTime: 120,
+        endTime: 121,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-23",
+        speaker: "Bố Rena",
+        japanese: "よし、じゃあレナ、そろそろ帰ろっか。",
+        furigana: "よし、じゃあ れな、そろそろ かえろっか。",
+        romaji: "Yoshi, jaa Rena, sorosoro kaerokka.",
+        vietnamese: "Được rồi, Rena ơi mình về thôi con.",
+        startTime: 121,
+        endTime: 124,
+        keywords: [
+          { word: "そろそろ", reading: "そろそろ", meaning: "Đến lúc / Sắp đến giờ rồi" },
+          { word: "帰る", reading: "かえる", meaning: "Trở về nhà" }
+        ]
+      },
+      {
+        id: "yt-brushup-24",
+        speaker: "Rena",
+        japanese: "うん、はーい。",
+        furigana: "うん、はーい。",
+        romaji: "Un, haai.",
+        vietnamese: "Dạ vâng ạ.",
+        startTime: 124,
+        endTime: 125,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-25",
+        speaker: "Cô Yoko",
+        japanese: "じゃあまた明日。",
+        furigana: "じゃあ また あした。",
+        romaji: "Jaa mata ashita.",
+        vietnamese: "Hẹn gặp lại ngày mai nhé.",
+        startTime: 125,
+        endTime: 126,
+        keywords: [
+          { word: "明日", reading: "あした", meaning: "Ngày mai" }
+        ]
+      },
+      {
+        id: "yt-brushup-26",
+        speaker: "Bố Rena",
+        japanese: "はい、また。",
+        furigana: "はい、また。",
+        romaji: "Hai, mata.",
+        vietnamese: "Vâng, chào cô.",
+        startTime: 126,
+        endTime: 127,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-27",
+        speaker: "Cô Yoko",
+        japanese: "またね、バイバイ！",
+        furigana: "またね、ばいばい！",
+        romaji: "Mata ne, baibai!",
+        vietnamese: "Hẹn gặp lại nhé, tạm biệt con!",
+        startTime: 127,
+        endTime: 129,
+        keywords: [
+          { word: "バイバイ", reading: "ばいばい", meaning: "Tạm biệt (Bye bye)" }
+        ]
+      },
+      {
+        id: "yt-brushup-28",
+        speaker: "Asami",
+        japanese: "私は翌日も、その次の日も、レナパパと洋子先生が2人きりになる時間を作らせないようにした。",
+        furigana: "わたし は よくじつ も、その つぎ の ひ も、れなぱぱ と ようこ せんせい が ふたりきり に なる じかん を つくらせない ように した。",
+        romaji: "Watashi wa yokujitsu mo, sono tsugi no hi mo, Rena-papa to Youko-sensei ga futarikiri ni naru jikan o tsukurasenai you ni shita.",
+        vietnamese: "Ngày hôm sau, rồi cả ngày sau nữa, tôi đều ngăn không để bố của Rena và cô Yoko có thời gian ở riêng với nhau.",
+        startTime: 131,
+        endTime: 137,
+        keywords: [
+          { word: "翌日", reading: "よくじつ", meaning: "Ngày hôm sau" },
+          { word: "次の日", reading: "つぎのひ", meaning: "Ngày tiếp theo" },
+          { word: "2人きり", reading: "ふたりきり", meaning: "Chỉ có hai người / Ở riêng" },
+          { word: "〜ようにする", reading: "〜ようにする", meaning: "Cố gắng làm / Làm sao cho..." }
+        ]
+      },
+      {
+        id: "yt-brushup-29",
+        speaker: "Asami",
+        japanese: "しかしその作戦も虚しく…",
+        furigana: "しかし その さくせん も むなしく…",
+        romaji: "Shikashi sono sakusen mo munashiku...",
+        vietnamese: "Thế nhưng, kế hoạch đó vẫn vô ích...",
+        startTime: 137,
+        endTime: 140,
+        keywords: [
+          { word: "作戦", reading: "さくせん", meaning: "Chiến thuật / Kế hoạch" },
+          { word: "虚しい", reading: "むなしい", meaning: "Vô ích / Vô nghĩa / Uổng công" }
+        ]
+      },
+      {
+        id: "yt-brushup-30",
+        speaker: "Bố Rena",
+        japanese: "これ……後で。",
+        furigana: "これ……あと で。",
+        romaji: "Kore...... ato de.",
+        vietnamese: "Cái này... tí nữa xem nhé.",
+        startTime: 141,
+        endTime: 144,
+        keywords: [
+          { word: "後で", reading: "あとで", meaning: "Lát nữa / Sau này" }
+        ]
+      },
+      {
+        id: "yt-brushup-31",
+        speaker: "Cô Yoko",
+        japanese: "あっ……はい。",
+        furigana: "あっ……はい。",
+        romaji: "A'...... hai.",
+        vietnamese: "A... vâng ạ.",
+        startTime: 144,
+        endTime: 146,
+        keywords: []
+      },
+      {
+        id: "yt-brushup-32",
+        speaker: "Asami",
+        japanese: "あれが携帯番号なら、かなりマズい。",
+        furigana: "あれ が けいたい ばんごう なら、かなり まずい。",
+        romaji: "Are ga keitai bangou nara, kanari mazui.",
+        vietnamese: "Nếu mẩu giấy đó là số điện thoại, thì to chuyện rồi đây.",
+        startTime: 146,
+        endTime: 150,
+        keywords: [
+          { word: "携帯番号", reading: "けいたいばんごう", meaning: "Số điện thoại di động" },
+          { word: "マズい", reading: "まずい", meaning: "Nguy to / Tệ rồi / Rắc rối to" }
+        ]
+      }
+    ],
+    summaryKeywords: [
+      { word: "気づく", reading: "きづく", meaning: "Nhận ra / Chú ý thấy" },
+      { word: "やけに", reading: "やけに", meaning: "Bất thường / Kỳ lạ" },
+      { word: "親しげ", reading: "したしげ", meaning: "Có vẻ thân thiết" },
+      { word: "不倫", reading: "ふりん", meaning: "Ngoại tình" },
+      { word: "離婚", reading: "りこん", meaning: "Ly hôn" },
+      { word: "クビになる", reading: "くびになる", meaning: "Bị đuổi việc / Sa thải" },
+      { word: "2人きり", reading: "ふたりきり", meaning: "Chỉ riêng 2 người" },
+      { word: "虚しい", reading: "むなしい", meaning: "Vô ích / Uổng công" },
+      { word: "マズい", reading: "まずい", meaning: "Nguy to / Rắc rối" }
+    ]
+  },
   // --- FEATURED YOUTUBE EPISODE: THẢM HỌA NẤU CÀ RI (NICHIJOU) ---
   {
     id: "youtube-AQX6HiZLDmo",

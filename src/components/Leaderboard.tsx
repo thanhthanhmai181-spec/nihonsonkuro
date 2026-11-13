@@ -11,8 +11,6 @@ import {
   Flame, 
   BookOpen, 
   Target, 
-  Medal, 
-  Crown, 
   Sparkles, 
   RefreshCw, 
   Search, 
@@ -24,6 +22,7 @@ import {
   Star,
   UserCheck
 } from "lucide-react";
+import { TopRankCrest } from "./TopRankCrest";
 
 export interface LeaderboardEntry {
   uid: string;
@@ -361,20 +360,30 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
   };
 
   const getRankBadge = (rank: number) => {
-    if (rank === 1) return <Crown className="w-7 h-7 text-amber-500 fill-amber-400 animate-bounce" />;
-    if (rank === 2) return <Medal className="w-7 h-7 text-slate-400 fill-slate-300" />;
-    if (rank === 3) return <Medal className="w-7 h-7 text-amber-700 fill-amber-600" />;
-    return <span className="text-base font-black text-slate-500">#{rank}</span>;
+    if (rank === 1 || rank === 2 || rank === 3) {
+      return <TopRankCrest rank={rank} />;
+    }
+    return (
+      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+        <span className="text-sm font-black tabular-nums text-slate-500 dark:text-slate-400">#{rank}</span>
+      </div>
+    );
   };
 
   const getRankCardBg = (rank: number, isSelf?: boolean) => {
     if (isSelf) {
-      return "bg-gradient-to-r from-amber-100/90 via-amber-50 to-amber-100/90 border-4 border-amber-500 shadow-[0_0_25px_rgba(245,158,11,0.4)] ring-4 ring-amber-300/50 scale-[1.01]";
+      return "bg-gradient-to-r from-amber-100/90 via-amber-50 to-amber-100/90 dark:from-[#2B1E0F] dark:via-[#382613] dark:to-[#221609] border-4 border-amber-500 dark:border-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.4)] dark:shadow-[0_0_25px_rgba(245,158,11,0.25)] ring-4 ring-amber-300/50 dark:ring-amber-500/20 scale-[1.01]";
     }
-    if (rank === 1) return "bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-100/70 border-2 border-amber-400 shadow-[4px_4px_0px_#d97706]";
-    if (rank === 2) return "bg-gradient-to-r from-slate-50 via-slate-100 to-slate-200/50 border-2 border-slate-300 shadow-[3px_3px_0px_#64748b]";
-    if (rank === 3) return "bg-gradient-to-r from-orange-50 to-amber-50/40 border-2 border-amber-700/30 shadow-[3px_3px_0px_#b45309]";
-    return "bg-white border-2 border-slate-200 hover:border-slate-400 shadow-[2px_2px_0px_#cbd5e1]";
+    if (rank === 1) {
+      return "bg-gradient-to-r from-amber-100/80 via-amber-50 to-yellow-100/70 dark:from-[#261E10] dark:via-[#332713] dark:to-[#1E170B] border-2 border-amber-400 dark:border-amber-400/80 shadow-[4px_4px_0px_#d97706] dark:shadow-[0_0_24px_rgba(245,158,11,0.22)]";
+    }
+    if (rank === 2) {
+      return "bg-gradient-to-r from-slate-100 via-slate-50 to-slate-200/60 dark:from-[#181D26] dark:via-[#222836] dark:to-[#151921] border-2 border-slate-300 dark:border-slate-400/80 shadow-[3px_3px_0px_#64748b] dark:shadow-[0_0_20px_rgba(148,163,184,0.18)]";
+    }
+    if (rank === 3) {
+      return "bg-gradient-to-r from-orange-100/70 via-amber-50 to-orange-50 dark:from-[#241711] dark:via-[#301E16] dark:to-[#1D120D] border-2 border-amber-700/30 dark:border-amber-600/80 shadow-[3px_3px_0px_#b45309] dark:shadow-[0_0_20px_rgba(217,119,6,0.18)]";
+    }
+    return "bg-white dark:bg-[#181520] border-2 border-slate-200 dark:border-[#2E2738] hover:border-slate-400 dark:hover:border-amber-400/40 shadow-[2px_2px_0px_#cbd5e1] dark:shadow-none";
   };
 
   const getTabLabel = (tab: CategoryTab) => {
@@ -486,7 +495,7 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
           </div>
 
           <div className="flex items-center gap-4 w-full sm:w-auto pt-2 sm:pt-0">
-            <div className="w-14 h-14 rounded-2xl border-2 border-amber-500 bg-amber-100 flex items-center justify-center text-2xl shadow-inner shrink-0 overflow-hidden relative">
+            <div className="w-14 h-14 rounded-2xl border-2 border-amber-500 bg-amber-100 dark:bg-amber-950/40 flex items-center justify-center text-2xl shadow-inner shrink-0 overflow-hidden relative">
               {myEntry.customAvatarUrl ? (
                 <img src={myEntry.customAvatarUrl} alt="Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               ) : (
@@ -498,23 +507,23 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-black text-slate-900 text-lg sm:text-xl">{myEntry.userName}</span>
+                <span className="font-black text-slate-900 dark:!text-[#F5EEDB] text-lg sm:text-xl">{myEntry.userName}</span>
                 <span className="px-2.5 py-0.5 bg-[#8B0000] text-amber-200 font-black text-[11px] rounded-full uppercase shadow-xs">
                   Hạng #{myRank} ({getTabLabel(activeTab)})
                 </span>
               </div>
-              <p className="text-xs text-slate-700 font-bold mt-0.5 flex items-center gap-1">
+              <p className="text-xs text-slate-700 dark:text-amber-100/80 font-bold mt-0.5 flex items-center gap-1">
                 {top1Entry && top1Entry.uid !== myEntry.uid ? (
-                  <span>Cách Top 1 (<strong className="text-amber-800">{top1Entry.userName}</strong>): <span className="font-black text-red-600">+{Math.max(0, getSortValue(top1Entry, activeTab) - getSortValue(myEntry, activeTab))}</span> điểm</span>
+                  <span>Cách Top 1 (<strong className="text-amber-800 dark:text-amber-300">{top1Entry.userName}</strong>): <span className="font-black text-red-600 dark:text-amber-400">+{Math.max(0, getSortValue(top1Entry, activeTab) - getSortValue(myEntry, activeTab))}</span> điểm</span>
                 ) : (
-                  <span className="text-emerald-700 font-black">🎉 Bạn đang dẫn đầu Bảng Vàng {getTabLabel(activeTab)}! Tuyệt vời!</span>
+                  <span className="text-emerald-700 dark:text-emerald-400 font-black">🎉 Bạn đang dẫn đầu Bảng Vàng {getTabLabel(activeTab)}! Tuyệt vời!</span>
                 )}
               </p>
             </div>
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-            <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border-2 border-amber-300 w-full sm:w-auto justify-around shadow-xs">
+            <div className="flex items-center gap-3 bg-white dark:bg-[#1A1622] px-4 py-2.5 rounded-2xl border-2 border-amber-300 dark:border-amber-500/40 w-full sm:w-auto justify-around shadow-xs">
               <div className="text-center px-1">
                 <span className="text-[10px] uppercase font-extrabold text-slate-400 block">📚 Từ vựng</span>
                 <span className="font-black text-emerald-600 text-sm">{myEntry.learnedWordsCount}</span>
@@ -550,7 +559,7 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
       )}
 
       {/* 4 PRIMARY LEADERBOARD CATEGORY TABS */}
-      <div className="bg-white p-3 sm:p-4 rounded-3xl border-2 border-[#1A1A1A] shadow-[4px_4px_0px_#1A1A1A] space-y-4">
+      <div className="bg-white dark:bg-[#15121C] p-3 sm:p-4 rounded-3xl border-2 border-[#1A1A1A] dark:border-[#2D2536] shadow-[4px_4px_0px_#1A1A1A] dark:shadow-none space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
           
           {/* Tab 1: Bảng Tổng */}
@@ -559,12 +568,12 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
             className={`p-3 sm:p-4 rounded-2xl font-black text-xs sm:text-sm transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 border-2 ${
               activeTab === "total"
                 ? "bg-[#8B0000] text-amber-300 border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] scale-[1.02]"
-                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                : "bg-slate-50 dark:bg-[#1E1926] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-[#382E42] hover:bg-slate-100 dark:hover:bg-[#282233]"
             }`}
           >
-            <Trophy className={`w-5 h-5 ${activeTab === "total" ? "text-amber-300 animate-pulse" : "text-amber-600"}`} />
+            <Trophy className={`w-5 h-5 ${activeTab === "total" ? "text-amber-300 animate-pulse" : "text-amber-600 dark:text-amber-400"}`} />
             <span>🏆 BẢNG TỔNG</span>
-            <span className={`text-[10px] font-bold ${activeTab === "total" ? "text-red-200" : "text-slate-400"}`}>
+            <span className={`text-[10px] font-bold ${activeTab === "total" ? "text-red-200" : "text-slate-400 dark:text-slate-400"}`}>
               Từ vựng + Ngữ pháp + Hán tự
             </span>
           </button>
@@ -575,12 +584,12 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
             className={`p-3 sm:p-4 rounded-2xl font-black text-xs sm:text-sm transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 border-2 ${
               activeTab === "vocab"
                 ? "bg-emerald-700 text-white border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] scale-[1.02]"
-                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                : "bg-slate-50 dark:bg-[#1E1926] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-[#382E42] hover:bg-slate-100 dark:hover:bg-[#282233]"
             }`}
           >
-            <BookOpen className={`w-5 h-5 ${activeTab === "vocab" ? "text-emerald-200" : "text-emerald-600"}`} />
+            <BookOpen className={`w-5 h-5 ${activeTab === "vocab" ? "text-emerald-200" : "text-emerald-600 dark:text-emerald-400"}`} />
             <span>📚 BẢNG TỪ VỰNG</span>
-            <span className={`text-[10px] font-bold ${activeTab === "vocab" ? "text-emerald-100" : "text-slate-400"}`}>
+            <span className={`text-[10px] font-bold ${activeTab === "vocab" ? "text-emerald-100" : "text-slate-400 dark:text-slate-400"}`}>
               Xếp hạng Từ vựng đã thuộc
             </span>
           </button>
@@ -591,12 +600,12 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
             className={`p-3 sm:p-4 rounded-2xl font-black text-xs sm:text-sm transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 border-2 ${
               activeTab === "grammar"
                 ? "bg-blue-700 text-white border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] scale-[1.02]"
-                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                : "bg-slate-50 dark:bg-[#1E1926] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-[#382E42] hover:bg-slate-100 dark:hover:bg-[#282233]"
             }`}
           >
-            <FileText className={`w-5 h-5 ${activeTab === "grammar" ? "text-blue-200" : "text-blue-600"}`} />
+            <FileText className={`w-5 h-5 ${activeTab === "grammar" ? "text-blue-200" : "text-blue-600 dark:text-blue-400"}`} />
             <span>📝 BẢNG NGỮ PHÁP</span>
-            <span className={`text-[10px] font-bold ${activeTab === "grammar" ? "text-blue-100" : "text-slate-400"}`}>
+            <span className={`text-[10px] font-bold ${activeTab === "grammar" ? "text-blue-100" : "text-slate-400 dark:text-slate-400"}`}>
               Xếp hạng Mẫu câu đã nắm chắc
             </span>
           </button>
@@ -607,12 +616,12 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
             className={`p-3 sm:p-4 rounded-2xl font-black text-xs sm:text-sm transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 border-2 ${
               activeTab === "kanji"
                 ? "bg-purple-800 text-white border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] scale-[1.02]"
-                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                : "bg-slate-50 dark:bg-[#1E1926] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-[#382E42] hover:bg-slate-100 dark:hover:bg-[#282233]"
             }`}
           >
-            <Layers className={`w-5 h-5 ${activeTab === "kanji" ? "text-purple-200" : "text-purple-600"}`} />
+            <Layers className={`w-5 h-5 ${activeTab === "kanji" ? "text-purple-200" : "text-purple-600 dark:text-purple-400"}`} />
             <span>⛩️ BẢNG HÁN TỰ</span>
-            <span className={`text-[10px] font-bold ${activeTab === "kanji" ? "text-purple-100" : "text-slate-400"}`}>
+            <span className={`text-[10px] font-bold ${activeTab === "kanji" ? "text-purple-100" : "text-slate-400 dark:text-slate-400"}`}>
               Xếp hạng Chữ Hán Kanji đã nhớ
             </span>
           </button>
@@ -620,10 +629,10 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
         </div>
 
         {/* Search Bar & Banner Description */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100">
-          <div className="text-xs font-bold text-slate-600 flex items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-white/10">
+          <div className="text-xs font-bold text-slate-600 dark:text-amber-100/70 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-            <span>Đang hiển thị: <strong className="text-slate-900 uppercase">{getTabLabel(activeTab)}</strong> ({filteredList.length} học viên)</span>
+            <span>Đang hiển thị: <strong className="text-slate-900 dark:text-amber-200 uppercase">{getTabLabel(activeTab)}</strong> ({filteredList.length} học viên)</span>
           </div>
 
           <div className="relative w-full md:w-72">
@@ -633,7 +642,7 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm tên học viên trong bảng..."
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border-2 border-slate-200 rounded-xl text-xs font-bold outline-none focus:border-[#8B0000]"
+              className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-[#1E1926] border-2 border-slate-200 dark:border-[#382E42] text-slate-900 dark:text-[#F5EEDB] rounded-xl text-xs font-bold outline-none focus:border-[#8B0000] dark:focus:border-amber-500"
             />
           </div>
         </div>
@@ -672,61 +681,136 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
 
                 {/* Left: Rank & Student Profile */}
                 <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                  {/* Rank Icon / Number */}
-                  <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                  {/* Rank Crest / Number */}
+                  <div className="w-14 sm:w-16 flex items-center justify-center shrink-0">
                     {getRankBadge(rank)}
                   </div>
 
-                  {/* Avatar with potential crown frame */}
-                  <div className={`w-12 h-12 rounded-2xl border-2 border-[#1A1A1A] bg-white flex items-center justify-center text-xl shrink-0 overflow-hidden shadow-sm relative ${isSelf ? "ring-2 ring-amber-500" : ""}`}>
-                    {student.customAvatarUrl ? (
-                      <img src={student.customAvatarUrl} alt="Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                    ) : (
-                      student.selectedAvatarId === "hero" ? "🥷" : 
-                      student.selectedAvatarId === "sakura" ? "🌸" :
-                      student.selectedAvatarId === "megane" ? "👓" :
-                      student.selectedAvatarId === "neko" ? "🐱" : "🦊"
-                    )}
-                    {isSelf && (
-                      <div className="absolute bottom-0 right-0 bg-amber-500 text-white p-0.5 rounded-tl-md">
-                        <Star className="w-3 h-3 fill-white" />
-                      </div>
+                  {/* Avatar with Escalating Top 3 Metallic Frame */}
+                  <div className="relative shrink-0">
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${
+                      rank === 1
+                        ? "border-2 border-amber-400 ring-2 ring-amber-400/50 dark:ring-amber-300/40 shadow-[0_0_18px_rgba(245,158,11,0.45)]"
+                        : rank === 2
+                        ? "border-2 border-slate-300 ring-2 ring-sky-400/35 dark:border-slate-300 dark:ring-slate-300/30 shadow-[0_0_14px_rgba(148,163,184,0.35)]"
+                        : rank === 3
+                        ? "border-2 border-orange-500/80 ring-2 ring-orange-500/30 dark:border-orange-400/80 dark:ring-orange-400/25 shadow-[0_0_12px_rgba(234,88,12,0.3)]"
+                        : "border-2 border-[#1A1A1A] dark:border-[#3A3142]"
+                    } bg-white dark:bg-[#1E1926] flex items-center justify-center text-xl overflow-hidden shadow-sm relative ${isSelf && rank > 3 ? "ring-2 ring-amber-500" : ""}`}>
+                      {student.customAvatarUrl ? (
+                        <img src={student.customAvatarUrl} alt="Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      ) : (
+                        student.selectedAvatarId === "hero" ? "🥷" : 
+                        student.selectedAvatarId === "sakura" ? "🌸" :
+                        student.selectedAvatarId === "megane" ? "👓" :
+                        student.selectedAvatarId === "neko" ? "🐱" : "🦊"
+                      )}
+                      {isSelf && (
+                        <div className="absolute bottom-0 right-0 bg-amber-500 text-white p-0.5 rounded-tl-md">
+                          <Star className="w-3 h-3 fill-white" />
+                        </div>
+                      )}
+                    </div>
+                    {rank <= 3 && (
+                      <span
+                        className={`absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center border shadow-sm tabular-nums ${
+                          rank === 1
+                            ? "bg-gradient-to-br from-amber-300 to-amber-500 text-amber-950 border-amber-100"
+                            : rank === 2
+                            ? "bg-gradient-to-br from-slate-100 to-slate-400 text-slate-900 border-white"
+                            : "bg-gradient-to-br from-orange-300 to-orange-600 text-white border-orange-100"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        {rank}
+                      </span>
                     )}
                   </div>
 
-                  {/* Name & Badges */}
+                  {/* Name & Honor Title */}
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className={`font-black text-sm sm:text-base truncate ${isSelf ? "text-amber-950 font-black text-base" : "text-slate-900"}`}>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                      <span className={`font-black text-sm sm:text-base truncate ${
+                        isSelf
+                          ? "text-amber-950 dark:!text-amber-200 text-base"
+                          : rank === 1
+                          ? "text-amber-950 dark:!text-amber-200"
+                          : rank === 2
+                          ? "text-slate-900 dark:!text-slate-100"
+                          : rank === 3
+                          ? "text-amber-950 dark:!text-orange-200"
+                          : "text-slate-900 dark:!text-[#F5EEDB]"
+                      }`}>
                         {student.userName}
                       </span>
+                      {rank <= 3 && (
+                        <span className={`text-[11px] font-extrabold tracking-wide whitespace-nowrap ${
+                          rank === 1
+                            ? "text-amber-700 dark:text-amber-300"
+                            : rank === 2
+                            ? "text-sky-700 dark:text-sky-300"
+                            : "text-orange-700 dark:text-orange-300"
+                        }`}>
+                          · {rank === 1 ? "Quán Quân" : rank === 2 ? "Á Quân" : "Quý Quân"}
+                        </span>
+                      )}
                       {isSelf && (
                         <span className="px-2.5 py-0.5 bg-amber-500 text-slate-900 text-[10px] font-black rounded-full shrink-0 shadow-xs border border-amber-600">
                           ⭐️ BẠN (TÔI)
                         </span>
                       )}
                       {student.badge && (
-                        <span className="hidden sm:inline-block px-2 py-0.5 bg-red-100 text-[#8B0000] border border-red-200 text-[10px] font-bold rounded-full truncate">
+                        <span className="hidden sm:inline-block px-2 py-0.5 bg-red-100 dark:bg-red-950/50 text-[#8B0000] dark:text-red-300 border border-red-200 dark:border-red-800/40 text-[10px] font-bold rounded-full truncate">
                           {student.badge}
                         </span>
                       )}
                     </div>
 
                     {/* All stats pill breakdown */}
-                    <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-600 font-bold mt-1">
-                      <span className={`px-2 py-0.5 rounded-md ${activeTab === "vocab" ? "bg-emerald-100 text-emerald-800 font-black ring-1 ring-emerald-400" : "bg-slate-100"}`}>
+                    <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold mt-1">
+                      <span className={`px-2 py-0.5 rounded-md ${
+                        activeTab === "vocab"
+                          ? "bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 font-black ring-1 ring-emerald-400 border border-emerald-300 dark:border-emerald-600/50"
+                          : rank === 1
+                          ? "bg-amber-900/10 dark:bg-black/40 text-amber-950 dark:text-amber-100/90 border border-amber-400/20 dark:border-amber-400/20"
+                          : rank === 2
+                          ? "bg-slate-200/60 dark:bg-black/40 text-slate-800 dark:text-slate-200 border border-slate-300/40 dark:border-slate-500/20"
+                          : rank === 3
+                          ? "bg-orange-100/50 dark:bg-black/40 text-orange-950 dark:text-orange-100/90 border border-orange-300/40 dark:border-amber-600/20"
+                          : "bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-white/5"
+                      }`}>
                         📚 {student.learnedWordsCount} từ
                       </span>
-                      <span className={`px-2 py-0.5 rounded-md ${activeTab === "grammar" ? "bg-blue-100 text-blue-800 font-black ring-1 ring-blue-400" : "bg-slate-100"}`}>
+                      <span className={`px-2 py-0.5 rounded-md ${
+                        activeTab === "grammar"
+                          ? "bg-blue-100 dark:bg-blue-950/70 text-blue-800 dark:text-blue-300 font-black ring-1 ring-blue-400 border border-blue-300 dark:border-blue-600/50"
+                          : rank === 1
+                          ? "bg-amber-900/10 dark:bg-black/40 text-amber-950 dark:text-amber-100/90 border border-amber-400/20 dark:border-amber-400/20"
+                          : rank === 2
+                          ? "bg-slate-200/60 dark:bg-black/40 text-slate-800 dark:text-slate-200 border border-slate-300/40 dark:border-slate-500/20"
+                          : rank === 3
+                          ? "bg-orange-100/50 dark:bg-black/40 text-orange-950 dark:text-orange-100/90 border border-orange-300/40 dark:border-amber-600/20"
+                          : "bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-white/5"
+                      }`}>
                         📝 {student.learnedGrammarCount} bài NP
                       </span>
-                      <span className={`px-2 py-0.5 rounded-md ${activeTab === "kanji" ? "bg-purple-100 text-purple-800 font-black ring-1 ring-purple-400" : "bg-slate-100"}`}>
+                      <span className={`px-2 py-0.5 rounded-md ${
+                        activeTab === "kanji"
+                          ? "bg-purple-100 dark:bg-purple-950/70 text-purple-800 dark:text-purple-300 font-black ring-1 ring-purple-400 border border-purple-300 dark:border-purple-600/50"
+                          : rank === 1
+                          ? "bg-amber-900/10 dark:bg-black/40 text-amber-950 dark:text-amber-100/90 border border-amber-400/20 dark:border-amber-400/20"
+                          : rank === 2
+                          ? "bg-slate-200/60 dark:bg-black/40 text-slate-800 dark:text-slate-200 border border-slate-300/40 dark:border-slate-500/20"
+                          : rank === 3
+                          ? "bg-orange-100/50 dark:bg-black/40 text-orange-950 dark:text-orange-100/90 border border-orange-300/40 dark:border-amber-600/20"
+                          : "bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-white/5"
+                      }`}>
                         ⛩️ {student.learnedKanjiCount} Hán tự
                       </span>
-                      <span className="hidden md:inline-block text-orange-600">
+                      <span className="hidden md:inline-block text-orange-600 dark:text-orange-400">
                         🔥 {student.streak}d
                       </span>
-                      <span className="hidden md:inline-block text-amber-600">
+                      <span className="hidden md:inline-block text-amber-600 dark:text-amber-400">
                         ⚡ {student.xp} XP
                       </span>
                     </div>
@@ -736,13 +820,31 @@ export default function Leaderboard({ progress, currentUser }: LeaderboardProps)
                 {/* Right: Highlighted Main Stat value for active Tab */}
                 <div className="text-right shrink-0">
                   <span className={`block font-black text-xl sm:text-2xl ${
-                    activeTab === "total" ? "text-amber-600" :
-                    activeTab === "vocab" ? "text-emerald-600" :
-                    activeTab === "grammar" ? "text-blue-600" : "text-purple-600"
+                    rank === 1
+                      ? "text-amber-700 dark:!text-amber-300 drop-shadow-[0_0_10px_rgba(245,158,11,0.35)]"
+                      : rank === 2
+                      ? "text-slate-700 dark:!text-slate-100 drop-shadow-[0_0_8px_rgba(148,163,184,0.35)]"
+                      : rank === 3
+                      ? "text-amber-800 dark:!text-orange-300 drop-shadow-[0_0_8px_rgba(217,119,6,0.35)]"
+                      : activeTab === "total"
+                      ? "text-amber-600 dark:text-amber-400"
+                      : activeTab === "vocab"
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : activeTab === "grammar"
+                      ? "text-blue-600 dark:text-blue-400"
+                      : "text-purple-600 dark:text-purple-400"
                   }`}>
                     {displayScore} {activeTab === "total" ? "Điểm" : activeTab === "vocab" ? "Từ" : activeTab === "grammar" ? "Bài" : "Chữ"}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase block">
+                  <span className={`text-[10px] font-bold uppercase block ${
+                    rank === 1
+                      ? "text-amber-800/80 dark:text-amber-300/80"
+                      : rank === 2
+                      ? "text-slate-500 dark:text-slate-400"
+                      : rank === 3
+                      ? "text-amber-800/80 dark:text-orange-300/80"
+                      : "text-slate-400 dark:text-slate-400"
+                  }`}>
                     {activeTab === "total" ? "Tổng (V+N+H)" : activeTab === "vocab" ? "Từ Vựng" : activeTab === "grammar" ? "Ngữ Pháp" : "Hán Tự"}
                   </span>
                 </div>

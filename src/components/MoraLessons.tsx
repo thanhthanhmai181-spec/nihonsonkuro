@@ -742,7 +742,7 @@ export default function MoraLessons({ onGoBack }: MoraLessonsProps) {
             <div className="space-y-4 pt-2">
               {[
                 { q: "1. (おばさん / おばあさん) が台所にいます。 (Bà tôi đang ở trong bếp)", key: "mp1", opts: ["おばさん", "おばあさん"], correct: "おばあさん" },
-                { q: "2. 彼は私の (おっと / おto) です。 (Anh ấy là chồng tôi)", key: "mp2", opts: ["おと", "おっと"], correct: "おっと" },
+                { q: "2. 彼は私の (おっと / おと) です。 (Anh ấy là chồng tôi)", key: "mp2", opts: ["おと", "おっと"], correct: "おっと" },
                 { q: "3. この (かっこ / かこ) を開けてください。 (Hãy mở ngoặc đơn này ra)", key: "mp3", opts: ["かこ", "かっこ"], correct: "かっこ" },
                 { q: "4. (とり / とおり) が青空を飛んでいます。 (Con chim đang bay trên bầu trời)", key: "mp4", opts: ["とり", "とおり"], correct: "とり" },
                 { q: "5. (ゆき / ゆうき) が降っています。 (Tuyết đang rơi)", key: "mp5", opts: ["ゆき", "ゆうき"], correct: "ゆき" },

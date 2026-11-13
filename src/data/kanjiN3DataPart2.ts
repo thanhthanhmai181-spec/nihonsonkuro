@@ -48,7 +48,7 @@ export const KANJI_N3_DATA_PART2: LessonItem[] = [
         sino_vietnamese: "KHỐ",
         meaning: "Kho",
         vocabularies: [
-          { word: "倉庫", reading: "sうこ", meaning: "Nhà kho" },
+          { word: "倉庫", reading: "そうこ", meaning: "Nhà kho" },
           { word: "車庫", reading: "しゃこ", meaning: "Nhà xe, gara" },
           { word: "庫入れ", reading: "くらいれ", meaning: "Nhập kho" }
         ]
@@ -259,7 +259,7 @@ export const KANJI_N3_DATA_PART2: LessonItem[] = [
         vocabularies: [
           { word: "減量", reading: "げんりょう", meaning: "Giảm trọng lượng" },
           { word: "数量", reading: "すうりょう", meaning: "Số lượng" },
-          { word: "量る", reading: "はkaru", meaning: "Cân, đo" },
+          { word: "量る", reading: "はかる", meaning: "Cân, đo" },
           { word: "量り", reading: "はかり", meaning: "Cái cân, sự cân đo" },
           { word: "量", reading: "りょう", meaning: "Lượng" }
         ]
@@ -440,7 +440,7 @@ export const KANJI_N3_DATA_PART2: LessonItem[] = [
         sino_vietnamese: "NÙNG",
         meaning: "Đậm, đặc",
         vocabularies: [
-          { word: "濃厚", reading: "のうkou", meaning: "Nồng hậu, đậm đà" },
+          { word: "濃厚", reading: "のうこう", meaning: "Nồng hậu, đậm đà" },
           { word: "濃度", reading: "のうど", meaning: "Nồng độ" },
           { word: "濃い", reading: "こい", meaning: "Đậm, đặc" }
         ]
@@ -1237,7 +1237,7 @@ export const KANJI_N3_DATA_PART2: LessonItem[] = [
         sino_vietnamese: "GIÁC",
         meaning: "Cạnh, góc",
         vocabularies: [
-          { word: "角度", reading: "かくdo", meaning: "Góc độ" },
+          { word: "角度", reading: "かくど", meaning: "Góc độ" },
           { word: "角", reading: "かど", meaning: "Góc" },
           { word: "四角", reading: "しかく", meaning: "Hình vuông" },
           { word: "街角", reading: "まちかど", meaning: "Góc phố" },
